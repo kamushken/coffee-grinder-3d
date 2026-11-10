@@ -1,0 +1,50 @@
+{
+ "auto, ondemand=0": [
+  [
+   "high",
+   2,
+   "Quality: high."
+  ],
+  [
+   "balanced",
+   1.25,
+   "Quality: balanced (auto, 38.2 ms average)."
+  ],
+  [
+   "fast",
+   1,
+   "Quality: fast (auto, 13.6 ms average)."
+  ]
+ ],
+ "auto, on-demand (default), keyboard orbit": [
+  [
+   "high",
+   2,
+   "Quality: high."
+  ],
+  [
+   "balanced",
+   1.25,
+   "Quality: balanced (auto, 30.4 ms average)."
+  ],
+  [
+   "fast",
+   1,
+   "Quality: fast (auto, 9.2 ms average)."
+  ]
+ ],
+ "pinned balanced, ondemand=0": [
+  [
+   "balanced",
+   1.25,
+   "Quality: balanced (pinned)."
+  ]
+ ],
+ "pinned high, ondemand=0": [
+  [
+   "high",
+   2,
+   "Quality: high (pinned)."
+  ]
+ ]
+}

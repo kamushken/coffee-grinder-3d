@@ -20,10 +20,12 @@ const status = document.getElementById('status');
 const say = (s) => { status.textContent = s; };
 
 export const TIERS = {
-  high:     { maxDpr: 2,   gtao: true,  shadow: 4096 },
-  balanced: { maxDpr: 1.5, gtao: true,  shadow: 4096 },
-  fast:     { maxDpr: 1,   gtao: false, shadow: 2048 },
+  high:     { maxDpr: 2,    gtao: true,  shadow: 4096 },
+  balanced: { maxDpr: 1.25, gtao: true,  shadow: 4096 },
+  fast:     { maxDpr: 1,    gtao: false, shadow: 2048 },
 };
+// Auto-drop: one tier down whenever 3 s of *rendered* frame time averages over 25 ms, down to
+// fast. A pinned tier (?quality=…, or a tier button) never auto-drops; recording never does.
 export const AUTO = { slowFrame: 1 / 40, windowSeconds: 3, minFrames: 60 };
 export const EXPLODE = {
   crank: { stage: 0, explode: [0, 0.16, 0] }, knob: { stage: 0, explode: [0, 0.16, 0] },
@@ -143,13 +145,16 @@ function start() {
   setQuality(quality);
   let autoOff = pinned || RECORD;
   tierButtons.forEach((b) => b.addEventListener('click', () => { autoOff = true; setQuality(b.dataset.quality, 'chosen'); }));
-  const perf = { sum: 0, n: 0, since: performance.now() / 1000 };
-  function watch(dt, now) {
+  // The window is 3 s of *rendered* frame time, not wall clock: with render on demand, idle gaps
+  // neither count nor restart it, so every tier, balanced included, gets its own full window.
+  const perf = { sum: 0, n: 0 };
+  function watch(dt) {
     if (autoOff || dt > 0.25) return;
     perf.sum += dt; perf.n++;
-    if (now - perf.since > AUTO.windowSeconds && perf.n > AUTO.minFrames) {
-      if (perf.sum / perf.n > AUTO.slowFrame && quality !== 'fast') setQuality(ORDER[ORDER.indexOf(quality) + 1], `auto, ${(1000 * perf.sum / perf.n).toFixed(1)} ms average`);
-      perf.sum = 0; perf.n = 0; perf.since = now;
+    if (perf.sum >= AUTO.windowSeconds && perf.n > AUTO.minFrames) {
+      const avg = perf.sum / perf.n;
+      perf.sum = 0; perf.n = 0;
+      if (avg > AUTO.slowFrame && quality !== 'fast') setQuality(ORDER[ORDER.indexOf(quality) + 1], `auto, ${(1000 * avg).toFixed(1)} ms average`);
     }
   }
 
@@ -212,9 +217,9 @@ function start() {
     if (!ONDEMAND || rendered < 3 || now < dirtyUntil || cam.flying) {
       labelsEl.classList.toggle('on', t >= EXPLODE.labelsFrom);
       rig.render(cam.controls.target); labels.update(); rendered++;
-      watch(dt, now);
+      watch(dt);
       if (rendered === 3) { document.body.classList.add('gl-ready'); window.__ready = true; say(`Quality: ${quality}${pinned ? ' (pinned)' : ''}${REDUCED ? ', reduced motion' : ''}.`); }
-    } else perf.since = now;
+    }
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
