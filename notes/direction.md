@@ -206,6 +206,8 @@ DOCUMENTED-NOT-RUN.
 **Pacing check.** `record.py ... --fps 8 --seconds 20 --scroll "0:0 18:100%"` → 160 frames,
 "no page errors". Re-encoded to `captures/stage-5-scroll.mp4` (480 px, 56,443 B).
 
+**Grinder footage, if generated (text only, no API call; motion-assets SKILL.md "Before spending anything" / "One look" / "Generation order"):** asset list = 1 hero still of the stage-8 hero frame + 4 keyframe stills (assembled, crank off, hopper and ring off, burrs apart) + 3 start/end-anchored clips chained between them (each anchored on the extracted last frame of the previous one, one video model for the whole chain, "locked-off camera; the tray, background and lighting stay perfectly still"); one look = a style preamble built from this file's palette and golden-hour light, prepended byte-for-byte to every prompt, with the approved hero still as the style reference for the rest; cost = unknown until calibrated: one still and one short clip first, read the charge, estimate the rest from that (the skill says never to quote a price from memory), then get a yes before generating. Every prompt, job id and cost would go in `prompts/asset-prompts.md`.
+
 **DOCUMENTED-NOT-RUN:** motion-assets (no paid generation), scroll-film generation (keyframes,
 legs, `prep.py seams`: there is only one leg, so seams has nothing to score), cursor-rig (no
 painted character, needs 2–8 paid image-to-video clips), alpha-cutout (the footage is opaque,
