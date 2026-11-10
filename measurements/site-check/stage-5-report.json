@@ -1,0 +1,218 @@
+[
+  {
+    "name": "default-chromium-1440",
+    "url": "http://127.0.0.1:4321/stage-5/",
+    "browser": "chromium",
+    "width": 1440,
+    "reduced": false,
+    "scroll": null,
+    "ready_s": 0.88,
+    "ms_per_frame": 8.1,
+    "fps": 123.1,
+    "errors": [],
+    "blank_canvases": 0,
+    "overflow": false,
+    "gl": {
+      "lost": false,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)"
+    },
+    "three": {
+      "calls": 0,
+      "triangles": 0,
+      "geometries": 35,
+      "textures": 27,
+      "programs": 34
+    },
+    "heapMB": 10,
+    "file": ".tmp/sc35/stage-5/default-chromium-1440.png"
+  },
+  {
+    "name": "default-chromium-768",
+    "url": "http://127.0.0.1:4321/stage-5/",
+    "browser": "chromium",
+    "width": 768,
+    "reduced": false,
+    "scroll": null,
+    "ready_s": 0.39,
+    "ms_per_frame": 7.8,
+    "fps": 129.0,
+    "errors": [],
+    "blank_canvases": 0,
+    "overflow": false,
+    "gl": {
+      "lost": false,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)"
+    },
+    "three": {
+      "calls": 0,
+      "triangles": 0,
+      "geometries": 35,
+      "textures": 27,
+      "programs": 34
+    },
+    "heapMB": 10,
+    "file": ".tmp/sc35/stage-5/default-chromium-768.png"
+  },
+  {
+    "name": "default-chromium-390",
+    "url": "http://127.0.0.1:4321/stage-5/",
+    "browser": "chromium",
+    "width": 390,
+    "reduced": false,
+    "scroll": null,
+    "ready_s": 0.4,
+    "ms_per_frame": 7.5,
+    "fps": 133.0,
+    "errors": [],
+    "blank_canvases": 0,
+    "overflow": false,
+    "gl": {
+      "lost": false,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)"
+    },
+    "three": {
+      "calls": 0,
+      "triangles": 0,
+      "geometries": 35,
+      "textures": 27,
+      "programs": 34
+    },
+    "heapMB": 10,
+    "file": ".tmp/sc35/stage-5/default-chromium-390.png"
+  },
+  {
+    "name": "default-chromium-1440-reduced",
+    "url": "http://127.0.0.1:4321/stage-5/",
+    "browser": "chromium",
+    "width": 1440,
+    "reduced": true,
+    "scroll": null,
+    "ready_s": 0.39,
+    "ms_per_frame": 8.0,
+    "fps": 124.8,
+    "errors": [],
+    "blank_canvases": 0,
+    "overflow": false,
+    "gl": {
+      "lost": false,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)"
+    },
+    "three": {
+      "calls": 0,
+      "triangles": 0,
+      "geometries": 35,
+      "textures": 27,
+      "programs": 34
+    },
+    "heapMB": 10,
+    "file": ".tmp/sc35/stage-5/default-chromium-1440-reduced.png"
+  },
+  {
+    "name": "default-webkit-1440",
+    "url": "http://127.0.0.1:4321/stage-5/",
+    "browser": "webkit",
+    "width": 1440,
+    "reduced": false,
+    "scroll": null,
+    "ready_s": 0.84,
+    "ms_per_frame": 16.4,
+    "fps": 61.0,
+    "errors": [],
+    "blank_canvases": 0,
+    "overflow": false,
+    "gl": {
+      "lost": false,
+      "renderer": "Apple GPU"
+    },
+    "three": {
+      "calls": 0,
+      "triangles": 0,
+      "geometries": 35,
+      "textures": 27,
+      "programs": 34
+    },
+    "heapMB": null,
+    "file": ".tmp/sc35/stage-5/default-webkit-1440.png"
+  },
+  {
+    "name": "default-webkit-768",
+    "url": "http://127.0.0.1:4321/stage-5/",
+    "browser": "webkit",
+    "width": 768,
+    "reduced": false,
+    "scroll": null,
+    "ready_s": 0.5,
+    "ms_per_frame": 16.3,
+    "fps": 61.2,
+    "errors": [],
+    "blank_canvases": 0,
+    "overflow": false,
+    "gl": {
+      "lost": false,
+      "renderer": "Apple GPU"
+    },
+    "three": {
+      "calls": 0,
+      "triangles": 0,
+      "geometries": 35,
+      "textures": 27,
+      "programs": 34
+    },
+    "heapMB": null,
+    "file": ".tmp/sc35/stage-5/default-webkit-768.png"
+  },
+  {
+    "name": "default-webkit-390",
+    "url": "http://127.0.0.1:4321/stage-5/",
+    "browser": "webkit",
+    "width": 390,
+    "reduced": false,
+    "scroll": null,
+    "ready_s": 0.47,
+    "ms_per_frame": 15.8,
+    "fps": 63.2,
+    "errors": [],
+    "blank_canvases": 0,
+    "overflow": false,
+    "gl": {
+      "lost": false,
+      "renderer": "Apple GPU"
+    },
+    "three": {
+      "calls": 0,
+      "triangles": 0,
+      "geometries": 35,
+      "textures": 27,
+      "programs": 34
+    },
+    "heapMB": null,
+    "file": ".tmp/sc35/stage-5/default-webkit-390.png"
+  },
+  {
+    "name": "default-webkit-1440-reduced",
+    "url": "http://127.0.0.1:4321/stage-5/",
+    "browser": "webkit",
+    "width": 1440,
+    "reduced": true,
+    "scroll": null,
+    "ready_s": 0.49,
+    "ms_per_frame": 16.6,
+    "fps": 60.4,
+    "errors": [],
+    "blank_canvases": 0,
+    "overflow": false,
+    "gl": {
+      "lost": false,
+      "renderer": "Apple GPU"
+    },
+    "three": {
+      "calls": 0,
+      "triangles": 0,
+      "geometries": 35,
+      "textures": 27,
+      "programs": 34
+    },
+    "heapMB": null,
+    "file": ".tmp/sc35/stage-5/default-webkit-1440-reduced.png"
+  }
+]

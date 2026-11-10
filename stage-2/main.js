@@ -88,11 +88,16 @@ const bloom = new UnrealBloomPass(new THREE.Vector2(size.x, size.y), LIGHTING.bl
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 
-addEventListener('resize', () => {
+// The one place renderer + composer are sized. Phase 3.5 fix: EffectComposer(renderer, rt) takes
+// rt's device-pixel size as its CSS size and multiplies by the pixel ratio again, so before the
+// first resize every pass ran at DPR^2 area. Calling resize() once at load sets CSS size × DPR.
+function resize() {
   camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight, false);
   composer.setPixelRatio(pixelRatio); composer.setSize(innerWidth, innerHeight);
-});
+}
+resize();
+addEventListener('resize', resize);
 
 // ---- light preset buttons live in the caption (content, not chrome)
 const buttons = [...document.querySelectorAll('[data-light]')];

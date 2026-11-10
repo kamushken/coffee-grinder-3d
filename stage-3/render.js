@@ -32,7 +32,7 @@ export function createRig({ canvas, camera, record = false, preset = LIGHTING.pr
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   let pixelRatio = Math.min(devicePixelRatio, maxDpr);
   renderer.setPixelRatio(pixelRatio);
-  renderer.setSize(innerWidth, innerHeight, false);
+  renderer.setSize(innerWidth, innerHeight, false);   // only so getDrawingBufferSize() below has a size; resize() is the real sizing point
 
   const scene = new THREE.Scene();
   const env = createEnvironment(renderer, scene, { preset: PRESETS[preset] ? preset : LIGHTING.preset, scale: LIGHTING.envScale });
@@ -51,12 +51,16 @@ export function createRig({ canvas, camera, record = false, preset = LIGHTING.pr
   composer.addPass(new OutputPass());
 
   function markNoAO() { scene.traverse((o) => { if (o.isPoints || o.renderOrder < 0) o.userData.noAO = true; }); }
+  // The one place renderer + composer are sized. Phase 3.5 fix: EffectComposer(renderer, rt) takes
+  // rt's device-pixel size as its CSS size and multiplies by the pixel ratio again, so before the
+  // first resize every pass ran at DPR^2 area. Calling resize() once here sets CSS size × DPR.
   function resize() {
     camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
     renderer.setPixelRatio(pixelRatio); renderer.setSize(innerWidth, innerHeight, false);
     composer.setPixelRatio(pixelRatio); composer.setSize(innerWidth, innerHeight);
   }
   function setPixelRatio(pr) { pixelRatio = pr; resize(); }
+  resize();
   function render(target) {
     U.uTime.value = performance.now() / 1000;
     env.update(camera, target);
