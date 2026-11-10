@@ -10,7 +10,9 @@ if (nav) {
   for (const [href, text] of STAGES) {
     const a = document.createElement('a');
     a.href = href; a.textContent = text;
-    a.setAttribute('aria-label', href === '/' ? 'Lab index' : `Stage ${text}`);
+    // home: the visible text is the accessible name (Phase 3.5: aria-label "Lab index" failed
+    // label-content-name-mismatch); stage links keep "Stage N", which contains the visible "N"
+    if (href !== '/') a.setAttribute('aria-label', `Stage ${text}`);
     if (href === here) a.setAttribute('aria-current', 'page');
     nav.appendChild(a);
   }
