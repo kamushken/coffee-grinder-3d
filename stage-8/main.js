@@ -89,8 +89,10 @@ function start() {
   const P0 = new THREE.Vector3(...VANTAGE.hero.pos), T0 = new THREE.Vector3(...VANTAGE.hero.tgt);
   const P1 = new THREE.Vector3(...EXPLAIN.pos), T1 = new THREE.Vector3(...EXPLAIN.tgt);
   let autoFrame = !startView;   // follow the explode amount from the hero vantage
-  function autoCamera(t) {
-    if (!autoFrame || userMoved || cam.flying) return;
+  let autoArmed = false;        // only once the explode has moved; at t = 0 it would pin the hero
+  function autoCamera(t) {      // and cancel the front -> hero flight before it starts (record mode)
+    if (t > 0) autoArmed = true;
+    if (!autoArmed || !autoFrame || userMoved || cam.flying) return;
     const u = Math.min(1, t * 2), k = u * u * (3 - 2 * u);
     camera.position.lerpVectors(P0, P1, k); cam.controls.target.lerpVectors(T0, T1, k); camera.lookAt(cam.controls.target);
   }
