@@ -205,3 +205,39 @@ DOCUMENTED-NOT-RUN.
 legs, `prep.py seams`: there is only one leg, so seams has nothing to score), cursor-rig (no
 painted character, needs 2–8 paid image-to-video clips), alpha-cutout (the footage is opaque,
 there is no chroma plate).
+
+## Stage 6 — explainer (as built)
+
+Runtime: `lib/open-3d-skills/explode.js` (Exploder, Labels, Xray, Picker), copied verbatim.
+Section is not used: x-ray alone shows the burrs inside the body. Scene, lighting and materials
+come from stages 3–4.
+
+| Part | stage | explode offset (m, assembly-local) | Note |
+|---|---|---|---|
+| crank, knob | 0 | [0, 0.16, 0] | lift off the shaft hex together |
+| hopper | 1 | [0, 0.10, 0] | |
+| ring | 2 | [0, 0.05, 0] + 0.5 turn about Y | the rotation is added in stage-6/main.js over the ring's own Exploder window; Exploder only translates |
+| burrOuter | 3 | [0, 0.04, 0] | rises with the ring |
+| burrInner | 3 | [0, −0.05, 0] | drops into the body, along the shaft |
+| gasket, screws, body, shaft | — | not in `parts` | they stay. body has `shell: true` |
+
+- Order: SKILL.md says "covers and shells, then fasteners and caps, then the inner parts".
+  Adapted to a hand grinder: crank → hopper → ring → burrs.
+- X-ray: `Xray.set(true, 0.14)` (runtime default). It switches on automatically at
+  t ≥ 0.62, when the burr stage is under way. A visitor's button press takes over from then on.
+- Labels: 8 entries, `margin: 56` so the top label clears the stage nav. Hidden below 600 px
+  (SKILL.md: "On narrow phones, hide the labels and show the hovered or tapped part's name in one
+  caption"). The `<output id="part">` readout always shows the hovered or picked part.
+- Camera: SKILL.md direction (0.42, 0.34, 1), here *without* the stage-4 y deviation.
+  An explainer reads best from above, and the horizon can go high. No rule-of-thirds offset,
+  because the label columns need the subject centred. autoDistance: target y 0.16→0.22, distance
+  0.62→0.86. Both are completed over the first half of t (the crank lifts first), and they stop
+  once the visitor orbits. `maxDistance` 1.6 > 0.86.
+- Slider eases at 0.12 per 60 Hz frame. Reduced motion jumps straight to the value.
+- Picking check (Chromium 1440x900, explode=1, a mouse sweep down x = 690 and x = 740): Hopper,
+  Adjustment ring, Outer burr, Inner burr and Crank all resolve. Knob resolved on a direct hover.
+  The ring and outer burr alternate across y 492–516, where they overlap on screen.
+- Measured (Chromium 1440x900): exploded 8.98 ms, 216 calls, 99,236 tris. Assembled 9.10 ms,
+  218 calls, 103,556 tris. 0 errors. Why the exploded count is lower is not investigated
+  (UNCERTAIN).
+- Clip: `captures/stage-6-explode.mp4` (record.py 7 s at 30 fps, 960x600 → 640 px, 53,387 B).
