@@ -1,35 +1,1272 @@
 {
- "stage-0-desktop": {
-  "lighthouse": "12.8.2",
-  "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/148.0.0.0 Safari/537.36",
-  "formFactor": "desktop",
-  "throttling": "simulate",
-  "scores": {
-   "performance": 99,
+ "stage-8-desktop": {
+  "protocol": "1 discarded warm-up + 5 runs, same profile, Lighthouse 12.8.2 simulate",
+  "median": {
+   "performance": 97,
    "accessibility": 100,
    "best-practices": 100,
-   "seo": 100
+   "seo": 100,
+   "first-contentful-paint": 726.24,
+   "largest-contentful-paint": 1167.487,
+   "total-blocking-time": 80.5,
+   "cumulative-layout-shift": 0.002,
+   "speed-index": 1012.808,
+   "interactive": 1167.487
   },
-  "metrics": {
-   "first-contentful-paint": 562.561,
-   "largest-contentful-paint": 889.073,
-   "total-blocking-time": 72.5,
-   "cumulative-layout-shift": 0,
-   "speed-index": 562.561,
-   "interactive": 889.673,
-   "total-byte-weight": 702869,
-   "server-response-time": 0.404
+  "spread": {
+   "performance": [
+    93,
+    97
+   ],
+   "accessibility": [
+    100,
+    100
+   ],
+   "best-practices": [
+    100,
+    100
+   ],
+   "seo": [
+    100,
+    100
+   ],
+   "first-contentful-paint": [
+    688.831,
+    727.0
+   ],
+   "largest-contentful-paint": [
+    1090.597,
+    1168.4
+   ],
+   "total-blocking-time": [
+    61.0,
+    170.5
+   ],
+   "cumulative-layout-shift": [
+    0,
+    0.002
+   ],
+   "speed-index": [
+    976.666,
+    1024.705
+   ],
+   "interactive": [
+    1090.597,
+    1168.4
+   ]
   },
-  "requests": 7,
-  "failing_audits": [
+  "lcp_elements": [
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"/stage-7/poster-wide.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"/stage-7/poster-wide.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"/stage-7/poster-wide.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"/stage-7/poster-wide.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"/stage-7/poster-wide.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   }
+  ],
+  "failing_last_run": [
+   [
+    "total-blocking-time",
+    "Total Blocking Time",
+    0.86
+   ],
+   [
+    "max-potential-fid",
+    "Max Potential First Input Delay",
+    0.62
+   ],
    [
     "valid-source-maps",
     "Missing source maps for large first-party JavaScript",
     0
    ],
    [
-    "label-content-name-mismatch",
-    "Elements with visible text labels do not have matching accessible names.",
+    "unminified-javascript",
+    "Minify JavaScript",
+    0
+   ],
+   [
+    "unused-javascript",
+    "Reduce unused JavaScript",
+    0
+   ],
+   [
+    "uses-text-compression",
+    "Enable text compression",
+    0
+   ],
+   [
+    "document-latency-insight",
+    "Document request latency",
+    0.5
+   ],
+   [
+    "network-dependency-tree-insight",
+    "Network dependency tree",
+    0
+   ],
+   [
+    "render-blocking-insight",
+    "Render blocking requests",
+    0.5
+   ]
+  ],
+  "runs": [
+   {
+    "scores": {
+     "performance": 97,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 726.3271249999999,
+     "largest-contentful-paint": 1167.5925499999998,
+     "total-blocking-time": 80.49999999999997,
+     "cumulative-layout-shift": 0,
+     "speed-index": 1022.9626156478479,
+     "interactive": 1167.5925499999998
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"/stage-7/poster-wide.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 97,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 726.2395,
+     "largest-contentful-paint": 1167.4874000000004,
+     "total-blocking-time": 77.00000000000003,
+     "cumulative-layout-shift": 0.001954,
+     "speed-index": 1012.8084434978571,
+     "interactive": 1167.4874000000004
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"/stage-7/poster-wide.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 97,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 724.8361249999999,
+     "largest-contentful-paint": 1165.8033499999997,
+     "total-blocking-time": 60.99999999999997,
+     "cumulative-layout-shift": 0.001954,
+     "speed-index": 1024.7053077759028,
+     "interactive": 1165.8033499999997
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"/stage-7/poster-wide.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 94,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 726.999625,
+     "largest-contentful-paint": 1168.39955,
+     "total-blocking-time": 147,
+     "cumulative-layout-shift": 0.001954,
+     "speed-index": 995.8538542819626,
+     "interactive": 1168.39955
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"/stage-7/poster-wide.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.7
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 93,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 688.8310000000001,
+     "largest-contentful-paint": 1090.5972,
+     "total-blocking-time": 170.5000000000001,
+     "cumulative-layout-shift": 0.001954,
+     "speed-index": 976.6656184580456,
+     "interactive": 1090.5972000000002
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"/stage-7/poster-wide.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.86
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.62
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   }
+  ]
+ },
+ "stage-8-mobile": {
+  "protocol": "1 discarded warm-up + 5 runs, same profile, Lighthouse 12.8.2 simulate",
+  "median": {
+   "performance": 61,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100,
+   "first-contentful-paint": 3530.906,
+   "largest-contentful-paint": 6307.087,
+   "total-blocking-time": 347.5,
+   "cumulative-layout-shift": 0.012,
+   "speed-index": 3530.906,
+   "interactive": 6380.315
+  },
+  "spread": {
+   "performance": [
+    60,
+    62
+   ],
+   "accessibility": [
+    100,
+    100
+   ],
+   "best-practices": [
+    100,
+    100
+   ],
+   "seo": [
+    100,
+    100
+   ],
+   "first-contentful-paint": [
+    3529.276,
+    3610.333
+   ],
+   "largest-contentful-paint": [
+    6305.131,
+    6312.399
+   ],
+   "total-blocking-time": [
+    336.5,
+    386
+   ],
+   "cumulative-layout-shift": [
+    0,
+    0.012
+   ],
+   "speed-index": [
+    3529.276,
+    3610.333
+   ],
+   "interactive": [
+    6373.881,
+    6387.199
+   ]
+  },
+  "lcp_elements": [
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   }
+  ],
+  "failing_last_run": [
+   [
+    "first-contentful-paint",
+    "First Contentful Paint",
+    0.32
+   ],
+   [
+    "largest-contentful-paint",
+    "Largest Contentful Paint",
+    0.1
+   ],
+   [
+    "speed-index",
+    "Speed Index",
+    0.87
+   ],
+   [
+    "total-blocking-time",
+    "Total Blocking Time",
+    0.73
+   ],
+   [
+    "max-potential-fid",
+    "Max Potential First Input Delay",
+    0.18
+   ],
+   [
+    "interactive",
+    "Time to Interactive",
+    0.6
+   ],
+   [
+    "mainthread-work-breakdown",
+    "Minimize main-thread work",
+    0
+   ],
+   [
+    "bootup-time",
+    "Reduce JavaScript execution time",
+    0
+   ],
+   [
+    "largest-contentful-paint-element",
+    "Largest Contentful Paint element",
+    0
+   ],
+   [
+    "valid-source-maps",
+    "Missing source maps for large first-party JavaScript",
+    0
+   ],
+   [
+    "render-blocking-resources",
+    "Eliminate render-blocking resources",
+    0.5
+   ],
+   [
+    "unminified-javascript",
+    "Minify JavaScript",
+    0
+   ],
+   [
+    "unused-javascript",
+    "Reduce unused JavaScript",
+    0
+   ],
+   [
+    "uses-text-compression",
+    "Enable text compression",
+    0
+   ],
+   [
+    "document-latency-insight",
+    "Document request latency",
+    0.5
+   ],
+   [
+    "image-delivery-insight",
+    "Improve image delivery",
+    0
+   ],
+   [
+    "network-dependency-tree-insight",
+    "Network dependency tree",
+    0
+   ],
+   [
+    "render-blocking-insight",
+    "Render blocking requests",
+    0.5
+   ]
+  ],
+  "runs": [
+   {
+    "scores": {
+     "performance": 62,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 3606.7972499999996,
+     "largest-contentful-paint": 6308.1567,
+     "total-blocking-time": 336.5,
+     "cumulative-layout-shift": 0,
+     "speed-index": 3606.7972499999996,
+     "interactive": 6382.4067
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.32
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.1
+     ],
+     [
+      "speed-index",
+      "Speed Index",
+      0.87
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.75
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.19
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.6
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0.5
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 60,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 3530.906,
+     "largest-contentful-paint": 6307.0872,
+     "total-blocking-time": 386,
+     "cumulative-layout-shift": 0.011999,
+     "speed-index": 3530.906,
+     "interactive": 6379.6872
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.34
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.1
+     ],
+     [
+      "speed-index",
+      "Speed Index",
+      0.88
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.69
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.13
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.6
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 62,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 3530.5128749999994,
+     "largest-contentful-paint": 6306.615449999999,
+     "total-blocking-time": 339.5,
+     "cumulative-layout-shift": 0.011999,
+     "speed-index": 3530.5128749999994,
+     "interactive": 6380.31545
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.34
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.1
+     ],
+     [
+      "speed-index",
+      "Speed Index",
+      0.88
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.74
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.19
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.6
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 61,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 3529.276,
+     "largest-contentful-paint": 6305.1312,
+     "total-blocking-time": 366.9999999999998,
+     "cumulative-layout-shift": 0.011999,
+     "speed-index": 3529.276,
+     "interactive": 6373.8812
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.34
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.1
+     ],
+     [
+      "speed-index",
+      "Speed Index",
+      0.88
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.71
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.15
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.6
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 61,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 3610.3326249999996,
+     "largest-contentful-paint": 6312.399149999999,
+     "total-blocking-time": 347.4999999999999,
+     "cumulative-layout-shift": 0,
+     "speed-index": 3610.3326249999996,
+     "interactive": 6387.1991499999995
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.32
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.1
+     ],
+     [
+      "speed-index",
+      "Speed Index",
+      0.87
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.73
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.18
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.6
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   }
+  ]
+ },
+ "stage-0-desktop": {
+  "protocol": "1 discarded warm-up + 5 runs, same profile, Lighthouse 12.8.2 simulate",
+  "median": {
+   "performance": 99,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100,
+   "first-contentful-paint": 562.284,
+   "largest-contentful-paint": 888.67,
+   "total-blocking-time": 0,
+   "cumulative-layout-shift": 0,
+   "speed-index": 562.284,
+   "interactive": 889.27
+  },
+  "spread": {
+   "performance": [
+    99,
+    99
+   ],
+   "accessibility": [
+    100,
+    100
+   ],
+   "best-practices": [
+    100,
+    100
+   ],
+   "seo": [
+    100,
+    100
+   ],
+   "first-contentful-paint": [
+    561.904,
+    563.216
+   ],
+   "largest-contentful-paint": [
+    882.741,
+    890.359
+   ],
+   "total-blocking-time": [
+    0,
+    0
+   ],
+   "cumulative-layout-shift": [
+    0,
+    0.002
+   ],
+   "speed-index": [
+    561.904,
+    563.216
+   ],
+   "interactive": [
+    882.741,
+    891.009
+   ]
+  },
+  "lcp_elements": [
+   {
+    "selector": "body > p.caption",
+    "snippet": "<p class=\"caption\">",
+    "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+   },
+   {
+    "selector": "body > p.caption",
+    "snippet": "<p class=\"caption\">",
+    "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+   },
+   {
+    "selector": "body > p.caption",
+    "snippet": "<p class=\"caption\">",
+    "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+   },
+   {
+    "selector": "body > p.caption",
+    "snippet": "<p class=\"caption\">",
+    "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+   },
+   {
+    "selector": "body > p.caption",
+    "snippet": "<p class=\"caption\">",
+    "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+   }
+  ],
+  "failing_last_run": [
+   [
+    "valid-source-maps",
+    "Missing source maps for large first-party JavaScript",
     0
    ],
    [
@@ -58,31 +1295,358 @@
     0.5
    ]
   ],
-  "runWarnings": []
+  "runs": [
+   {
+    "scores": {
+     "performance": 99,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 563.21575,
+     "largest-contentful-paint": 890.3589,
+     "total-blocking-time": 0,
+     "cumulative-layout-shift": 0,
+     "speed-index": 563.21575,
+     "interactive": 891.0089
+    },
+    "lcp_element": {
+     "selector": "body > p.caption",
+     "snippet": "<p class=\"caption\">",
+     "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+    },
+    "failing": [
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0.5
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 99,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 562.283875,
+     "largest-contentful-paint": 882.74065,
+     "total-blocking-time": 0,
+     "cumulative-layout-shift": 0,
+     "speed-index": 562.283875,
+     "interactive": 882.74065
+    },
+    "lcp_element": {
+     "selector": "body > p.caption",
+     "snippet": "<p class=\"caption\">",
+     "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+    },
+    "failing": [
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0.5
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 99,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 561.904,
+     "largest-contentful-paint": 889.2847999999999,
+     "total-blocking-time": 0,
+     "cumulative-layout-shift": 0,
+     "speed-index": 561.904,
+     "interactive": 889.9848
+    },
+    "lcp_element": {
+     "selector": "body > p.caption",
+     "snippet": "<p class=\"caption\">",
+     "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+    },
+    "failing": [
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0.5
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 99,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 562.225125,
+     "largest-contentful-paint": 888.67015,
+     "total-blocking-time": 0,
+     "cumulative-layout-shift": 0,
+     "speed-index": 562.225125,
+     "interactive": 889.2701500000001
+    },
+    "lcp_element": {
+     "selector": "body > p.caption",
+     "snippet": "<p class=\"caption\">",
+     "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+    },
+    "failing": [
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0.5
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 99,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 562.6965,
+     "largest-contentful-paint": 883.2357999999999,
+     "total-blocking-time": 0,
+     "cumulative-layout-shift": 0.001954,
+     "speed-index": 562.6965,
+     "interactive": 883.2357999999999
+    },
+    "lcp_element": {
+     "selector": "body > p.caption",
+     "snippet": "<p class=\"caption\">",
+     "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+    },
+    "failing": [
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0.5
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   }
+  ]
  },
  "stage-0-mobile": {
-  "lighthouse": "12.8.2",
-  "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/148.0.0.0 Safari/537.36",
-  "formFactor": "mobile",
-  "throttling": "simulate",
-  "scores": {
+  "protocol": "1 discarded warm-up + 5 runs, same profile, Lighthouse 12.8.2 simulate",
+  "median": {
    "performance": 79,
    "accessibility": 100,
    "best-practices": 100,
-   "seo": 100
-  },
-  "metrics": {
-   "first-contentful-paint": 2777.873,
-   "largest-contentful-paint": 4653.447,
-   "total-blocking-time": 27,
+   "seo": 100,
+   "first-contentful-paint": 2777.035,
+   "largest-contentful-paint": 4677.232,
+   "total-blocking-time": 17,
    "cumulative-layout-shift": 0.012,
-   "speed-index": 2777.873,
-   "interactive": 4708.447,
-   "total-byte-weight": 702869,
-   "server-response-time": 0.534
+   "speed-index": 2777.035,
+   "interactive": 4679.732
   },
-  "requests": 7,
-  "failing_audits": [
+  "spread": {
+   "performance": [
+    79,
+    79
+   ],
+   "accessibility": [
+    100,
+    100
+   ],
+   "best-practices": [
+    100,
+    100
+   ],
+   "seo": [
+    100,
+    100
+   ],
+   "first-contentful-paint": [
+    2776.86,
+    2777.297
+   ],
+   "largest-contentful-paint": [
+    4652.263,
+    4680.757
+   ],
+   "total-blocking-time": [
+    15.5,
+    23
+   ],
+   "cumulative-layout-shift": [
+    0,
+    0.012
+   ],
+   "speed-index": [
+    2776.86,
+    2777.297
+   ],
+   "interactive": [
+    4652.263,
+    4708.757
+   ]
+  },
+  "lcp_elements": [
+   {
+    "selector": "body > p.caption",
+    "snippet": "<p class=\"caption\">",
+    "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+   },
+   {
+    "selector": "body > p.caption",
+    "snippet": "<p class=\"caption\">",
+    "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+   },
+   {
+    "selector": "body > p.caption",
+    "snippet": "<p class=\"caption\">",
+    "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+   },
+   {
+    "selector": "body > p.caption",
+    "snippet": "<p class=\"caption\">",
+    "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+   },
+   {
+    "selector": "body > p.caption",
+    "snippet": "<p class=\"caption\">",
+    "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+   }
+  ],
+  "failing_last_run": [
    [
     "first-contentful-paint",
     "First Contentful Paint",
@@ -109,11 +1673,6 @@
     0
    ],
    [
-    "label-content-name-mismatch",
-    "Elements with visible text labels do not have matching accessible names.",
-    0
-   ],
-   [
     "render-blocking-resources",
     "Eliminate render-blocking resources",
     0.5
@@ -144,228 +1703,397 @@
     0.5
    ]
   ],
-  "runWarnings": []
- },
- "stage-8-desktop": {
-  "lighthouse": "12.8.2",
-  "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/148.0.0.0 Safari/537.36",
-  "formFactor": "desktop",
-  "throttling": "simulate",
-  "scores": {
-   "performance": 58,
-   "accessibility": 100,
-   "best-practices": 100,
-   "seo": 100
-  },
-  "metrics": {
-   "first-contentful-paint": 4356.092,
-   "largest-contentful-paint": 4356.092,
-   "total-blocking-time": 86.954,
-   "cumulative-layout-shift": 0,
-   "speed-index": 4939.048,
-   "interactive": 4493.946,
-   "total-byte-weight": 899761,
-   "server-response-time": 1.845
-  },
-  "requests": 30,
-  "failing_audits": [
-   [
-    "first-contentful-paint",
-    "First Contentful Paint",
-    0
-   ],
-   [
-    "largest-contentful-paint",
-    "Largest Contentful Paint",
-    0.13
-   ],
-   [
-    "speed-index",
-    "Speed Index",
-    0.04
-   ],
-   [
-    "max-potential-fid",
-    "Max Potential First Input Delay",
-    0.32
-   ],
-   [
-    "interactive",
-    "Time to Interactive",
-    0.5
-   ],
-   [
-    "mainthread-work-breakdown",
-    "Minimize main-thread work",
-    0
-   ],
-   [
-    "bootup-time",
-    "Reduce JavaScript execution time",
-    0
-   ],
-   [
-    "largest-contentful-paint-element",
-    "Largest Contentful Paint element",
-    0
-   ],
-   [
-    "valid-source-maps",
-    "Missing source maps for large first-party JavaScript",
-    0
-   ],
-   [
-    "label-content-name-mismatch",
-    "Elements with visible text labels do not have matching accessible names.",
-    0
-   ],
-   [
-    "unminified-javascript",
-    "Minify JavaScript",
-    0
-   ],
-   [
-    "unused-javascript",
-    "Reduce unused JavaScript",
-    0.5
-   ],
-   [
-    "uses-text-compression",
-    "Enable text compression",
-    0
-   ],
-   [
-    "document-latency-insight",
-    "Document request latency",
-    0.5
-   ],
-   [
-    "network-dependency-tree-insight",
-    "Network dependency tree",
-    0
-   ],
-   [
-    "render-blocking-insight",
-    "Render blocking requests",
-    0.5
-   ]
-  ],
-  "runWarnings": []
- },
- "stage-8-mobile": {
-  "lighthouse": "12.8.2",
-  "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/148.0.0.0 Safari/537.36",
-  "formFactor": "mobile",
-  "throttling": "simulate",
-  "scores": {
-   "performance": 50,
-   "accessibility": 100,
-   "best-practices": 100,
-   "seo": 100
-  },
-  "metrics": {
-   "first-contentful-paint": 3606.486,
-   "largest-contentful-paint": 6513.283,
-   "total-blocking-time": 829.5,
-   "cumulative-layout-shift": 0,
-   "speed-index": 3606.486,
-   "interactive": 6801.283,
-   "total-byte-weight": 894334,
-   "server-response-time": 0.688
-  },
-  "requests": 30,
-  "failing_audits": [
-   [
-    "first-contentful-paint",
-    "First Contentful Paint",
-    0.32
-   ],
-   [
-    "largest-contentful-paint",
-    "Largest Contentful Paint",
-    0.09
-   ],
-   [
-    "speed-index",
-    "Speed Index",
-    0.87
-   ],
-   [
-    "total-blocking-time",
-    "Total Blocking Time",
-    0.35
-   ],
-   [
-    "max-potential-fid",
-    "Max Potential First Input Delay",
-    0.02
-   ],
-   [
-    "interactive",
-    "Time to Interactive",
-    0.55
-   ],
-   [
-    "mainthread-work-breakdown",
-    "Minimize main-thread work",
-    0
-   ],
-   [
-    "bootup-time",
-    "Reduce JavaScript execution time",
-    0
-   ],
-   [
-    "largest-contentful-paint-element",
-    "Largest Contentful Paint element",
-    0
-   ],
-   [
-    "valid-source-maps",
-    "Missing source maps for large first-party JavaScript",
-    0
-   ],
-   [
-    "label-content-name-mismatch",
-    "Elements with visible text labels do not have matching accessible names.",
-    0
-   ],
-   [
-    "render-blocking-resources",
-    "Eliminate render-blocking resources",
-    0.5
-   ],
-   [
-    "unminified-javascript",
-    "Minify JavaScript",
-    0
-   ],
-   [
-    "unused-javascript",
-    "Reduce unused JavaScript",
-    0
-   ],
-   [
-    "uses-text-compression",
-    "Enable text compression",
-    0
-   ],
-   [
-    "document-latency-insight",
-    "Document request latency",
-    0.5
-   ],
-   [
-    "network-dependency-tree-insight",
-    "Network dependency tree",
-    0
-   ],
-   [
-    "render-blocking-insight",
-    "Render blocking requests",
-    0.5
-   ]
-  ],
-  "runWarnings": []
+  "runs": [
+   {
+    "scores": {
+     "performance": 79,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 2776.886125,
+     "largest-contentful-paint": 4652.26335,
+     "total-blocking-time": 15.5,
+     "cumulative-layout-shift": 0.011999,
+     "speed-index": 2776.886125,
+     "interactive": 4652.26335
+    },
+    "lcp_element": {
+     "selector": "body > p.caption",
+     "snippet": "<p class=\"caption\">",
+     "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.57
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.34
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.81
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0.5
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 79,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 2777.03475,
+     "largest-contentful-paint": 4652.441699999999,
+     "total-blocking-time": 19.5,
+     "cumulative-layout-shift": 0.011999,
+     "speed-index": 2777.03475,
+     "interactive": 4652.441699999999
+    },
+    "lcp_element": {
+     "selector": "body > p.caption",
+     "snippet": "<p class=\"caption\">",
+     "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.57
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.34
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.81
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0.5
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 79,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 2776.86,
+     "largest-contentful-paint": 4677.232,
+     "total-blocking-time": 17,
+     "cumulative-layout-shift": 0.011999,
+     "speed-index": 2776.86,
+     "interactive": 4679.732
+    },
+    "lcp_element": {
+     "selector": "body > p.caption",
+     "snippet": "<p class=\"caption\">",
+     "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.57
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.33
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.8
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0.5
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 79,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 2777.297125,
+     "largest-contentful-paint": 4680.75655,
+     "total-blocking-time": 23,
+     "cumulative-layout-shift": 0,
+     "speed-index": 2777.297125,
+     "interactive": 4708.75655
+    },
+    "lcp_element": {
+     "selector": "body > p.caption",
+     "snippet": "<p class=\"caption\">",
+     "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.57
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.33
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.8
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0.5
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 79,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 2777.1090000000004,
+     "largest-contentful-paint": 4679.0308,
+     "total-blocking-time": 15.5,
+     "cumulative-layout-shift": 0,
+     "speed-index": 2777.1090000000004,
+     "interactive": 4705.5308
+    },
+    "lcp_element": {
+     "selector": "body > p.caption",
+     "snippet": "<p class=\"caption\">",
+     "label": "Stage 0 \u2014 slop baseline. AmbientLight only, MeshStandardMaterial defaults on ev\u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.57
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.33
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.8
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0.5
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   }
+  ]
  }
 }

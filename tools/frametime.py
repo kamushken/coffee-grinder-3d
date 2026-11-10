@@ -46,7 +46,7 @@ def parse_sizes(s):
     return out
 
 
-def run(p, engine, stages, sizes, query, settle, frames, bases=("http://127.0.0.1:4321",)):
+def run(p, engine, stages, sizes, query, settle, frames, bases=("http://127.0.0.1:4321",), warmup=False):
     if engine == "webkit":
         b = p.webkit.launch()
     else:
@@ -55,6 +55,12 @@ def run(p, engine, stages, sizes, query, settle, frames, bases=("http://127.0.0.
             args += ["--disable-gpu-vsync", "--disable-frame-rate-limit"]
         b = p.chromium.launch(args=args)
     res = []
+    if warmup:  # Phase 3.5 protocol: one discarded load of every stage fills the Metal shader cache
+        for st in stages:
+            ctx = b.new_context(viewport={"width": 1440, "height": 900}); pg = ctx.new_page()
+            pg.goto(f"{bases[0]}/{st}/" + ("?ondemand=0" if st in ("stage-7", "stage-8") else ""))
+            pg.wait_for_function("window.__ready === true", timeout=60000); pg.wait_for_timeout(500); ctx.close()
+        print(f"{engine}: warm-up pass done (discarded)", flush=True)
     for st in stages:
       for w, h, dpr in sizes:
         for base in bases:
@@ -93,13 +99,14 @@ def main():
     ap.add_argument("--settle", type=float, default=1.5)
     ap.add_argument("--frames", type=int, default=120)
     ap.add_argument("--bases", default="http://127.0.0.1:4321", help="comma list; each page is loaded from every base in turn (interleaved A/B)")
+    ap.add_argument("--warmup", action="store_true", help="one discarded load of every stage per engine first")
     a = ap.parse_args()
     stages = [f"stage-{s}" for s in a.stages.split(",")]
     sizes = parse_sizes(a.sizes)
     out = []
     with sync_playwright() as p:
         for e in a.engines.split(","):
-            out += run(p, e, stages, sizes, a.query, a.settle, a.frames, a.bases.split(","))
+            out += run(p, e, stages, sizes, a.query, a.settle, a.frames, a.bases.split(","), a.warmup)
     print(json.dumps(out))
 
 
