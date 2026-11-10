@@ -13,3 +13,10 @@ canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block
 .stages a { color: #e8e8e8; text-decoration: none; min-width: 28px; min-height: 28px; display: grid; place-items: center; border-radius: 3px; }
 .stages a:hover { background: rgba(255, 255, 255, .14); }
 .stages a[aria-current="page"] { background: #e8e8e8; color: #000; }
+.stages a:focus-visible { outline: 2px solid #ffd28a; outline-offset: 2px; }
+/* Phase 3.6: prev/next at the end of every stage caption */
+.prevnext { display: flex; justify-content: space-between; gap: 12px; margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, .18); }
+.prevnext a { color: #ffd28a; text-decoration: none; min-height: 28px; display: inline-flex; align-items: center; }
+.prevnext a:hover { text-decoration: underline; }
+.prevnext a:focus-visible { outline: 2px solid #ffd28a; outline-offset: 2px; }
+.prevnext .next { margin-left: auto; text-align: right; }
