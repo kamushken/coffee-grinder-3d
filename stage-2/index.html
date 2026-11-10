@@ -14,6 +14,8 @@
   </script>
   <link rel="stylesheet" href="/shared/shell.css">
   <style>
+    /* 3.6: paint before the first WebGL frame (the canvas is transparent until then). Colours sampled from captures/stage-2.webp. */
+    html, body { background: #917e6c linear-gradient(180deg, #c1bab2 0%, #bab5b5 52%, #a8978a 58%, #917e6c 100%) fixed; }
     .caption button { font: inherit; color: #e8e8e8; background: transparent; border: 1px solid rgba(255,255,255,.3); border-radius: 3px; padding: 2px 8px; margin: 4px 4px 0 0; min-height: 28px; cursor: pointer; }
     .caption button[aria-pressed="true"] { background: #e8e8e8; color: #000; }
     .caption button:focus-visible { outline: 2px solid #ffd28a; outline-offset: 2px; }

@@ -13,6 +13,10 @@
     } }
   </script>
   <link rel="stylesheet" href="/shared/shell.css">
+  <style>
+    /* 3.6: paint before the first WebGL frame (the canvas is transparent until then). Colours sampled from captures/stage-1.webp. */
+    html, body { background: #9e7a64 linear-gradient(180deg, #dab58f 0%, #dab58f 52%, #a37d66 60%, #9e7a64 78%, #463a32 100%) fixed; }
+  </style>
 </head>
 <body>
   <canvas id="gl" aria-label="The coffee grinder in its palette: green-charcoal body, warm steel, walnut knob, on a travertine slab, lit warm from behind-left."></canvas>
