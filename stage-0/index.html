@@ -4,14 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
-  <title>Stage 0 · coffee-grinder-3d lab</title>
-  <meta name="description" content="Stage 0 of a procedural three.js coffee grinder study. Not built yet.">
+  <title>Stage 0 · slop baseline · coffee-grinder-3d lab</title>
+  <meta name="description" content="Stage 0: a procedural three.js coffee grinder with ambient light and default materials only. The deliberately ugly baseline.">
+  <script type="importmap">
+    { "imports": {
+        "three": "/vendor/three/build/three.module.min.js",
+        "three/addons/": "/vendor/three/examples/jsm/"
+    } }
+  </script>
   <link rel="stylesheet" href="/shared/shell.css">
 </head>
 <body>
+  <canvas id="gl" aria-label="A manual burr coffee grinder rendered with ambient light only: a flat white silhouette."></canvas>
   <nav class="stages" aria-label="Stages"></nav>
-  <p class="caption"><b>Stage 0</b> — not built yet.</p>
+  <p class="caption"><b>Stage 0 — slop baseline.</b> AmbientLight only, MeshStandardMaterial defaults on every part, dead-centre straight-on camera, no shadows, no tone mapping, no motion.</p>
   <script type="module" src="/shared/shell.js"></script>
   <script type="module" src="/shared/goatcounter.js"></script>
+  <script type="module" src="./main.js"></script>
 </body>
 </html>
