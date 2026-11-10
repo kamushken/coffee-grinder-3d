@@ -22,6 +22,42 @@ simulated throttling.
 
 Item 5 (renderer notes) is documentation only, below.
 
+## Phase 3.6: index and stage entry (UX only, no scene changes)
+
+| Change | Commit | Verified by |
+|---|---|---|
+| Index rebuilt: #111 background, 60ch intro (what / start at 0, end at 8 / stage 0 ugly on purpose), `ul` grid of 9 card links (3 / 2 / 1 columns at >900 / ≤900 / ≤600 px), stills lazy with explicit width/height, footer with skills ran / DOCUMENTED-NOT-RUN / pinned hash; no corner nav on the index | `fadbc8e` | site-check below; Lighthouse a11y below |
+| Prev/next links with stage titles at the bottom of every stage caption (`shared/shell.js`), stage 0 prev and stage 8 next go to the index | `3877b2e` | screenshots of stages 0, 4, 8 at 1440 and 390; 0 page errors on all 10 routes × 2 engines × 2 viewports (`first-paint.json`, `errors`) |
+| Stage 0: visible note above the fold, "Deliberately ugly baseline. Compare with stage 8." linking `/stage-8/`, clear of the corner nav at 1440 and 390 in both engines | `ebb05ac` | element boxes measured in Chromium and WebKit |
+| Stages 1, 2, 3, 4, 6: sky-to-ground CSS gradient on html/body sampled from each stage's still, so the page shows the scene's colours (not #000) until the first WebGL frame. CSS in each stage's own `index.html`; scene code untouched | `3c20c6d` | `tools/first_paint.py` before/after below |
+
+### First paint (`tools/first_paint.py`; before: `measurements/phase-3.6/first-paint-before.json`, after: `measurements/phase-3.6/first-paint.json`)
+
+Screenshots are taken as fast as the engine allows from navigation to 1.5 s. A shot counts as black when the centre crop has mean luma < 10 and stddev < 3. Viewports: 1440×900@1 and 390×844@2. Engines: Chromium with Metal ANGLE, and WebKit.
+
+- **Before:** the index was black for the whole 1.5 s in both engines (LATE). In Chromium at 1440, the first shot was black on stages 2 (non-black at 277 ms), 3 (412 ms), 4 (418 ms) and 6 (474 ms), and on stage 0.
+- **After:** all 40 runs are non-black within 1 s; the latest first non-black shot is at 477 ms. No stage has a black first shot in either engine at either width. Stage 0 now shows the note and the grey grinder in its first shot.
+- **Stage 1** was not black in the "before" run, but one "after" run in Chromium at 1440 caught a black first shot at 74 ms. It now has the same CSS fix, and three more runs showed no black first shot.
+- **Remaining:** in WebKit at 1440 the index's first shot (about 60 ms) was black in some runs, then non-black at 185–232 ms.
+  - That shot has mean 0.0 and stddev 0.0. The page background is #111, which is luma 17, so the shot was taken before the page had painted anything at all, not of a black page.
+  - A separate 8-run probe had its first shot at 33–92 ms. Every one showed #111 plus text (mean 12.8–13.7), and `first-contentful-paint` was at 12–42 ms.
+  - This is a race between the screenshot and the first composited frame, not a black page. See UNCERTAIN 13.
+
+### Accessibility (`tools/lh.py a11y --pages /,stage-8`; `measurements/phase-3.6/lighthouse-a11y/summary.json`)
+
+| Page | Lighthouse 12.8.2 a11y | Failing audits |
+|---|---|---|
+| `/` (index) | **100** | none |
+| `/stage-8/` | **100** | none (`label-content-name-mismatch` score 1) |
+
+- Each card is a single `<a>`. Its accessible name is "Stage N · title" followed by the description; a space separates the description so the words don't run together.
+- Cards have a `:focus-visible` outline: 3px #ffd28a, offset 3px.
+- The grid is a `ul` with the label "Stages, 0 to 8", so screen readers announce 9 items.
+
+### site-check on the index (`check.py`, 3.7-patched; `measurements/site-check/index-report.json`)
+
+`check.py http://127.0.0.1:4321/ --browser both --widths 1440,768,390` reported: 8 shots, 0 with problems, 0 errors, 0 blank canvases, no overflow. That covers 3 widths × 2 engines, plus reduced motion at 1440. Contact sheet looked at: 3 columns at 1440, 2 at 768, 1 at 390 in both engines.
+
 ## Skills: what actually ran
 
 | Skill | Status | Evidence |
@@ -474,3 +510,8 @@ so they are not mistaken for measured facts.
 12. **Whether Retina ever reaches fast unforced.** On this M1 Pro balanced settles at 8.7 ms, under
    the 25 ms trigger. Fast was reached only with the threshold forced (`ladder.json`). A slower GPU
    is needed to see the second drop happen on its own.
+13. **WebKit index first shot (3.6).** At 1440 the first screenshot is sometimes uniformly 0.0 at
+   about 60 ms, although the computed body background is already #111 and FCP has fired. I read this
+   as Playwright's screenshot landing before WebKit composites its first frame, a tool artefact and
+   not a black page, but it is not traced. Whether real Safari ever shows the black frame was not
+   tested.

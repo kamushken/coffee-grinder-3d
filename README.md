@@ -52,7 +52,7 @@ Homebrew is not present on this machine.
 
 | Route | Stage | Status |
 | --- | --- | --- |
-| `/` | index | lab index |
+| `/` | index | lab index (3.6 `fadbc8e`): intro, 9-card grid that is the nav, footer with skills and pinned hash |
 | `/stage-0/` | slop baseline: AmbientLight, default MeshStandardMaterial, straight-on, no shadows | frozen `2990273` · `captures/stage-0.webp` |
 | `/stage-1/` | direction: palette and light temperature from `notes/direction.md` | frozen `007a474` · `captures/stage-1.webp` |
 | `/stage-2/` | lighting: sky/sun presets with blending, fitted soft shadows, GTAO | frozen `6097ddf`, DPR fix `c6e169e` · `captures/stage-2.webp` |
@@ -62,6 +62,8 @@ Homebrew is not present on this machine.
 | `/stage-6/` | explainer: exploded-view of the burr assembly, x-ray, labels, picking | frozen `fd6b800`, DPR fix `c6e169e` · `captures/stage-6*.webp`, `stage-6-explode.mp4` |
 | `/stage-7/` | degradation: quality tiers, poster fallback, reduced motion, keyboard nav | frozen `d8817ea`, LCP fix `c74bff1` · `captures/stage-7*.webp` |
 | `/stage-8/` | final: stage 3 light + stage 4 composition + stage 6 explainer + stage 7 degradation | frozen `cf86b51` (+ record fix `6cee84a`, LCP fix `c74bff1`, 3.7: tier ladder `a79406d`, mobile deferred boot `b7c5437`, mobile fast default `26f74c1`) · `captures/stage-8*.webp` |
+
+Phase 3.6 (UX only, scenes untouched): every stage page has prev/next links with stage titles (`3877b2e`); stage 0 has a visible "Compare with stage 8" note (`ebb05ac`); stages 1–4 and 6 have a CSS sky-to-ground background, so the page is never black before the first WebGL frame (`3c20c6d`). Details are in `FACTS.md` under "Phase 3.6".
 
 Each stage is frozen once its capture is committed. Phase 3.5 lifted the freeze for bugfixes only (no art changes); each fix is its own commit, listed in `FACTS.md`. Shared code in `shared/` is frozen at the
 point the first stage using it is captured; later stages fork rather than edit.

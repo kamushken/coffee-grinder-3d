@@ -1,0 +1,18 @@
+{
+ "index": {
+  "score": 100,
+  "failing": [],
+  "label-content-name-mismatch": {
+   "score": null,
+   "mode": "notApplicable"
+  }
+ },
+ "stage-8": {
+  "score": 100,
+  "failing": [],
+  "label-content-name-mismatch": {
+   "score": 1,
+   "mode": "binary"
+  }
+ }
+}
