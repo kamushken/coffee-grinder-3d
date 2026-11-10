@@ -1,0 +1,14 @@
+{
+  "capture": "captures/stage-1.webp",
+  "bytes": 15734,
+  "webp_quality": 82,
+  "url": "http://127.0.0.1:4321/stage-1/",
+  "browser": "chromium",
+  "viewport": "1440x900",
+  "ready_s": 0.42,
+  "ms_per_frame": 8.21,
+  "calls": 34,
+  "triangles": 22004,
+  "gl": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+  "errors": []
+}

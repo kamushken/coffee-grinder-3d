@@ -4,14 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
-  <title>Stage 1 · coffee-grinder-3d lab</title>
-  <meta name="description" content="Stage 1 of a procedural three.js coffee grinder study. Not built yet.">
+  <title>Stage 1 · direction · coffee-grinder-3d lab</title>
+  <meta name="description" content="Stage 1: the procedural coffee grinder with the art-direction palette and warm-key, cool-fill light temperature applied.">
+  <script type="importmap">
+    { "imports": {
+        "three": "/vendor/three/build/three.module.min.js",
+        "three/addons/": "/vendor/three/examples/jsm/"
+    } }
+  </script>
   <link rel="stylesheet" href="/shared/shell.css">
 </head>
 <body>
+  <canvas id="gl" aria-label="The coffee grinder in its palette: green-charcoal body, warm steel, walnut knob, on a travertine slab, lit warm from behind-left."></canvas>
   <nav class="stages" aria-label="Stages"></nav>
-  <p class="caption"><b>Stage 1</b> — not built yet.</p>
+  <p class="caption"><b>Stage 1 — direction.</b> Palette and light temperature from notes/direction.md: warm ~3200 K key from behind-left, cool sky fill, warm ground bounce. Camera, materials and shadows unchanged from stage 0.</p>
   <script type="module" src="/shared/shell.js"></script>
   <script type="module" src="/shared/goatcounter.js"></script>
+  <script type="module" src="./main.js"></script>
 </body>
 </html>
