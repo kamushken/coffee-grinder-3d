@@ -1,0 +1,13 @@
+{
+ "stage-7/poster-wide.webp": {
+  "size": "1440x900",
+  "bytes": 48994,
+  "bpp": 0.302
+ },
+ "stage-7/poster-tall.webp": {
+  "size": "585x1266",
+  "bytes": 49312,
+  "bpp": 0.533
+ },
+ "note": "tools/poster.py: wide q92, tall q98 (lowest quality >= 40 KB); before: wide 14,478 B, tall 9,052 B"
+}

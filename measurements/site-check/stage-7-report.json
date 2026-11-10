@@ -6,9 +6,9 @@
     "width": 1440,
     "reduced": false,
     "scroll": null,
-    "ready_s": 0.33,
-    "ms_per_frame": 8.5,
-    "fps": 117.4,
+    "ready_s": 0.36,
+    "ms_per_frame": 8.8,
+    "fps": 113.9,
     "errors": [],
     "blank_canvases": 0,
     "overflow": false,
@@ -23,8 +23,8 @@
       "textures": 27,
       "programs": 34
     },
-    "heapMB": 10,
-    "file": ".tmp/site-check/stage-7/default-chromium-1440.png"
+    "heapMB": 11,
+    "file": ".tmp/sc35/stage-7/default-chromium-1440.png"
   },
   {
     "name": "default-chromium-768",
@@ -33,9 +33,9 @@
     "width": 768,
     "reduced": false,
     "scroll": null,
-    "ready_s": 0.26,
+    "ready_s": 0.25,
     "ms_per_frame": 8.3,
-    "fps": 120.5,
+    "fps": 120.4,
     "errors": [],
     "blank_canvases": 0,
     "overflow": false,
@@ -51,7 +51,7 @@
       "programs": 34
     },
     "heapMB": 10,
-    "file": ".tmp/site-check/stage-7/default-chromium-768.png"
+    "file": ".tmp/sc35/stage-7/default-chromium-768.png"
   },
   {
     "name": "default-chromium-390",
@@ -61,8 +61,8 @@
     "reduced": false,
     "scroll": null,
     "ready_s": 0.27,
-    "ms_per_frame": 8.3,
-    "fps": 119.8,
+    "ms_per_frame": 8.9,
+    "fps": 112.6,
     "errors": [],
     "blank_canvases": 0,
     "overflow": false,
@@ -78,7 +78,7 @@
       "programs": 34
     },
     "heapMB": 10,
-    "file": ".tmp/site-check/stage-7/default-chromium-390.png"
+    "file": ".tmp/sc35/stage-7/default-chromium-390.png"
   },
   {
     "name": "ondemand-0-chromium-1440",
@@ -87,9 +87,9 @@
     "width": 1440,
     "reduced": false,
     "scroll": null,
-    "ready_s": 0.29,
-    "ms_per_frame": 8.5,
-    "fps": 118.1,
+    "ready_s": 0.25,
+    "ms_per_frame": 8.4,
+    "fps": 119.2,
     "errors": [],
     "blank_canvases": 0,
     "overflow": false,
@@ -105,7 +105,7 @@
       "programs": 34
     },
     "heapMB": 10,
-    "file": ".tmp/site-check/stage-7/ondemand-0-chromium-1440.png"
+    "file": ".tmp/sc35/stage-7/ondemand-0-chromium-1440.png"
   },
   {
     "name": "ondemand-0-chromium-768",
@@ -114,9 +114,9 @@
     "width": 768,
     "reduced": false,
     "scroll": null,
-    "ready_s": 0.25,
+    "ready_s": 0.34,
     "ms_per_frame": 8.3,
-    "fps": 120.5,
+    "fps": 120.4,
     "errors": [],
     "blank_canvases": 0,
     "overflow": false,
@@ -131,8 +131,8 @@
       "textures": 27,
       "programs": 34
     },
-    "heapMB": 10,
-    "file": ".tmp/site-check/stage-7/ondemand-0-chromium-768.png"
+    "heapMB": 11,
+    "file": ".tmp/sc35/stage-7/ondemand-0-chromium-768.png"
   },
   {
     "name": "ondemand-0-chromium-390",
@@ -141,9 +141,9 @@
     "width": 390,
     "reduced": false,
     "scroll": null,
-    "ready_s": 0.26,
-    "ms_per_frame": 8.4,
-    "fps": 118.6,
+    "ready_s": 0.25,
+    "ms_per_frame": 8.2,
+    "fps": 121.3,
     "errors": [],
     "blank_canvases": 0,
     "overflow": false,
@@ -159,7 +159,7 @@
       "programs": 34
     },
     "heapMB": 10,
-    "file": ".tmp/site-check/stage-7/ondemand-0-chromium-390.png"
+    "file": ".tmp/sc35/stage-7/ondemand-0-chromium-390.png"
   },
   {
     "name": "default-chromium-1440-reduced",
@@ -168,9 +168,9 @@
     "width": 1440,
     "reduced": true,
     "scroll": null,
-    "ready_s": 0.25,
-    "ms_per_frame": 8.3,
-    "fps": 120.7,
+    "ready_s": 0.24,
+    "ms_per_frame": 8.2,
+    "fps": 121.4,
     "errors": [],
     "blank_canvases": 0,
     "overflow": false,
@@ -186,7 +186,7 @@
       "programs": 34
     },
     "heapMB": 10,
-    "file": ".tmp/site-check/stage-7/default-chromium-1440-reduced.png"
+    "file": ".tmp/sc35/stage-7/default-chromium-1440-reduced.png"
   },
   {
     "name": "default-webkit-1440",
@@ -195,9 +195,9 @@
     "width": 1440,
     "reduced": false,
     "scroll": null,
-    "ready_s": 0.56,
-    "ms_per_frame": 16.6,
-    "fps": 60.2,
+    "ready_s": 0.64,
+    "ms_per_frame": 16.4,
+    "fps": 60.8,
     "errors": [],
     "blank_canvases": 0,
     "overflow": false,
@@ -213,7 +213,7 @@
       "programs": 34
     },
     "heapMB": null,
-    "file": ".tmp/site-check/stage-7/default-webkit-1440.png"
+    "file": ".tmp/sc35/stage-7/default-webkit-1440.png"
   },
   {
     "name": "default-webkit-768",
@@ -222,7 +222,7 @@
     "width": 768,
     "reduced": false,
     "scroll": null,
-    "ready_s": 0.46,
+    "ready_s": 0.43,
     "ms_per_frame": 16.6,
     "fps": 60.4,
     "errors": [],
@@ -240,7 +240,7 @@
       "programs": 34
     },
     "heapMB": null,
-    "file": ".tmp/site-check/stage-7/default-webkit-768.png"
+    "file": ".tmp/sc35/stage-7/default-webkit-768.png"
   },
   {
     "name": "default-webkit-390",
@@ -249,7 +249,7 @@
     "width": 390,
     "reduced": false,
     "scroll": null,
-    "ready_s": 0.44,
+    "ready_s": 0.42,
     "ms_per_frame": 16.5,
     "fps": 60.7,
     "errors": [],
@@ -267,7 +267,7 @@
       "programs": 34
     },
     "heapMB": null,
-    "file": ".tmp/site-check/stage-7/default-webkit-390.png"
+    "file": ".tmp/sc35/stage-7/default-webkit-390.png"
   },
   {
     "name": "ondemand-0-webkit-1440",
@@ -276,9 +276,9 @@
     "width": 1440,
     "reduced": false,
     "scroll": null,
-    "ready_s": 0.43,
-    "ms_per_frame": 16.4,
-    "fps": 60.9,
+    "ready_s": 0.42,
+    "ms_per_frame": 16.5,
+    "fps": 60.7,
     "errors": [],
     "blank_canvases": 0,
     "overflow": false,
@@ -294,7 +294,7 @@
       "programs": 34
     },
     "heapMB": null,
-    "file": ".tmp/site-check/stage-7/ondemand-0-webkit-1440.png"
+    "file": ".tmp/sc35/stage-7/ondemand-0-webkit-1440.png"
   },
   {
     "name": "ondemand-0-webkit-768",
@@ -304,8 +304,8 @@
     "reduced": false,
     "scroll": null,
     "ready_s": 0.41,
-    "ms_per_frame": 16.5,
-    "fps": 60.7,
+    "ms_per_frame": 16.6,
+    "fps": 60.2,
     "errors": [],
     "blank_canvases": 0,
     "overflow": false,
@@ -321,7 +321,7 @@
       "programs": 34
     },
     "heapMB": null,
-    "file": ".tmp/site-check/stage-7/ondemand-0-webkit-768.png"
+    "file": ".tmp/sc35/stage-7/ondemand-0-webkit-768.png"
   },
   {
     "name": "ondemand-0-webkit-390",
@@ -331,8 +331,8 @@
     "reduced": false,
     "scroll": null,
     "ready_s": 0.42,
-    "ms_per_frame": 16.6,
-    "fps": 60.1,
+    "ms_per_frame": 16.5,
+    "fps": 60.7,
     "errors": [],
     "blank_canvases": 0,
     "overflow": false,
@@ -348,7 +348,7 @@
       "programs": 34
     },
     "heapMB": null,
-    "file": ".tmp/site-check/stage-7/ondemand-0-webkit-390.png"
+    "file": ".tmp/sc35/stage-7/ondemand-0-webkit-390.png"
   },
   {
     "name": "default-webkit-1440-reduced",
@@ -357,9 +357,9 @@
     "width": 1440,
     "reduced": true,
     "scroll": null,
-    "ready_s": 0.43,
+    "ready_s": 0.44,
     "ms_per_frame": 16.5,
-    "fps": 60.7,
+    "fps": 60.5,
     "errors": [],
     "blank_canvases": 0,
     "overflow": false,
@@ -375,6 +375,6 @@
       "programs": 34
     },
     "heapMB": null,
-    "file": ".tmp/site-check/stage-7/default-webkit-1440-reduced.png"
+    "file": ".tmp/sc35/stage-7/default-webkit-1440-reduced.png"
   }
 ]

@@ -6,18 +6,15 @@
   <link rel="icon" href="data:,">
   <title>Stage 8 · final · coffee-grinder-3d lab</title>
   <meta name="description" content="Stage 8: the final coffee grinder scene. Golden-hour light, rule-of-thirds composition, an exploded view with labels and x-ray, quality tiers, a static poster fallback, reduced motion and full keyboard control.">
-  <script type="importmap">
-    { "imports": {
-        "three": "/vendor/three/build/three.module.min.js",
-        "three/addons/": "/vendor/three/examples/jsm/"
-    } }
-  </script>
   <link rel="stylesheet" href="/shared/shell.css">
-  <link rel="preload" as="image" href="/stage-7/poster-wide.webp" media="(min-aspect-ratio: 1/1)">
-  <link rel="preload" as="image" href="/stage-7/poster-tall.webp" media="(max-aspect-ratio: 1/1)">
+  <link rel="preload" as="image" href="/stage-7/poster-wide.webp" media="(min-aspect-ratio: 1/1)" fetchpriority="high">
+  <link rel="preload" as="image" href="/stage-7/poster-tall.webp" media="(max-aspect-ratio: 1/1)" fetchpriority="high">
   <style>
     /* poster first (stage 7) */
-    #poster { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 0; }
+    /* Phase 3.5: 1 px short of the viewport. Chrome drops an image that covers the whole viewport as an LCP
+       candidate (treated as a background); measured with tools/lcp_probe.py: full size -> LCP #controls,
+       height - 1px -> LCP #poster. The 1 px strip is the black page background under the caption. */
+    #poster { position: fixed; top: 0; left: 0; width: 100%; height: calc(100% - 1px); object-fit: cover; display: block; z-index: 0; }
     canvas#gl { z-index: 1; opacity: 0; }
     body.gl-ready canvas#gl { opacity: 1; }
     body.gl-ready #poster { visibility: hidden; }
@@ -43,7 +40,8 @@
     .caption button { font: inherit; color: #e8e8e8; background: transparent; border: 1px solid rgba(255,255,255,.3); border-radius: 3px; padding: 2px 8px; min-height: 28px; min-width: 28px; cursor: pointer; }
     .caption button[aria-pressed="true"] { background: #e8e8e8; color: #000; }
     .caption button:focus-visible, .caption input:focus-visible, .stages a:focus-visible, .skip:focus-visible { outline: 2px solid #ffd28a; outline-offset: 2px; }
-    #status { color: #ffd28a; }
+    /* Phase 3.5: never the largest text paint (LCP must be the poster): smaller than the caption, width capped */
+    #status { color: #ffd28a; font-size: 11px; max-width: 34ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     body.poster-only .caption .gl { display: none; }
     @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
     @media (max-width: 600px) { .labels .label, .labels svg { display: none !important; } .caption .long { display: none; } }
@@ -53,8 +51,15 @@
   <a class="skip" href="#controls">Skip to scene controls</a>
   <picture>
     <source media="(max-aspect-ratio: 1/1)" srcset="/stage-7/poster-tall.webp">
-    <img id="poster" src="/stage-7/poster-wide.webp" width="1440" height="900" alt="The coffee grinder on a walnut tray at golden hour, three-quarter view, on the right third of the frame. Static image.">
+    <img id="poster" src="/stage-7/poster-wide.webp" width="1440" height="900" fetchpriority="high" decoding="sync" alt="The coffee grinder on a walnut tray at golden hour, three-quarter view, on the right third of the frame. Static image.">
   </picture>
+  <!-- import map after the poster so the poster precedes every script element (Phase 3.5) -->
+  <script type="importmap">
+    { "imports": {
+        "three": "/vendor/three/build/three.module.min.js",
+        "three/addons/": "/vendor/three/examples/jsm/"
+    } }
+  </script>
   <canvas id="gl" tabindex="0" aria-label="Interactive 3D coffee grinder. With focus: arrow keys orbit, plus and minus zoom, 1 to 3 jump between views. Hover or tap a part to name it."></canvas>
   <div class="labels" aria-hidden="true"></div>
   <nav class="stages" aria-label="Stages"></nav>
