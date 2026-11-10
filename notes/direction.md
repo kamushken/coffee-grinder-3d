@@ -141,3 +141,38 @@ headless), 32 calls, 21,876 triangles.
 exploded-view SKILL.md recommends "Product-shot lighting ... a `RoomEnvironment` PMREM ... rather
 than a sky". The brief asks for the threejs-scene sky and sun presets at stage 2. The brief wins;
 the terrace setting is what makes a sky plausible behind a hand tool.
+
+## Stage 4 — composition (as built)
+
+Source: `stage-4/scene.js`. Lighting and materials are imported unchanged from stage 3
+(`stage-3/render.js`, `stage-3/materials.js`).
+
+| Parameter | Value |
+|---|---|
+| Orbit target | `TARGET = [0.01, 0.135, 0]` (body mid-height) |
+| Vantage `front` | stage-0 straight-on camera (flight start) |
+| Vantage `hero` | `TARGET + normalize(0.42, 0.17, 1) × 0.74` |
+| Vantage `low` | pos `[-0.30, 0.06, 0.34]` → tgt `[0.01, 0.16, 0]` |
+| Rule of thirds | `camera.setViewOffset` shifts the subject to x = 2/3 when aspect > 1.0; cleared on portrait (centred) |
+| FOV | base 38 at 16:9, widened by `fitFov` on narrower aspects |
+| Flight | one `flyTo` front → hero on load, 2.8 s (starter: rises over the midpoint, eased). Skipped when `?view=` is set; jump instead under reduced motion |
+| OrbitControls | damping 0.07, maxPolarAngle 1.45, distance 0.3–1.6, pan off |
+| Grinder placement | `(-0.035, tray floor, 0)`, rotY −0.55 (crank reads against the sky) |
+| Profile sweep | walnut tray rim: kit.js `sweep(profile, roundedRect(0.34, 0.22, r 0.03), {closed:true, uvScale:0.25})`, 8-point lip profile, rim height 18 mm; floor is an extruded rounded rect 6 mm |
+
+**Deviation from the skill.** exploded-view SKILL.md gives a three-quarter direction of
+"0.42, 0.34, 1". At y 0.34 the terrace horizon sat in the top tenth of the frame and the sky
+disappeared, so the hero uses y 0.17 at distance 0.74 (was 0.62). The horizon now sits near the
+upper third line.
+
+**Known defect (seen in `captures/stage-4.webp`).** The tray's cast shadow is cut off at the right
+by a hard vertical edge. env.js `update()` sizes the shadow frustum each frame as
+`half = clamp(0.85 × camera→target distance, 0.25·scale, 4·scale)`, centred on the orbit target
+(scale 2). For the hero (distance 0.74) that gives half ≈ 0.63 m. The low golden-hour sun throws
+the tray shadow past that edge, and `setViewOffset` shows more ground on the right than the
+distance heuristic allows for. This is the likely cause; I have not verified it with a
+shadow-camera helper. Stage 4 is frozen with this defect. Stage 8 has to enlarge or offset the
+frustum.
+
+Measured (Chromium 1440x900, `measurements/stage-4-capture.json`): 8.39 ms/frame, 218 calls,
+103,556 triangles, 0 console errors.
