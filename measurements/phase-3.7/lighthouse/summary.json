@@ -1,0 +1,745 @@
+{
+ "stage-8-mobile": {
+  "protocol": "1 discarded warm-up + 5 runs, same profile, Lighthouse 12.8.2 simulate",
+  "median": {
+   "performance": 63,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100,
+   "first-contentful-paint": 3605.811,
+   "largest-contentful-paint": 6306.973,
+   "total-blocking-time": 301,
+   "cumulative-layout-shift": 0,
+   "speed-index": 3605.811,
+   "interactive": 6382.873
+  },
+  "spread": {
+   "performance": [
+    61,
+    63
+   ],
+   "accessibility": [
+    100,
+    100
+   ],
+   "best-practices": [
+    100,
+    100
+   ],
+   "seo": [
+    100,
+    100
+   ],
+   "first-contentful-paint": [
+    3529.909,
+    3606.631
+   ],
+   "largest-contentful-paint": [
+    6305.891,
+    6307.958
+   ],
+   "total-blocking-time": [
+    294.0,
+    371.5
+   ],
+   "cumulative-layout-shift": [
+    0,
+    0
+   ],
+   "speed-index": [
+    3529.909,
+    3606.631
+   ],
+   "interactive": [
+    6380.691,
+    6389.358
+   ]
+  },
+  "lcp_elements": [
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   }
+  ],
+  "failing_last_run": [
+   [
+    "first-contentful-paint",
+    "First Contentful Paint",
+    0.32
+   ],
+   [
+    "largest-contentful-paint",
+    "Largest Contentful Paint",
+    0.1
+   ],
+   [
+    "speed-index",
+    "Speed Index",
+    0.87
+   ],
+   [
+    "total-blocking-time",
+    "Total Blocking Time",
+    0.78
+   ],
+   [
+    "max-potential-fid",
+    "Max Potential First Input Delay",
+    0.25
+   ],
+   [
+    "interactive",
+    "Time to Interactive",
+    0.6
+   ],
+   [
+    "mainthread-work-breakdown",
+    "Minimize main-thread work",
+    0
+   ],
+   [
+    "bootup-time",
+    "Reduce JavaScript execution time",
+    0
+   ],
+   [
+    "largest-contentful-paint-element",
+    "Largest Contentful Paint element",
+    0
+   ],
+   [
+    "valid-source-maps",
+    "Missing source maps for large first-party JavaScript",
+    0
+   ],
+   [
+    "render-blocking-resources",
+    "Eliminate render-blocking resources",
+    0.5
+   ],
+   [
+    "unminified-javascript",
+    "Minify JavaScript",
+    0
+   ],
+   [
+    "unused-javascript",
+    "Reduce unused JavaScript",
+    0
+   ],
+   [
+    "uses-text-compression",
+    "Enable text compression",
+    0
+   ],
+   [
+    "document-latency-insight",
+    "Document request latency",
+    0.5
+   ],
+   [
+    "image-delivery-insight",
+    "Improve image delivery",
+    0.5
+   ],
+   [
+    "network-dependency-tree-insight",
+    "Network dependency tree",
+    0
+   ],
+   [
+    "render-blocking-insight",
+    "Render blocking requests",
+    0.5
+   ]
+  ],
+  "runs": [
+   {
+    "scores": {
+     "performance": 63,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 3529.908875,
+     "largest-contentful-paint": 6305.890649999999,
+     "total-blocking-time": 295.4999999999999,
+     "cumulative-layout-shift": 0,
+     "speed-index": 3529.908875,
+     "interactive": 6380.69065
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.34
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.1
+     ],
+     [
+      "speed-index",
+      "Speed Index",
+      0.88
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.79
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.26
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.6
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0.5
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 61,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 3606.5260000000003,
+     "largest-contentful-paint": 6307.8312000000005,
+     "total-blocking-time": 371.5,
+     "cumulative-layout-shift": 0,
+     "speed-index": 3606.5260000000003,
+     "interactive": 6386.4812
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.32
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.1
+     ],
+     [
+      "speed-index",
+      "Speed Index",
+      0.87
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.71
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.15
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.6
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0.5
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 63,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 3605.031,
+     "largest-contentful-paint": 6306.037200000001,
+     "total-blocking-time": 294.0000000000001,
+     "cumulative-layout-shift": 0,
+     "speed-index": 3605.031,
+     "interactive": 6381.9372
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.32
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.1
+     ],
+     [
+      "speed-index",
+      "Speed Index",
+      0.87
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.79
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.26
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.6
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0.5
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 61,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 3606.631375,
+     "largest-contentful-paint": 6307.957649999999,
+     "total-blocking-time": 367,
+     "cumulative-layout-shift": 0,
+     "speed-index": 3606.631375,
+     "interactive": 6389.35765
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.32
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.1
+     ],
+     [
+      "speed-index",
+      "Speed Index",
+      0.87
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.71
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.15
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.6
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0.5
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 63,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 3605.811,
+     "largest-contentful-paint": 6306.9732,
+     "total-blocking-time": 301,
+     "cumulative-layout-shift": 0,
+     "speed-index": 3605.811,
+     "interactive": 6382.8732
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"http://127.0.0.1:4321/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "first-contentful-paint",
+      "First Contentful Paint",
+      0.32
+     ],
+     [
+      "largest-contentful-paint",
+      "Largest Contentful Paint",
+      0.1
+     ],
+     [
+      "speed-index",
+      "Speed Index",
+      0.87
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.78
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.25
+     ],
+     [
+      "interactive",
+      "Time to Interactive",
+      0.6
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "largest-contentful-paint-element",
+      "Largest Contentful Paint element",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "render-blocking-resources",
+      "Eliminate render-blocking resources",
+      0.5
+     ],
+     [
+      "unminified-javascript",
+      "Minify JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "uses-text-compression",
+      "Enable text compression",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0.5
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0.5
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   }
+  ]
+ }
+}

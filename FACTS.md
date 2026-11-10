@@ -29,8 +29,8 @@ Item 5 (renderer notes) is documentation only, below.
 | threejs-scene | RAN (starter `env.js`, `kit.js` copied verbatim into `lib/open-3d-skills/`) | stages 2–8 |
 | exploded-view | RAN (`explode.js` verbatim) | stages 6, 8 |
 | scroll-film | runtime RAN (`scroll-film.js` verbatim, `prep.py video`); **generation DOCUMENTED-NOT-RUN** | stage 5 uses the repo's own example footage (an electric motor) |
-| site-check | RAN (`check.py`, unmodified) | `measurements/site-check/` |
-| frame-capture | RAN (`record.py`, `compare.py`, `serve.py`, unmodified) | `captures/*-60fps.mp4`, `captures/compare-0-vs-8.mp4` |
+| site-check | RAN (`check.py`, unmodified until 3.7, then one local patch, see SKILL BUGS) | `measurements/site-check/` |
+| frame-capture | RAN (`record.py`, `compare.py`, `serve.py`, unmodified; `--crf 26` in 3.7) | `captures/*-60fps.mp4`, `captures/compare-0-vs-8.mp4` |
 | motion-assets | **DOCUMENTED-NOT-RUN** (paid generation API). A text-only plan for grinder footage is in `notes/direction.md` (stage 5) | — |
 | alpha-cutout | **DOCUMENTED-NOT-RUN** (needs generated footage) | — |
 | cursor-rig | **DOCUMENTED-NOT-RUN** (needs generated head-turn clips) | — |
@@ -80,6 +80,56 @@ served on :4322) and then from the fixed tree (:4321). Uncapped Chromium, settle
 | 4 | 15.90 → **7.94** | same | 78.63 → **30.67** | same | unchanged |
 | 5 | 17.44 → **7.99** | same | 75.19 → **28.66** | same | unchanged |
 | 6 | 16.83 → **8.70** | same | 85.15 → **32.33** | same | unchanged |
+
+### Phase 3.7: tier ladder and mobile boot (stage 8 only; stage 7 is unchanged)
+
+| # | Fix | Commit | Verified by |
+|---|---|---|---|
+| 1 | balanced maxDpr 1.5 → **1.25**, fast stays 1. The auto-drop window now counts only *rendered* frame time (3 s), so on-demand idle gaps no longer restart it. A pinned tier never drops, as before | `a79406d` | `tools/ladder_test.py` → `measurements/phase-3.7/ladder.json` |
+| 2 | Deferred boot when `innerWidth < 600`, or `saveData`, or `effectiveType` is slow-2g, 2g or 3g. The poster is painted first. GL (including the WebGL 2 probe) starts on `requestIdleCallback({timeout: 2500})` (setTimeout 2500 where rIC is missing: WebKit), or on the first `pointerdown`/`scroll`/`wheel`/`touchmove`/`keydown`. Reduced motion keeps the immediate path | `b7c5437` | `tools/boot_test.py` → `measurements/phase-3.7/boot.json` |
+| 3 | The same devices default to **fast** before the first frame. A pinned `?quality=` wins | `26f74c1` | same; tier read at the first `renderer.render` call |
+| 4 | Local `check.py` patch (see SKILL BUGS); stage 5 re-run with `--scroll-steps 4` | `29bd235` | 16 shots, 0 problems |
+| 5 | Re-recorded stage 8 + compare; all three 60 fps MP4s at crf 26 | `1536032` | see frame-capture |
+
+Note on fix 1: the code never had an explicit floor. `watch()` already allowed balanced → fast.
+In 3.5 the ladder stopped at balanced because the measured balanced frame (~17.5 ms) was under
+the 25 ms trigger. That is the starter's own rule and is kept unchanged. The window also restarted
+on every idle frame in on-demand mode, so a second window could rarely complete; that was a real
+floor and it is fixed. With the threshold forced to 1 ms (`ladder.json`), the ladder runs
+high → balanced (DPR 1.25) → fast (DPR 1) both with `?ondemand=0` and in default on-demand mode
+(keyboard orbit). With `?quality=balanced` or `?quality=high` it stays pinned for 16 s.
+
+Fix 2/3 cases (`boot.json`, Chromium and WebKit, 26 cases, 0 page errors):
+
+| Case | Deferred | Boot trigger | Tier at frame 1 | Fallback |
+|---|---|---|---|---|
+| 390×844, idle | yes | Chromium `idle` (~0.35 s); WebKit `timeout` (~2.9 s, no rIC) | fast @ DPR 1 | — |
+| 390, pointerdown / wheel / keydown (idle disabled in the test) | yes | `pointerdown` / `wheel` / `keydown` | fast | — |
+| 390, `WEBGL_lose_context` after deferred boot | yes | idle / timeout | fast | "the WebGL context was lost" |
+| 390, reduced motion | **no** (current path) | immediate | fast | — |
+| 390, `?quality=poster` | — | never | — | "requested with ?quality=poster" |
+| 390, no WebGL 2 (`getContext` → null) | yes | idle / timeout | — | "this browser has no WebGL 2" |
+| 390, `?quality=high` | yes | idle / timeout | high @ DPR 2 (pinned) | — |
+| 1440×900 desktop | no | immediate | high @ DPR 2 | — |
+| 1440, `saveData` / `3g` | yes | idle / timeout | fast | — |
+| 1440, context lost | no | immediate | high | "the WebGL context was lost" |
+
+`scroll` alone never fires on stage 8 (the page does not scroll). `wheel` and `touchmove` were
+added for that reason: the first WebKit run booted on the timeout, not on the gesture.
+
+### Retina laptop, stage 8 (3.7) (`measurements/phase-3.7/retina-stage-8.json`)
+
+Same protocol as 3.5 (1440×900 @2, uncapped, `ondemand=0`, 1 warm-up + 5 runs).
+
+| Config | Median ms | Spread | Tier / DPR |
+|---|---|---|---|
+| `?quality=balanced` (pinned) | **12.10** | 12.08–12.17 | balanced, DPR 1.25 (3.5: 16.65 at 1.5) |
+| `?quality=high` (pinned) | 38.72 | 29.20–40.30 | high, DPR 2 |
+| auto, first ~60 frames | 31.80 | 30.66–34.09 | high |
+| auto, 180 frames at 8 s (steady state) | **8.71** | 8.23–9.74 | balanced in 5/5 ("auto, 28.5–32.3 ms average") |
+
+On this M1 Pro the steady state is balanced. At 8.7–12 ms it is far under the 25 ms trigger,
+so a drop to fast is not called for. That fast is reachable is shown by `ladder.json`.
 
 ### Retina laptop, stage 8 (3.5) (`measurements/phase-3.5/retina-stage-8.json`)
 
@@ -140,6 +190,7 @@ reduced-motion pass at 1440 per engine.
 | 0 | Phase 3 | 8 | 0 |
 | 2, 3, 4, 5, 6 | after fix 1 (3.5) | 40 | 0 |
 | 7, 8 (default + `?ondemand=0`) | after fix 3 (3.5) | 28 | 0 |
+| 8 (default + `?ondemand=0`) | after 3.7 fixes 1–3 | 14 | 0 (WebKit 390 ready 2.9 s = deferred boot timeout) |
 
 | 5 with `--scroll-steps 4`, patched `check.py` | 3.7 | 16 | 0 |
 
@@ -148,6 +199,29 @@ In 3.5, `check.py --scroll-steps` crashed on stage 5 (see SKILL BUGS). After the
 same command ran: 3 widths, scroll 0 / 0.33 / 0.67 / 1.0 at 1440 and reduced motion, for both engines.
 That is 16 shots and 0 problems. At scroll 1.0 the shot shows the live stage-4 scene (218 calls);
 the film canvas is off screen and is now skipped instead of crashing.
+
+### Lighthouse 12.8.2, stage 8 mobile (3.7) (`measurements/phase-3.7/lighthouse/summary.json`)
+
+Same protocol (1 discarded warm-up + 5 runs, simulated throttling, Moto G emulation 412×823 @1.75).
+
+| | Performance | FCP ms | LCP ms | TBT ms | CLS | LCP element |
+|---|---|---|---|---|---|---|
+| 3.5 | 61 [60–62] | 3,531 | 6,307 [6,305–6,312] | 348 [336–386] | 0.012 | `img#poster` |
+| **3.7** | **63** [61–63] | 3,606 [3,530–3,607] | **6,307** [6,306–6,308] | **301** [294–372] | 0 | `img#poster` 5/5 |
+
+Mobile LCP **did not move**. The deferred boot does not change what Lighthouse simulates, for
+these reasons, read from `stage-8-mobile-run1.json`:
+- Observed LCP is 52 ms; the 6.3 s is Lantern's simulation.
+- LCP breakdown: TTFB 452, load delay 1,130, load time 225, **render delay 4,499 ms**.
+- `main.js` imports three.js statically. All 30 module requests, including the 687,699 B
+  `three.module.min.js`, start at 18–35 ms, before the observed LCP. Lantern therefore puts
+  their download and parse on the LCP path.
+
+Deferring `start()` defers the scene build and shader compile, which shows as TBT −47 ms (median).
+It does not defer the module fetch. Moving that out of the LCP path would need a dynamic `import()`
+of `three` and the stage modules inside the deferred boot. That is not done, because it is outside
+3.7. The trace also shows `body.gl-ready`: Lighthouse's idle page fires `requestIdleCallback`
+almost at once, so GL boots inside the trace anyway.
 
 ### Lighthouse 12.8.2 (3.5) (`tools/lh.py`; `measurements/lighthouse/summary.json`)
 
@@ -170,6 +244,13 @@ Still failing (last run): `uses-text-compression` (local server; Netlify not mea
 `bootup-time` / `mainthread-work-breakdown` / `total-blocking-time` (scene build + shader compile).
 `label-content-name-mismatch` is gone.
 
+### LCP on mobile after 3.7 (`measurements/phase-3.7/lcp-probe.json`)
+
+`tools/lcp_probe.py` re-run on the 3.7 page. As shipped: 1440×900 → `#poster` 1,294,560 px².
+390×844 @2 → `#controls` 1,890 px² @36 ms, then **`#poster` 328,770 px² @44 ms** (final LCP).
+That is the same sequence as 3.5, so the deferred boot did not change it. Full-viewport variant:
+still `#controls` (the 1 px rule holds). Lighthouse mobile names `img#poster` in 5/5 runs.
+
 ### LCP: how the poster became the LCP element (fix 3)
 
 `tools/lcp_probe.py` (`measurements/phase-3.5/lcp-probe.json`) records Chrome's
@@ -190,18 +271,22 @@ changes were applied as well: posters re-encoded to 48,994 B (wide, q92, 0.30 bi
 map moved after `<picture>` so the poster precedes every `<script>`; `#status` 11 px (caption 13
 px), `max-width: 34ch`, one line. The 1 px strip at the bottom is the black body background.
 
-### frame-capture (`record.py` + `compare.py`, unmodified)
+### frame-capture (`record.py` + `compare.py`, unmodified) (3.7)
 
 | File | What | Size |
 |---|---|---|
-| `captures/stage-0-60fps.mp4` | stage 0, `?record=1`, 12 s, 60 fps, 1920×1080, 720 frames. Static scene | 104,264 B |
-| `captures/stage-8-60fps.mp4` | stage 8, `?record=1`, 12 s, 60 fps, 1920×1080, 720 frames. 0.5 s front→hero flight (3.6 s), explode 5.5–9.5 s, hold | 3,898,182 B |
-| `captures/compare-0-vs-8.mp4` | stacked, "Stage 0 — slop baseline" / "Stage 8 — final", 1192×1530, 60 fps | 1,453,455 B |
-| `captures/compare-0-vs-8-poster.webp` | frame at 10 s of the compare | 10,444 B |
+| `captures/stage-0-60fps.mp4` | stage 0, `?record=1`, 12 s, 60 fps, 1920×1080, 720 frames, crf 26. Static scene | 91,218 B (was 104,264 at crf 16) |
+| `captures/stage-8-60fps.mp4` | stage 8, `?record=1`, 12 s, 60 fps, 1920×1080, 720 frames, crf 26. 0.5 s front→hero flight (3.6 s), explode 5.5–9.5 s, hold | 1,195,705 B (was 3,898,182) |
+| `captures/compare-0-vs-8.mp4` | stacked, "Stage 0 — slop baseline" / "Stage 8 — final", 1192×1530, 60 fps, crf 26 | 439,187 B (was 1,453,455) |
+| `captures/compare-0-vs-8-poster.webp` | frame at 10 s of the compare | 28,630 B |
 
-Recorded in Phase 3, before fix 3. Stage 8's render path did not change in 3.5 (fix 1 touches
-`createRig`, but stage 8 already called `resize()` via `setQuality()` at load), so they were not
-re-recorded.
+Re-recorded in 3.7 after the ladder change. Each MP4 was rendered from the page with
+`record.py --crf 26`. The compare was built with `compare.py --crf 26` from crf-16 masters
+recorded in the same session (kept in `.tmp/fc37/`), so it is compressed once, not twice. Record mode
+pins high (auto-drop is off while recording), so the frames match the 3.5 clip: the stage-8 crf-16
+master was 3,902,073 B against 3,898,182 B before. The stage-0 crf-16 master is byte-identical
+to the committed one. Checked frames at 0.5 / 4.5 / 7.5 / 11.5 s: flight, hero, explode with
+labels, x-ray hold. ffprobe: h264, bt709, 60/1, 720 frames for all three.
 
 ---
 
@@ -243,9 +328,11 @@ Lighting and material parameters are the values in code; full tables with reason
 - Tiers: high DPR ≤ 2 / GTAO / 4096; balanced DPR ≤ 1.5 / GTAO / 4096; fast DPR 1 / no GTAO / 2048. Auto-drop when the 3 s mean exceeds 25 ms.
 - Poster: 48,994 B wide / 49,312 B tall (was 14,478 / 9,052), LCP element `img#poster`.
 
-### Stage 8 — final (`cf86b51` + Phase 3 record fix `6cee84a`, LCP fix `c74bff1`)
-- Frame (`ondemand=0`, 3.5): 8.74 / 5.16 / 7.93 ms. Retina 1440@2: balanced 16.65 ms, high 40.43 ms pinned; unpinned high auto-drops to balanced in 5/5 runs (17.54 ms at 8 s). 218 / 216 calls. 928,418 B. 0 console, 0 blank.
-- Lighthouse (3.5): desktop 97 [93–97], mobile 61 [60–62]; LCP element `img#poster` in 10/10 runs.
+### Stage 8 — final (`cf86b51` + Phase 3 record fix `6cee84a`, LCP fix `c74bff1`, 3.7 `a79406d` `b7c5437` `26f74c1`)
+- Frame (`ondemand=0`, 3.5): 8.74 / 5.16 / 7.93 ms. 218 / 216 calls. 928,418 B (3.5). 0 console, 0 blank (site-check 3.7: 14 shots).
+- Tiers (3.7): high DPR ≤ 2 / GTAO / 4096; balanced DPR ≤ **1.25** / GTAO / 4096; fast DPR 1 / no GTAO / 2048. Auto-drop over 3 s of rendered frames > 25 ms, down to fast; pinned never drops. Narrow (< 600 px) / saveData / 2g–3g: deferred boot and fast by default.
+- Retina 1440@2 (3.7): balanced 12.10 ms, high 38.72 ms pinned; auto: high → balanced in 5/5, 8.71 ms at 8 s.
+- Lighthouse: desktop 97 [93–97] (3.5); mobile 63 [61–63] (3.7); LCP element `img#poster` in all runs.
 - Shadow A/B: the stage-4 "cut-off" is the tray's own shadow (`measurements/stage-8-shadow-ab.txt`).
 
 ---
@@ -264,18 +351,20 @@ items (poster 40–60 KB, LCP element = poster, mismatch audit gone).
 | Blank canvases, stages 4/7/8, both engines, 3 widths | 0 | 0 (site-check 3.5) | PASS |
 | Draw calls / triangles, every stage | < 300 / < 2 M | max 218 / 103,556 | PASS |
 | Frame, stages 2–8, 1440@1 / 768@1 / 390@2 uncapped | ≤ 10 ms | max 9.40 (stage 6, 1440) | PASS |
-| Frame, stage 8 Retina 1440@2, balanced (pinned) | ≤ 10 ms | 16.65 ms | **FAIL** |
-| Frame, stage 8 Retina 1440@2, high (pinned) | ≤ 10 ms | 40.43 ms | **FAIL** |
-| Frame, stage 8 Retina, high + auto-drop, at 8 s | ≤ 10 ms | 17.54 ms (drops to balanced, never to fast) | **FAIL** |
+| Frame, stage 8 Retina 1440@2, balanced (pinned) | ≤ 10 ms | 12.10 ms (3.7, DPR 1.25; was 16.65) | **FAIL** |
+| Frame, stage 8 Retina 1440@2, high (pinned) | ≤ 10 ms | 38.72 ms (3.7) | **FAIL** (by design: pinned) |
+| Frame, stage 8 Retina, high + auto-drop, at 8 s | ≤ 10 ms | **8.71 ms** [8.23–9.74] (3.7, balanced) | PASS |
+| Auto-drop can reach fast; pinned never drops | yes | yes (`ladder.json`) | PASS |
+| Mobile: GL deferred, poster first, fast before frame 1, all fallbacks | yes | 26/26 cases, 0 errors (`boot.json`) | PASS |
 | Composer target = CSS × DPR, stages 2–6 | yes | 780×1688 at 390@2 | PASS |
 | `label-content-name-mismatch`, 10 pages | gone | score 1 on all 10 | PASS |
 | Lighthouse a11y, 10 pages | 100 | 100 | PASS |
 | LCP element, stage 8 | `img#poster` | `img#poster` 10/10 runs | PASS |
 | Poster size | 40–60 KB | 48,994 / 49,312 B | PASS |
 | Lighthouse performance, stage 8 desktop | ≥ 90 | 97 [93–97] | PASS |
-| Lighthouse performance, stage 8 mobile | ≥ 90 | 61 [60–62] | **FAIL** |
-| LCP, stage 8 mobile | ≤ 2.5 s | 6.31 s | **FAIL** |
-| TBT, stage 8 mobile | ≤ 200 ms | 348 ms | **FAIL** |
+| Lighthouse performance, stage 8 mobile | ≥ 90 | 63 [61–63] (3.7) | **FAIL** |
+| LCP, stage 8 mobile | ≤ 2.5 s | 6.31 s (3.7, unchanged: static three.js import, see above) | **FAIL** |
+| TBT, stage 8 mobile | ≤ 200 ms | 301 ms [294–372] (3.7) | **FAIL** |
 | Lighthouse performance, stage 0 mobile | ≥ 90 | 79 | **FAIL** (baseline; 687 KB three.js) |
 | CLS, all measured | ≤ 0.1 | ≤ 0.012 | PASS |
 | Lighthouse BP / SEO | ≥ 90 | 100 / 100 | PASS |
@@ -374,3 +463,14 @@ so they are not mistaken for measured facts.
    mobile is simulated throttling. No real phone was used.
 9. **The Phase 3 Lighthouse outlier (58)** did not recur with the warm-up protocol (spread 93–97),
    which fits a cold shader cache but does not prove it.
+10. **Why the deferred boot leaves mobile LCP at 6.3 s.** The explanation above comes from reading
+   one Lighthouse report: Lantern counts the statically imported module graph as LCP render delay.
+   It was not tested with a dynamic `import()`, which was out of scope. The cause is a reading of the
+   report, not an A/B.
+11. **Deferred boot on real phones.** The trigger conditions (`innerWidth < 600`, `navigator.connection`)
+   were emulated. `navigator.connection` does not exist in Safari/WebKit, so there only the
+   viewport rule applies. WebKit has no `requestIdleCallback`, so iOS boots on the 2.5 s timeout
+   or on the first touch.
+12. **Whether Retina ever reaches fast unforced.** On this M1 Pro balanced settles at 8.7 ms, under
+   the 25 ms trigger. Fast was reached only with the threshold forced (`ladder.json`). A slower GPU
+   is needed to see the second drop happen on its own.

@@ -281,6 +281,8 @@ auto-drop, poster, reduced motion, keyboard, on demand). Nothing frozen was edit
 | Poster | reuses `/stage-7/poster-*.webp` (same hero frame) | no duplicate bytes |
 | Shadow | env.js sizing unchanged (see A/B) | the frustum was not the cause |
 | Scroll film | not included | the stage 5 footage is an electric motor, not this grinder |
+| Tiers (Phase 3.7) | balanced DPR ≤ **1.25** (stage 7 keeps 1.5). The auto-drop window is 3 s of rendered frames, so it can step high → balanced → fast. Pinned never drops | in 3.5 the window restarted on every idle on-demand frame |
+| Mobile boot (3.7) | `innerWidth < 600`, `saveData`, or slow-2g/2g/3g: the poster only. GL starts on `requestIdleCallback` (2.5 s timeout; plain timeout in WebKit) or on the first pointerdown/scroll/wheel/touchmove/keydown. These devices start on **fast**. Reduced motion boots immediately as before | poster first on phones; the scene build stays off the first paint |
 
 ### Stage 8 — shadow A/B (`measurements/stage-8-shadow-ab.txt`)
 
