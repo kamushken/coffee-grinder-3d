@@ -20,7 +20,12 @@ STATE = """() => ({ deferred: !!window.__deferred, bootReason: window.__bootReas
   ready: !!window.__ready, glReady: document.body.classList.contains('gl-ready'),
   posterVisible: getComputedStyle(document.getElementById('poster')).visibility !== 'hidden' && !document.getElementById('poster').hidden,
   tier: window.__app ? window.__app.quality : null, dpr: window.__app ? window.__app.renderer.getPixelRatio() : null,
-  fallback: window.__fallback || null, status: document.getElementById('status').textContent, t: Math.round(performance.now()) })"""
+  fallback: window.__fallback || null, status: document.getElementById('status').textContent, t: Math.round(performance.now()),
+  firstFrameTier: window.__firstFrameTier || null })"""
+# records the tier at the first renderer.render call, to prove fast is chosen before frame 1
+FIRST = """(() => { const iv = setInterval(() => { const a = window.__app; if (!a) return; clearInterval(iv);
+  const r = a.renderer.render.bind(a.renderer); let done = false, before = a.rendered;
+  a.renderer.render = (...x) => { if (!done) { done = true; window.__firstFrameTier = a.quality + '@' + a.renderer.getPixelRatio() + ' (frames before hook: ' + before + ')'; } return r(...x); }; }, 0); })();"""
 
 
 def case(b, name, w, h, dpr=2, q="", init=None, reduced=False, act=None, mobile=True):
@@ -28,6 +33,7 @@ def case(b, name, w, h, dpr=2, q="", init=None, reduced=False, act=None, mobile=
                         is_mobile=mobile and b.browser_type.name == "chromium", has_touch=mobile,
                         reduced_motion="reduce" if reduced else "no-preference")
     if init: ctx.add_init_script(init)
+    ctx.add_init_script(FIRST)
     pg = ctx.new_page()
     errs = []
     pg.on("pageerror", lambda e: errs.append(str(e)))
@@ -75,7 +81,7 @@ def main():
     for r in out:
         f, a = r["final"], r["at_load_150ms"]
         print(f"{r['engine']:8} {r['case']:48} deferred={a['deferred']!s:5} glAt150={a['glReady']!s:5} boot={f['bootReason']!s:11} "
-              f"ready@{f['t']:>5}ms tier={f['tier']!s:8} dpr={f['dpr']} fallback={f['fallback']} "
+              f"ready@{f['t']:>5}ms tier={f['tier']!s:8} dpr={f['dpr']} first={f['firstFrameTier']} fallback={f['fallback']} "
               f"lost={r['context_lost'] and r['context_lost']['fallback']} errs={len(r['page_errors'])}", file=sys.stderr)
     print(json.dumps(out, indent=1))
 

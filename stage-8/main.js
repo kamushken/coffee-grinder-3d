@@ -160,8 +160,11 @@ function start() {
   xrayBtn.addEventListener('click', () => { xrayAuto = false; setXray(!xray.on); });
 
   // --- quality tiers -------------------------------------------------------------------------
-  let quality = TIERS[params.get('quality')] ? params.get('quality') : 'high';
+  // Phase 3.7: narrow or constrained devices start on fast, chosen here before the first frame
+  // (not reached by auto-drop). A pinned ?quality= still wins.
   const pinned = !!TIERS[params.get('quality')];
+  const liteDefault = BOOT.narrow || BOOT.constrained;
+  let quality = pinned ? params.get('quality') : liteDefault ? 'fast' : 'high';
   const tierButtons = [...document.querySelectorAll('[data-quality]')];
   function setQuality(q, why = '') {
     quality = q; const tr = TIERS[q];
@@ -249,7 +252,7 @@ function start() {
       labelsEl.classList.toggle('on', t >= EXPLODE.labelsFrom);
       rig.render(cam.controls.target); labels.update(); rendered++;
       watch(dt);
-      if (rendered === 3) { document.body.classList.add('gl-ready'); window.__ready = true; say(`Quality: ${quality}${pinned ? ' (pinned)' : ''}${REDUCED ? ', reduced motion' : ''}.`); }
+      if (rendered === 3) { document.body.classList.add('gl-ready'); window.__ready = true; say(`Quality: ${quality}${pinned ? ' (pinned)' : liteDefault ? ' (mobile default)' : ''}${REDUCED ? ', reduced motion' : ''}.`); }
     }
     requestAnimationFrame(loop);
   }
