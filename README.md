@@ -55,15 +55,15 @@ Homebrew is not present on this machine.
 | `/` | index | lab index |
 | `/stage-0/` | slop baseline: AmbientLight, default MeshStandardMaterial, straight-on, no shadows | frozen `2990273` · `captures/stage-0.webp` |
 | `/stage-1/` | direction: palette and light temperature from `notes/direction.md` | frozen `007a474` · `captures/stage-1.webp` |
-| `/stage-2/` | lighting: sky/sun presets with blending, fitted soft shadows, GTAO | frozen `6097ddf` · `captures/stage-2.webp` |
-| `/stage-3/` | materials: per-family PBR rules, glass transmission, burr shader patch | frozen `9e68e6d` · `captures/stage-3*.webp` |
-| `/stage-4/` | composition: rule-of-thirds, one camera flight, one profile sweep | frozen `907e87e` · `captures/stage-4.webp` |
-| `/stage-5/` | motion: scroll-scrubbed intro (scroll-film), cursor-rig / alpha-cutout DOCUMENTED-NOT-RUN | frozen `97fc3fd` · `captures/stage-5*.webp`, `stage-5-scroll.mp4` |
-| `/stage-6/` | explainer: exploded-view of the burr assembly, x-ray, labels, picking | frozen `fd6b800` · `captures/stage-6*.webp`, `stage-6-explode.mp4` |
-| `/stage-7/` | degradation: quality tiers, poster fallback, reduced motion, keyboard nav | frozen `d8817ea` · `captures/stage-7*.webp` |
-| `/stage-8/` | final: stage 3 light + stage 4 composition + stage 6 explainer + stage 7 degradation | frozen `cf86b51` (+ Phase 3 record-mode fix) · `captures/stage-8*.webp` |
+| `/stage-2/` | lighting: sky/sun presets with blending, fitted soft shadows, GTAO | frozen `6097ddf`, DPR fix `c6e169e` · `captures/stage-2.webp` |
+| `/stage-3/` | materials: per-family PBR rules, glass transmission, burr shader patch | frozen `9e68e6d`, DPR fix `c6e169e` · `captures/stage-3*.webp` |
+| `/stage-4/` | composition: rule-of-thirds, one camera flight, one profile sweep | frozen `907e87e`, DPR fix `c6e169e` · `captures/stage-4.webp` |
+| `/stage-5/` | motion: scroll-scrubbed intro (scroll-film), cursor-rig / alpha-cutout DOCUMENTED-NOT-RUN | frozen `97fc3fd`, DPR fix `c6e169e`, caption `ffc900c` · `captures/stage-5*.webp`, `stage-5-scroll.mp4` |
+| `/stage-6/` | explainer: exploded-view of the burr assembly, x-ray, labels, picking | frozen `fd6b800`, DPR fix `c6e169e` · `captures/stage-6*.webp`, `stage-6-explode.mp4` |
+| `/stage-7/` | degradation: quality tiers, poster fallback, reduced motion, keyboard nav | frozen `d8817ea`, LCP fix `c74bff1` · `captures/stage-7*.webp` |
+| `/stage-8/` | final: stage 3 light + stage 4 composition + stage 6 explainer + stage 7 degradation | frozen `cf86b51` (+ record fix `6cee84a`, LCP fix `c74bff1`) · `captures/stage-8*.webp` |
 
-Each stage is frozen once its capture is committed. Shared code in `shared/` is frozen at the
+Each stage is frozen once its capture is committed. Phase 3.5 lifted the freeze for bugfixes only (no art changes); each fix is its own commit, listed in `FACTS.md`. Shared code in `shared/` is frozen at the
 point the first stage using it is captured; later stages fork rather than edit.
 
 ## Run locally

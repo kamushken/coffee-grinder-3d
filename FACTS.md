@@ -1,13 +1,26 @@
 # FACTS — coffee-grinder-3d
 
 Everything below was measured on one machine on 2026-11-10 unless marked otherwise. Raw output
-lives in `measurements/`; the command that produced each number is named next to it. Anything I
-could not pin down is in **UNCERTAIN** at the end.
+lives in `measurements/`; the command that produced each number is named next to it. Inferred
+explanations are in **RENDERER NOTES** (flagged as not traced); anything I could not pin down is
+in **UNCERTAIN** at the end. Numbers marked **(3.5)** were re-measured after the Phase 3.5 fixes.
 
 Machine: MacBook Pro M1 Pro, macOS 26.6.2, 120 Hz panel. Headless Chromium 1223 (Playwright),
 WebGL `ANGLE Metal Renderer: Apple M1 Pro` (real GPU, not SwiftShader), and Playwright WebKit 2287
 (`Apple GPU`). No real phone, no Windows or Android GPU, no throttled network except Lighthouse's
 simulated throttling.
+
+## Phase 3.5 fixes (one commit each)
+
+| # | Fix | Commit | Verified by |
+|---|---|---|---|
+| 1 | Composer double-DPR: `createRig()` (`stage-3/render.js`) and `stage-2/main.js` now size renderer + composer once in `resize()` at load | `c6e169e` | composer target 780×1688 instead of 1560×3376 at 390@2; A/B frame times below; site-check stages 2–6, 2 engines × 3 widths, 0 problems; stages 2–6 re-captured (pixel diff 0.27–0.46/255 mean vs. old stills) |
+| 2 | Home link: aria-label removed, visible text "home" is the accessible name | `4eb27aa` | Lighthouse a11y on all 10 pages: 100, `label-content-name-mismatch` score 1 everywhere (`measurements/lighthouse/a11y/summary.json`) |
+| 3 | LCP is the poster on stages 7 and 8 | `c74bff1` | Lighthouse `largest-contentful-paint-element` = `img#poster` in all 10 measured stage-8 runs; `tools/lcp_probe.py` |
+| 4 | Measurement protocol: discarded warm-up, 5 runs, median + spread | `9831774` | `tools/lh.py`, `tools/retina.py`, `tools/frametime.py --warmup` |
+| 6 | Stage 5 caption + direction.md: motor footage stated plainly, grinder-footage plan (text only) | `ffc900c` | — |
+
+Item 5 (renderer notes) is documentation only, below.
 
 ## Skills: what actually ran
 
@@ -18,205 +31,291 @@ simulated throttling.
 | scroll-film | runtime RAN (`scroll-film.js` verbatim, `prep.py video`); **generation DOCUMENTED-NOT-RUN** | stage 5 uses the repo's own example footage (an electric motor) |
 | site-check | RAN (`check.py`, unmodified) | `measurements/site-check/` |
 | frame-capture | RAN (`record.py`, `compare.py`, `serve.py`, unmodified) | `captures/*-60fps.mp4`, `captures/compare-0-vs-8.mp4` |
-| motion-assets | **DOCUMENTED-NOT-RUN** (paid generation API) | — |
+| motion-assets | **DOCUMENTED-NOT-RUN** (paid generation API). A text-only plan for grinder footage is in `notes/direction.md` (stage 5) | — |
 | alpha-cutout | **DOCUMENTED-NOT-RUN** (needs generated footage) | — |
 | cursor-rig | **DOCUMENTED-NOT-RUN** (needs generated head-turn clips) | — |
 
+## Measurement protocol (3.5)
+
+- **Lighthouse** (`tools/lh.py perf`): per page × form factor, one Chrome profile; **one warm-up
+  run discarded** (fills the Metal shader cache and HTTP cache), then **5 runs** against the same
+  profile. Median reported, spread = min–max of the 5. One full JSON per config is kept
+  (`*-run1.json`); all 5 runs' scores, metrics and LCP element are in `summary.json`.
+- **Frame time** (`tools/frametime.py --warmup`): one discarded load of every stage per engine,
+  then settle 2.5 s and the mean of 180 rAF intervals. Uncapped Chromium =
+  `--disable-gpu-vsync --disable-frame-rate-limit`.
+- **Retina** (`tools/retina.py`): 1440×900 @2, uncapped, `?ondemand=0`; one discarded warm-up
+  per configuration, then 5 runs each in a fresh context; tier pinned with `?quality=balanced` /
+  `?quality=high`, plus unpinned high with the auto-drop allowed.
+
 ## Cross-stage tables
 
-### Frame time per viewport (`tools/frametime.py` → `measurements/frametime.json`)
+### Frame time per viewport (3.5) (`measurements/frametime.json`)
 
-Mean of 120 rAF intervals after a 1.5 s settle; p95 in the JSON. Stages 7 and 8 were measured with
-`?ondemand=0`, stage 5 scrolled to its live scene. **Uncapped** means Chromium was run with
-`--disable-gpu-vsync --disable-frame-rate-limit`, so the number is real render cost. Capped
-Chromium bottoms out at 8.3 ms (120 Hz) and WebKit at 16.7 ms (60 Hz). Capped numbers only show
-whether a frame fits the refresh interval.
+Uncapped Chromium, mean ms of 180 rAF intervals. Capped Chromium bottoms out at 8.3 ms (120 Hz)
+and WebKit at 16.7 ms (60 Hz); every stage sits on that floor in both (full table in the JSON).
 
-| Stage | 1440×900 @1 uncapped | 768×1024 @1 uncapped | 390×844 @2 uncapped | WebKit 1440 / 768 / 390@2 |
+| Stage | 1440×900 @1 | 768×1024 @1 | 390×844 @2 | WebKit 1440 / 768 / 390@2 (vsync) |
 |---|---|---|---|---|
-| 0 | 1.55 | 1.32 | 1.35 | 16.68 / 16.67 / 16.68 |
-| 1 | 1.30 | 1.28 | 1.27 | 16.66 / 16.81 / 16.81 |
-| 2 | 7.13 | 4.69 | 18.28 | 16.62 / 16.67 / 20.93 |
-| 3 | 8.68 | 5.52 | 18.27 | 16.53 / 16.67 / 19.61 |
-| 4 | 9.05 | 5.55 | 15.78 | 16.67 / 16.67 / 19.32 |
-| 5 (live part) | 8.60 | 5.59 | 15.81 | 16.56 / 16.68 / 17.73 |
-| 6 | 9.44 | 5.80 | 17.11 | 16.66 / 16.67 / 18.21 |
-| 7 | 8.90 | 5.65 | **8.63** | 16.67 / 16.67 / 16.67 |
-| 8 | 8.88 | 5.75 | **8.64** | 17.21 / 16.53 / 16.67 |
+| 0 | 1.29 | 1.28 | 1.31 | 16.67 / 16.67 / 16.66 |
+| 1 | 1.40 | 1.33 | 1.36 | 16.67 / 16.67 / 16.66 |
+| 2 | 6.87 | 4.68 | **7.38** | 16.65 / 16.76 / 16.67 |
+| 3 | 8.08 | 5.49 | **8.48** | 16.67 / 16.67 / 16.68 |
+| 4 | 8.12 | 5.38 | **8.00** | 16.67 / 16.69 / 16.67 |
+| 5 (live part) | 8.44 | 5.17 | **7.99** | 16.67 / 16.67 / 16.67 |
+| 6 | 9.40 | 5.97 | **8.93** | 16.67 / 16.67 / 16.67 |
+| 7 | 8.07 | 5.38 | 8.13 | 16.67 / 16.67 / 16.67 |
+| 8 | 8.74 | 5.16 | 7.93 | 16.67 / 16.67 / 16.67 |
 
-On phone-sized viewports, stages 7 and 8 are about twice as fast as stages 2–6 because stages 2–6
-have a bug, and it is mine (stage-3/render.js and stage-2/main.js), not the skill's. `createRig()`
-builds the EffectComposer from a render target that is already in device pixels (`780×1688`). The
-composer takes that as its CSS size and multiplies by the pixel ratio again, so until the first
-`resize` event every pass runs at **1560×3376**, 4× the pixels. I confirmed this by hooking
-`setRenderTarget`: the 1560×3376 targets disappear after one `resize` event, and stage 4 at
-390@2 goes from 16.2 to 11.4 ms. The starter avoids the bug because `setQuality()` calls
-`resize()` at load. Stages 7 and 8 do the same, so they are fine. Stages 2–6 are frozen and keep
-the bug. The 1440 @1 numbers are unaffected because DPR 1 × DPR 1 changes nothing.
+### DPR fix: before / after (3.5) (`measurements/phase-3.5/dpr-ab.json`)
 
-**Retina laptop (1440×900 @2, uncapped, stage 8):** high tier 30.4 / 27.1 ms. After 3 s the
-auto-drop switches to `balanced (auto, 28.7 ms average)`, then 17.9–18.6 ms. That is over the
-skill's 10 ms budget on the most common Mac setup. Stage 4 at the same size with the double-size
-composer bug: 72.9 ms, 57.4 ms after a resize.
+Interleaved A/B in one browser: each page loaded from the pre-fix tree (HEAD before the fix,
+served on :4322) and then from the fixed tree (:4321). Uncapped Chromium, settle 2.5 s, 180 frames.
+"buffer" = the largest non-shadow render target bound in one frame.
+
+| Stage | 390×844 @2 before → after (ms) | buffer before → after | 1440×900 @2 before → after (ms) | buffer before → after | 1440 @1 / 768 @1 |
+|---|---|---|---|---|---|
+| 2 | 18.31 → **7.16** | 1560×3376 → 780×1688 | 66.69 → **25.35** | 5760×3600 → 2880×1800 | unchanged (DPR 1 × 1) |
+| 3 | 20.07 → **10.18** | same | 73.62 → **32.89** | same | unchanged |
+| 4 | 15.90 → **7.94** | same | 78.63 → **30.67** | same | unchanged |
+| 5 | 17.44 → **7.99** | same | 75.19 → **28.66** | same | unchanged |
+| 6 | 16.83 → **8.70** | same | 85.15 → **32.33** | same | unchanged |
+
+### Retina laptop, stage 8 (3.5) (`measurements/phase-3.5/retina-stage-8.json`)
+
+1440×900 @2, uncapped, warm-up discarded, 5 runs.
+
+| Configuration | Median ms | Spread | p95 median | Tier / DPR |
+|---|---|---|---|---|
+| `?quality=balanced` (pinned) | **16.65** | 16.63–17.24 | 34.1 | balanced, DPR 1.5 |
+| `?quality=high` (pinned) | **40.43** | 38.35–41.63 | 47.1 | high, DPR 2 |
+| high, auto-drop allowed: first ~60 frames (0.5–1.5 s) | 31.93 | 30.09–36.50 | — | high |
+| high, auto-drop allowed: at 8 s | **17.54** | 11.73–18.72 | — | balanced in 5/5 runs ("auto, 28.1–29.9 ms average") |
+
+A frame-interval histogram (balanced, one run) is bimodal: most frames at ~16 or ~20 ms. With
+vsync off that looks like GPU-bound frames at ~16–20 ms, not a refresh cap; not proven.
+`?quality=fast` at the same size: 3.77 ms (DPR 1, no GTAO).
 
 ### Draw calls, triangles (renderer.info, whole frame including every post pass)
 
-| Stage | calls | triangles | geometries | textures | programs |
+| Stage | calls | triangles |
+|---|---|---|
+| 0 | 32 | 21,876 |
+| 1 | 34 | 22,004 |
+| 2 | 166 | 81,168 |
+| 3 | 198 | 97,116 |
+| 4, 5 (live), 6 assembled, 7, 8 | 218 | 103,556 |
+| 6 / 8 exploded (`explode=1`, x-ray auto on) | 216 | 99,236 |
+| 8 idle, on demand | 0 | 0 |
+
+Unchanged by the fixes (same numbers in the 3.5 frametime run). Budget (threejs-scene SKILL.md):
+under 300 calls and 2 M triangles; every stage is under it.
+
+### Page weight, console, blank canvas (3.5) (`tools/weigh.py` → `measurements/weight-{chromium,webkit}.json`)
+
+Decoded response bodies until ready + 2 s, 1440×900. Served uncompressed (`serve.py` has no gzip/br).
+
+| Route | requests (Chromium / WebKit) | bytes | of which three.js | console errors+warnings (both) | blank canvases (both) |
 |---|---|---|---|---|---|
-| 0 | 32 | 21,876 | 16 | 0 | 2 |
-| 1 | 34 | 22,004 | — | — | — |
-| 2 | 166 | 81,168 | — | — | — |
-| 3 | 198 | 97,116 | — | — | — |
-| 4, 5 (live), 6 assembled, 7, 8 | 218 | 103,556 | 35 | 27 | 34 |
-| 6 / 8 exploded (`explode=1`, x-ray auto on) | 216 | 99,236 | | | |
-| 8 idle, on demand | 0 | 0 | (nothing rendered; see stage 7) | | |
+| `/` | 4 / 4 | 3,438 | 0 | 0 | — (no canvas) |
+| `/stage-0/` | 7 / 7 | 701,389 | 687,458 | 0 | 0 |
+| `/stage-1/` | 7 / 7 | 702,753 | 687,458 | 0 | 0 |
+| `/stage-2/` | 23 / 23 | 803,701 | 775,061 | 0 | 0 |
+| `/stage-3/` | 26 / 26 | 815,804 | 775,061 | 0 | 0 |
+| `/stage-4/` | 28 / 28 | 854,321 | 807,195 | 0 | 0 |
+| `/stage-5/` | 32 / 100 | 2,143,671 / 2,161,894 | 807,195 | 0 | 0 |
+| `/stage-6/` | 29 / 29 | 870,632 | 807,195 | 0 | 0 |
+| `/stage-7/` | 29 / 29 | 913,449 | 807,195 | 0 | 0 |
+| `/stage-8/` | 30 / 30 | 928,418 | 807,195 | 0 | 0 |
 
-Calls and triangles for stages 0, 4, 7 and 8 come from site-check (`measurements/site-check/summary.json`,
-the same in both engines and at every width). Stages 1–3, 5 and 6 come from `tools/frametime.py`.
-Budget (threejs-scene SKILL.md): under 300 calls and under 2 M triangles. Every stage is under it.
-
-### Page weight, console, blank canvas (`tools/weigh.py` → `measurements/weight-{chromium,webkit}.json`)
-
-Decoded response bodies until ready + 2 s, 1440×900. Served uncompressed: `serve.py` sends no gzip/br.
-Netlify will compress, so transfer sizes there will be smaller. Not measured.
-
-| Route | requests (Chromium / WebKit) | bytes | of which three.js | console errors+warnings (both engines) | blank canvases (both engines) |
-|---|---|---|---|---|---|
-| `/` | 4 / 4 | 3,258 | 0 | 0 | — (no canvas) |
-| `/stage-0/` | 7 / 7 | 701,209 | 687,458 | 0 | 0 |
-| `/stage-1/` | 7 / 7 | 702,573 | 687,458 | 0 | 0 |
-| `/stage-2/` | 23 / 23 | 803,199 | 775,061 | 0 | 0 |
-| `/stage-3/` | 26 / 26 | 815,228 | 775,061 | 0 | 0 |
-| `/stage-4/` | 28 / 28 | 853,745 | 807,195 | 0 | 0 |
-| `/stage-5/` | 32 / 100 | 2,142,958 / 2,161,181 | 807,195 | 0 | 0 |
-| `/stage-6/` | 29 / 29 | 870,056 | 807,195 | 0 | 0 |
-| `/stage-7/` | 29 / 29 | 877,634 | 807,195 | 0 | 0 |
-| `/stage-8/` | 30 / 30 | 892,603 | 807,195 | 0 | 0 |
-
-Stage 5: video 1,265,171 B, poster 12,894 B. WebKit fetches the video as 69 more Range requests.
+Stages 7/8 grew by ~35 KB: the poster went from 14,478 to 48,994 B (fix 3).
 
 ### site-check (`check.py`, unmodified; `measurements/site-check/`)
 
-Stages 0, 4, 7 and 8 at widths 1440, 768 and 390 (390 = phone emulation: touch, DPR 2), in
-Chromium and WebKit, plus a reduced-motion pass at 1440 per engine. Stages 7 and 8 also with
-`?ondemand=0`. **52 shots total: 0 page errors, 0 failed requests, 0 blank canvases, 0 horizontal
-overflow.** Every run exited 0. The stage-8 run was repeated after the Phase 3 fix (see stage 8):
-14 shots, 0 problems.
+Widths 1440, 768, 390 (390 = phone emulation: touch, DPR 2), Chromium and WebKit, plus a
+reduced-motion pass at 1440 per engine.
 
-Note: site-check's ms/frame is vsync-capped (8.3 Chromium / 16.6 WebKit) and only shows whether a
-frame fits. The one outlier is stage 4 Chromium 390: 16.4 ms, which is the composer bug above.
-The reduced-motion shots of stages 7 and 8 read **0 calls**, because on-demand rendering is idle
-once the camera has jumped to the hero vantage. That is not a broken scene. The screenshot shows
-the frame (not blank).
+| Stages | When | Shots | Problems |
+|---|---|---|---|
+| 0 | Phase 3 | 8 | 0 |
+| 2, 3, 4, 5, 6 | after fix 1 (3.5) | 40 | 0 |
+| 7, 8 (default + `?ondemand=0`) | after fix 3 (3.5) | 28 | 0 |
 
-### Lighthouse 12.8.2 (`npx`, Chrome for Testing 1223 headless=new + Metal ANGLE; `measurements/lighthouse/`)
+0 page errors, 0 failed requests, 0 blank canvases, 0 horizontal overflow; every run exited 0.
+Note: `check.py --scroll-steps` on stage 5 crashed inside the script (`ZeroDivisionError` in
+`blank()`: at scroll 1.0 the film canvas is at y = −900, fully off screen, so the crop is empty).
+That is a site-check bug, not a page bug; stage 5 was re-run without `--scroll-steps` (8 shots,
+0 problems), and the live part is covered by `tools/frametime.py` (scrolled to the end, 0 errors).
 
-Three runs each, simulated throttling (Lighthouse default). Median shown, all runs in brackets.
+### Lighthouse 12.8.2 (3.5) (`tools/lh.py`; `measurements/lighthouse/summary.json`)
 
-| Page | Performance | FCP ms | LCP ms | TBT ms | CLS | A11y | BP | SEO |
-|---|---|---|---|---|---|---|---|---|
-| stage 8 desktop | **96** [58, 97, 96] | 726 | 1,166 | 95 | 0 | 100 | 100 | 100 |
-| stage 8 mobile | **59** [50, 60, 59] | 3,534 | 6,160 | 452 | 0.012 | 100 | 100 | 100 |
-| stage 0 desktop | **99** [99, 99, 99] | 563 | 889 | 0 | 0 | 100 | 100 | 100 |
-| stage 0 mobile | **79** [79, 79, 79] | 2,778 | 4,653 | 27 | 0.012 | 100 | 100 | 100 |
+Chrome for Testing 1223 headless=new + Metal ANGLE, simulated throttling. Protocol above:
+1 discarded warm-up + 5 runs; median [min–max].
 
-Failing audits that matter:
-- `uses-text-compression`: local server, no gzip. Netlify fixes this; not measured there.
-- `bootup-time` / `mainthread-work-breakdown` on stage 8: 1.7–2.7 s of script evaluation on mobile
-  (main.js + render.js: scene build, canvas textures, shader compile). That is the real cost of
-  the page.
-- `unused-javascript`: three.module.min.js is the whole library (687 KB). No tree-shaking without
-  a build step, which the brief rules out.
-- `label-content-name-mismatch`: `<a href="/" aria-label="Lab index">` shows the text "home". It
-  is a real accessibility defect in `shared/shell.js` (frozen since stage 0) and affects every
-  page. The audit is unweighted, so the score stays 100.
+| Page | Performance | FCP ms | LCP ms | TBT ms | CLS | A11y | BP | SEO | LCP element (5/5 runs) |
+|---|---|---|---|---|---|---|---|---|---|
+| stage 8 desktop | **97** [93–97] | 726 | 1,167 [1,091–1,168] | 81 [61–171] | 0.002 | 100 | 100 | 100 | `img#poster` |
+| stage 8 mobile | **61** [60–62] | 3,531 | 6,307 [6,305–6,312] | 348 [336–386] | 0.012 | 100 | 100 | 100 | `img#poster` |
+| stage 0 desktop | **99** [99–99] | 562 | 889 [883–890] | 0 | 0 | 100 | 100 | 100 | `p.caption` |
+| stage 0 mobile | **79** [79–79] | 2,777 | 4,677 [4,652–4,681] | 17 | 0.012 | 100 | 100 | 100 | `p.caption` |
 
-The first stage-8 desktop run (58) is an outlier: FCP 4,356 ms, bootup 4,398 ms. Runs 2 and 3
-were 96–97. See UNCERTAIN.
+With the warm-up discarded, the Phase 3 outlier (58) did not recur: the stage-8 desktop spread is
+93–97. That supports, but does not prove, the cold-shader-cache explanation.
+
+Still failing (last run): `uses-text-compression` (local server; Netlify not measured),
+`unused-javascript` / `unminified-javascript` (whole three.js, no build step by brief),
+`valid-source-maps`, `render-blocking-resources` (mobile: shell.css), and on stage 8 mobile
+`bootup-time` / `mainthread-work-breakdown` / `total-blocking-time` (scene build + shader compile).
+`label-content-name-mismatch` is gone.
+
+### LCP: how the poster became the LCP element (fix 3)
+
+`tools/lcp_probe.py` (`measurements/phase-3.5/lcp-probe.json`) records Chrome's
+`largest-contentful-paint` entries on stage 8 with one CSS change per variant:
+
+| Variant | 1440×900 | 390×844 @2 |
+|---|---|---|
+| poster exactly full viewport (`inset: 0; height: 100%`) | `#controls` 67,914 px² | `#controls` 1,890 px² |
+| poster `height: calc(100% − 1px)` (shipped) | `#poster` 1,294,560 px² | `#controls` first, then `#poster` 328,770 px² |
+| `?quality=poster` (no GL at all) | `#poster` | `#poster` |
+
+So the deciding factor was not entropy: at 14 KB the poster was already 0.09 bits/px, above
+Chrome's 0.05 low-entropy cut. Chrome drops an image that covers the **entire viewport** as an
+LCP candidate (it treats it as a background). One pixel short, it counts. The other requested
+changes were applied as well: posters re-encoded to 48,994 B (wide, q92, 0.30 bits/px) and
+49,312 B (tall, q98, 0.53 bits/px) by `tools/poster.py` from the same frame;
+`fetchpriority="high"` on the `<img>` and both preloads; explicit `width`/`height`; the import
+map moved after `<picture>` so the poster precedes every `<script>`; `#status` 11 px (caption 13
+px), `max-width: 34ch`, one line. The 1 px strip at the bottom is the black body background.
 
 ### frame-capture (`record.py` + `compare.py`, unmodified)
 
 | File | What | Size |
 |---|---|---|
-| `captures/stage-0-60fps.mp4` | stage 0, `?record=1`, 12 s, 60 fps, 1920×1080, 720 frames. Static scene (nothing moves; stage 0 has no motion) | 104,264 B |
+| `captures/stage-0-60fps.mp4` | stage 0, `?record=1`, 12 s, 60 fps, 1920×1080, 720 frames. Static scene | 104,264 B |
 | `captures/stage-8-60fps.mp4` | stage 8, `?record=1`, 12 s, 60 fps, 1920×1080, 720 frames. 0.5 s front→hero flight (3.6 s), explode 5.5–9.5 s, hold | 3,898,182 B |
-| `captures/compare-0-vs-8.mp4` | stacked, labels "Stage 0 — slop baseline" / "Stage 8 — final", 1192×1530, 60 fps, 720 frames | 1,453,455 B |
+| `captures/compare-0-vs-8.mp4` | stacked, "Stage 0 — slop baseline" / "Stage 8 — final", 1192×1530, 60 fps | 1,453,455 B |
 | `captures/compare-0-vs-8-poster.webp` | frame at 10 s of the compare | 10,444 B |
 
-"no page errors" printed by record.py for both. Real time: stage 0 26 s, stage 8 2 min 54 s. A
-timing pass at 8 fps (SKILL.md Run step 2) was done first, and it found a bug (stage 8 below).
-The MP4s are over 120 KB. The brief says "heavy sequences ship as video", and these are those videos.
+Recorded in Phase 3, before fix 3. Stage 8's render path did not change in 3.5 (fix 1 touches
+`createRig`, but stage 8 already called `resize()` via `setQuality()` at load), so they were not
+re-recorded.
 
 ---
 
 ## Per stage
 
-Lighting and material parameters are the values in code. The full tables, with a reason for
-each value, are in `notes/direction.md`. Repeated here in short so this file stands alone.
+Lighting and material parameters are the values in code; full tables with reasons are in
+`notes/direction.md`.
 
 ### Stage 0 — slop baseline (`2990273`)
-- Frame: 1.55 / 1.32 / 1.35 ms uncapped (1440 / 768 / 390@2). 32 calls, 21,876 tris. 701,209 B. 0 console, 0 blank (site-check, both engines, 3 widths).
-- Light: `AmbientLight(#ffffff, 1)` only. Materials: `MeshStandardMaterial()` defaults (color #ffffff, roughness 1, metalness 0). No tone mapping, no shadows, no post. Camera: FOV 50, (0, 0.15, 0.6) → (0, 0.15, 0). Renderer `antialias: true`, DPR ≤ 2.
-- Result: flat grey silhouette on black, as intended.
+- Frame (3.5): 1.29 / 1.28 / 1.31 ms uncapped (1440 / 768 / 390@2). 32 calls, 21,876 tris. 701,389 B. 0 console, 0 blank.
+- Light: `AmbientLight(#ffffff, 1)` only. Materials: `MeshStandardMaterial()` defaults. No tone mapping, no shadows, no post. Camera FOV 50, (0, 0.15, 0.6) → (0, 0.15, 0).
 
 ### Stage 1 — direction (`007a474`)
-- Frame: 1.30 / 1.28 / 1.27 ms. 34 calls, 22,004 tris. 702,573 B. 0 console, 0 blank (weigh.py, both engines, 1440).
-- Light: key `DirectionalLight #ffb066` 2.2 at (−0.6, 0.35, −0.5). `HemisphereLight #9fb4d8 / #4a3c2e` 1.1. Front fill `DirectionalLight #ffd9b0` 0.6 at (0.4, 0.5, 1). Background `#d9b48f`.
-- Materials: MeshStandardMaterial with palette colours only (body `#2f3a33`, steel `#c8c4bc`, walnut `#6b4226`, rubber `#1d1b19`, glass tint `#eef3f0`, opaque).
+- Frame (3.5): 1.40 / 1.33 / 1.36 ms. 34 calls, 22,004 tris. 702,753 B. 0 console, 0 blank.
+- Light: key `DirectionalLight #ffb066` 2.2 at (−0.6, 0.35, −0.5); `HemisphereLight #9fb4d8 / #4a3c2e` 1.1; fill `#ffd9b0` 0.6. Background `#d9b48f`. Palette colours only.
 
-### Stage 2 — lighting (`6097ddf`)
-- Frame: 7.13 / 4.69 / 18.28 ms (390 hit by the composer bug). 166 calls, 81,168 tris. 803,199 B. 0 console, 0 blank.
-- env.js verbatim, scale 2, preset `golden`: skyEl 5, el 9, az 250, sunI 3.4, sunC `#ffb066`, hemiS `#f2c9a3`, hemiG `#4a3c2e`, hemiI 0.42, envI 0.62, turb 5.0, ray 2.4, mie 0.007, mieG 0.86, fogC `#dcae88`, fogD 0.0042, exp 0.72. Blend 2.5 s smoothstep.
-- Shadows: 4096² PCFSoft, half-width clamp(0.85·dist, 0.5, 8) m, texel-snapped, bias −0.0002, normalBias 0.0012. Screws castShadow off.
-- Post: ACESFilmic. HalfFloat MSAA 4 target. GTAO radius 0.03, distExp 1.5, thickness 0.03, scale 1, samples 16; denoise r 6 / rings 2 / samples 16; blend 0.8. Bloom 0.12 + 0.5·night, radius 0.5, threshold 0.9 − 0.15·night.
+### Stage 2 — lighting (`6097ddf`, DPR fix `c6e169e`)
+- Frame (3.5): 6.87 / 4.68 / 7.38 ms (390@2 was 18.31 before the fix). 166 calls. 803,701 B. 0 console, 0 blank (site-check 3.5).
+- env.js verbatim, scale 2, preset `golden`. Shadows 4096² PCFSoft, texel-snapped. ACES; HalfFloat MSAA 4; GTAO r 0.03 / blend 0.8; bloom 0.12 / 0.5 / 0.9.
 
-### Stage 3 — materials (`9e68e6d`)
-- Frame: 8.68 / 5.52 / 18.27 ms. 198 calls, 97,116 tris. 815,228 B. 0 console, 0 blank.
-- Glass (hopper): Physical, roughness 0.04, transmission 1, thickness 0.0025, IOR 1.5, attenuation `#d6e6dc` @ 0.12 m, castShadow off, noAO.
-- Brushed steel (ring, shaft, crank, screws): metalness 0.9, roughness 0.34 × brushed map (0.80–1.00), anisotropy 0.6.
-- Burr steel: steel with roughness 0.28, plus the shader patch: uPitch 0.0009 m, uRange (0.55, 1.35), uGlint 0.35, cache key `burr-groove-v1`.
-- Powder coat (body): `#2f3a33`, roughness 0.62 × orange-peel (0.88–1.00), clearcoat 0.18 / 0.55.
-- Rubber (gasket): `#1d1b19`, roughness 0.88, specularIntensity 0.35, sheen 0.25 / 0.8 `#3a3632`.
-- Wood (knob): walnut grain 256×1024, roughness 0.52, clearcoat 0.35 / 0.35.
-- Stone (slab): Standard, travertine 1024² repeat 60, roughness 0.82.
+### Stage 3 — materials (`9e68e6d`, DPR fix `c6e169e`)
+- Frame (3.5): 8.08 / 5.49 / 8.48 ms (390@2 was 20.07). 198 calls. 815,804 B. 0 console, 0 blank.
+- Glass: transmission 1, IOR 1.5, thickness 0.0025. Brushed steel: metalness 0.9, roughness 0.34 × map, anisotropy 0.6. Burr patch: uPitch 0.0009 m, uGlint 0.35. Powder coat `#2f3a33` r 0.62 + clearcoat 0.18. Rubber r 0.88 + sheen. Walnut r 0.52 + clearcoat 0.35. Travertine r 0.82.
 
-### Stage 4 — composition (`907e87e`)
-- Frame: 9.05 / 5.55 / 15.78 ms. 218 calls, 103,556 tris. 853,745 B. 0 console, 0 blank (site-check 3 widths × 2 engines).
-- Camera: FOV 38 (fitFov on portrait), hero dir (0.42, 0.17, 1) at 0.74 m → target (0.01, 0.135, 0). Rule of thirds via setViewOffset (thirdX 2/3) on landscape. Flight front→hero 2.8 s.
-- Tray: kit.js sweep, 0.34 × 0.22 m, r 0.03, rim 18 mm, walnut (new instance). Grinder rotY −0.55.
-- Lighting and materials: stage 3, unchanged.
+### Stage 4 — composition (`907e87e`, DPR fix `c6e169e`)
+- Frame (3.5): 8.12 / 5.38 / 8.00 ms (390@2 was 15.90). 218 calls, 103,556 tris. 854,321 B. 0 console, 0 blank.
+- FOV 38 (fitFov), hero dir (0.42, 0.17, 1) at 0.74 m, thirds via setViewOffset, flight 2.8 s. Tray: kit.js sweep 0.34 × 0.22 m.
 
-### Stage 5 — motion (`97fc3fd`)
-- Frame (live scene): 8.60 / 5.59 / 15.81 ms, 218 calls. While the film is on screen GL is paused: 0 calls. 2,142,958 B (video 1,265,171). 0 console, 0 blank.
-- Film: repo example `motor-take-apart.webp` → `prep.py video`, 129 frames, 15 fps, GOP 4, 600vh section, keys `[[0,0],[0.1,0],[0.3,40],[0.42,40],[0.55,72],[0.67,72],[0.9,128],[1,128]]`, fit contain. **It shows an electric motor, not the grinder.** Generation, cursor-rig and alpha-cutout: DOCUMENTED-NOT-RUN.
+### Stage 5 — motion (`97fc3fd`, DPR fix `c6e169e`, caption `ffc900c`)
+- Frame (live part, 3.5): 8.44 / 5.17 / 7.99 ms. While the film is on screen GL is paused (0 calls). 2,143,671 B (video 1,265,171). 0 console, 0 blank.
+- **Footage: the only local image sequence in the skills repo is `examples/motor-take-apart.webp`, an electric motor. The scroll-film technique is object-agnostic; the object on screen is not the grinder.** 129 frames → `prep.py video`, 15 fps, GOP 4, 600vh. How grinder footage would be generated (asset list, one look, cost calibration) is written up in `notes/direction.md`, text only. Generation, cursor-rig and alpha-cutout: DOCUMENTED-NOT-RUN.
 
-### Stage 6 — explainer (`fd6b800`)
-- Frame: 9.44 / 5.80 / 17.11 ms. 218 calls assembled, 216 exploded. 870,056 B. 0 console, 0 blank.
-- Explode: crank and knob stage 0 +0.16 y; hopper stage 1 +0.10; ring stage 2 +0.05 and ½ turn; outer burr stage 3 +0.04; inner burr stage 3 −0.05. Staged windows w = 2/(n+1). Ease 0.12. X-ray auto at t ≥ 0.62, opacity 0.14. 8 labels, margin 56, hidden below 600 px.
+### Stage 6 — explainer (`fd6b800`, DPR fix `c6e169e`)
+- Frame (3.5): 9.40 / 5.97 / 8.93 ms (390@2 was 16.83). 218 calls assembled, 216 exploded. 870,632 B. 0 console, 0 blank.
+- Explode stages 0–3, windows w = 2/(n+1), ease 0.12, x-ray auto at t ≥ 0.62 (opacity 0.14), 8 labels, hidden below 600 px.
 
-### Stage 7 — degradation (`d8817ea`)
-- Frame (`ondemand=0`): 8.90 / 5.65 / 8.63 ms. 218 calls. Idle on demand: 0 calls. 877,634 B. 0 console, 0 blank (site-check 3 widths × 2 engines, both query sets).
-- Tiers: high DPR ≤ 2, GTAO, 4096 shadow; balanced DPR ≤ 1.5, GTAO, 4096; fast DPR 1, no GTAO, 2048. Auto-drop when the mean frame exceeds 1/40 s over 3 s and more than 60 frames.
-- Poster (1440×900 14,478 B / 585×1266 9,052 B) on `?quality=poster`, no WebGL 2, create failure, context lost, JS off. Reduced motion: no flight, no damping, instant light changes.
-- Functional results: `measurements/stage-7-functional*.json`.
+### Stage 7 — degradation (`d8817ea`, LCP fix `c74bff1`)
+- Frame (`ondemand=0`, 3.5): 8.07 / 5.38 / 8.13 ms. Idle on demand: 0 calls. 913,449 B. 0 console, 0 blank (site-check 3.5, both query sets).
+- Tiers: high DPR ≤ 2 / GTAO / 4096; balanced DPR ≤ 1.5 / GTAO / 4096; fast DPR 1 / no GTAO / 2048. Auto-drop when the 3 s mean exceeds 25 ms.
+- Poster: 48,994 B wide / 49,312 B tall (was 14,478 / 9,052), LCP element `img#poster`.
 
-### Stage 8 — final (`cf86b51` + Phase 3 fix)
-- Frame (`ondemand=0`): 8.88 / 5.75 / 8.64 ms uncapped. 1440@2: 27–30 ms on high, then auto-drops to balanced at ~18 ms. 218 calls / 103,556 tris assembled; 216 / 99,236 exploded with auto x-ray. 892,603 B. 0 console, 0 blank (site-check 3 widths × 2 engines, both query sets; smoke test with the slider at 1 in 6 configurations).
-- Composition: stage 3 rig + stage 4 scene + stage 6 explode/labels + stage 7 degradation. Exploded framing `EXPLAIN`: hero direction, 1.0 m, target y 0.22, lerped by smoothstep(min(1, 2t)). Labels appear at t ≥ 0.04.
-- Shadow: env.js sizing unchanged. The stage-4 "cut-off" is the tray's own shadow (A/B below).
-- **Phase 3 fix (uncommitted at the time of the 8 fps pass):** in `?record=1`, `autoCamera()` pinned the camera to the hero at t = 0 and cancelled the front→hero flight. The 8 fps timing pass showed a static first 5 s. Fix: auto-framing only starts once t > 0 (`autoArmed`). The committed stills are unaffected: `?view=hero` disables auto-framing, and `?explode=1` has t > 0 from the start. The stage-8 site-check was re-run after the fix: 0 problems.
-- Shadow A/B (`tools/shadow_ab.py`, `tools/shadow_tray.py` → `measurements/stage-8-shadow-ab.txt`): widening the frustum 0.63 → 4 m changes the "cut" region by a mean of 0.68/255. Turning off the tray's castShadow changes it by 6.10/255 and removes the straight-edged block. Sun elevation 9.0°.
+### Stage 8 — final (`cf86b51` + Phase 3 record fix `6cee84a`, LCP fix `c74bff1`)
+- Frame (`ondemand=0`, 3.5): 8.74 / 5.16 / 7.93 ms. Retina 1440@2: balanced 16.65 ms, high 40.43 ms pinned; unpinned high auto-drops to balanced in 5/5 runs (17.54 ms at 8 s). 218 / 216 calls. 928,418 B. 0 console, 0 blank.
+- Lighthouse (3.5): desktop 97 [93–97], mobile 61 [60–62]; LCP element `img#poster` in 10/10 runs.
+- Shadow A/B: the stage-4 "cut-off" is the tray's own shadow (`measurements/stage-8-shadow-ab.txt`).
+
+---
+
+## Against thresholds (3.5)
+
+The brief names no numeric thresholds for 3.5 beyond the fix list, so these are the ones I used:
+the skills' own budgets (threejs-scene: 10 ms frame, < 300 calls, < 2 M tris), the brief's
+definition of done (0 console errors, 0 blank canvases), Core Web Vitals "good" (LCP ≤ 2.5 s,
+CLS ≤ 0.1, TBT ≤ 200 ms as Lighthouse's lab proxy), Lighthouse ≥ 90 per category, and the 3.5
+items (poster 40–60 KB, LCP element = poster, mismatch audit gone).
+
+| Check | Threshold | Measured | Result |
+|---|---|---|---|
+| Console errors, all routes, both engines | 0 | 0 | PASS |
+| Blank canvases, stages 4/7/8, both engines, 3 widths | 0 | 0 (site-check 3.5) | PASS |
+| Draw calls / triangles, every stage | < 300 / < 2 M | max 218 / 103,556 | PASS |
+| Frame, stages 2–8, 1440@1 / 768@1 / 390@2 uncapped | ≤ 10 ms | max 9.40 (stage 6, 1440) | PASS |
+| Frame, stage 8 Retina 1440@2, balanced (pinned) | ≤ 10 ms | 16.65 ms | **FAIL** |
+| Frame, stage 8 Retina 1440@2, high (pinned) | ≤ 10 ms | 40.43 ms | **FAIL** |
+| Frame, stage 8 Retina, high + auto-drop, at 8 s | ≤ 10 ms | 17.54 ms (drops to balanced, never to fast) | **FAIL** |
+| Composer target = CSS × DPR, stages 2–6 | yes | 780×1688 at 390@2 | PASS |
+| `label-content-name-mismatch`, 10 pages | gone | score 1 on all 10 | PASS |
+| Lighthouse a11y, 10 pages | 100 | 100 | PASS |
+| LCP element, stage 8 | `img#poster` | `img#poster` 10/10 runs | PASS |
+| Poster size | 40–60 KB | 48,994 / 49,312 B | PASS |
+| Lighthouse performance, stage 8 desktop | ≥ 90 | 97 [93–97] | PASS |
+| Lighthouse performance, stage 8 mobile | ≥ 90 | 61 [60–62] | **FAIL** |
+| LCP, stage 8 mobile | ≤ 2.5 s | 6.31 s | **FAIL** |
+| TBT, stage 8 mobile | ≤ 200 ms | 348 ms | **FAIL** |
+| Lighthouse performance, stage 0 mobile | ≥ 90 | 79 | **FAIL** (baseline; 687 KB three.js) |
+| CLS, all measured | ≤ 0.1 | ≤ 0.012 | PASS |
+| Lighthouse BP / SEO | ≥ 90 | 100 / 100 | PASS |
+
+---
+
+## RENDERER NOTES
+
+Inferred from the numbers, **not traced** (no per-pass call breakdown was captured). Kept here
+so they are not mistaken for measured facts.
+
+1. **X-ray removes exactly 2 calls and 4,320 triangles.** The body mesh is 2,160 triangles;
+   4,320 = 2 × 2,160. Measured on stage 8: x-ray off 218 / 103,556; x-ray on 216 / 99,236.
+   Explanation: once the body is transparent it drops out of **two opaque-only passes**. The
+   likely two are the transmission pre-pass three.js runs for the glass hopper (it renders only
+   opaque objects) and the GTAO normal/depth pass (which skips transparent materials). Inferred,
+   not traced.
+2. **Explode at t = 1 with x-ray off renders 12 fewer calls (206) and 4,176 fewer triangles**,
+   although no geometry is removed. Explanation: the exploded parts move **out of the fitted shadow
+   frustum and out of the view frustum** for some passes, so frustum culling skips them in the
+   shadow pass and in some screen passes. Inferred, not traced.
 
 ---
 
 ## UNCERTAIN
 
-1. **Why x-ray removes exactly 2 calls and 4,320 triangles (2 × the body's 2,160).** Measured on stage 8: t 0 / x-ray off 218 / 103,556; x-ray on 216 / 99,236. My guess, not verified: once the body is transparent it is skipped by two passes that only draw opaque objects (the transmission pre-pass for the glass hopper, and one more). Which second pass, I don't know.
-2. **Why explode t = 1 with x-ray off renders 12 fewer calls (206) and 4,176 fewer triangles.** No geometry is removed. Parts moving out of the fitted shadow frustum, or out of the view frustum for some passes, would explain it. Not traced.
-3. **The stage-8 desktop Lighthouse outlier** (58: FCP 4.36 s, script evaluation 4.4 s, against 0.5 s in runs 2–3). It was the first run against a fresh profile. A cold GPU shader cache (Metal program compile counted as script time) is likely but not proven. The headless-shell first paint for stage 8 is 40–44 ms (`.tmp/fcp_probe.py`, not committed), so the page itself paints the poster early.
-4. **LCP element on stage 8 is text, not the poster.** Lighthouse picked `#controls` (desktop) and `#status` (mobile). On mobile `#status` changes to "Quality: high." when GL is ready, so LCP there measures GL ready rather than the first meaningful paint. I don't know why Chrome does not count the full-viewport poster `<img>`. Possibly the low-entropy image heuristic: 14 KB over 1440×900. Not verified.
-5. **Retina frame time is from headless.** 27–30 ms at 1440×900 @2 is a headless Chromium number. A visible Safari or Chrome window on the same Mac may differ. Not measured.
-6. **WebKit Tab order** (stage 7/8): Tab only cycles skip link ↔ canvas. I attribute this to Safari's default "Tab skips links/buttons" and saw Alt+Tab walk the full order. I did not test real Safari with the preference changed.
-7. **Netlify transfer sizes and caching**: not measured, no deploy yet. Lighthouse's `uses-text-compression` failure should disappear there.
-8. **The stage-5 video on real iOS Safari** (Range seeking, `playsinline`, decode of GOP-4 H.264 while scrubbing): only tested in Playwright WebKit on macOS.
-9. **Phone performance in general**: 390@2 is a desktop GPU with a phone-sized viewport. No real phone was used.
+1. **LCP element on mobile is `img#poster` only after a brief `#controls` entry.** At 390×844 @2
+   the probe sees `#controls` first, then `#poster` a few ms later; Lighthouse names `img#poster`
+   in 5/5 runs. Why Chrome paints/reports the text entry first on the narrow viewport is not known.
+2. **The full-viewport rule.** I inferred "Chrome ignores a full-viewport image as LCP" from the
+   probe (full size → not a candidate; 1 px less → candidate). I did not read Chrome's source to
+   confirm the exact rule, and it may change between versions. The fix is a 1 px hack that relies on it.
+3. **Retina bimodal frame intervals (~16 / ~20 ms) with vsync off.** Read as GPU-bound; could also be
+   a compositor cadence in headless. Not traced.
+4. **Retina frame time is from headless.** A visible Safari or Chrome window on the same Mac may differ.
+5. **WebKit Tab order** (stage 7/8): Tab only cycles skip link ↔ canvas; attributed to Safari's
+   default "Tab skips links/buttons". Real Safari with the preference changed was not tested.
+6. **Netlify transfer sizes and caching**: not measured, no deploy yet. `uses-text-compression` should
+   disappear there.
+7. **The stage-5 video on real iOS Safari** (Range seeking, `playsinline`, GOP-4 scrubbing): only
+   Playwright WebKit on macOS.
+8. **Phone performance in general**: 390@2 is a desktop GPU with a phone-sized viewport; Lighthouse
+   mobile is simulated throttling. No real phone was used.
+9. **The Phase 3 Lighthouse outlier (58)** did not recur with the warm-up protocol (spread 93–97),
+   which fits a cold shader cache but does not prove it.
