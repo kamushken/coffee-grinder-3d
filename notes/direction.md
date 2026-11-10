@@ -174,6 +174,11 @@ distance heuristic allows for. This is the likely cause; I have not verified it 
 shadow-camera helper. Stage 4 is frozen with this defect. Stage 8 has to enlarge or offset the
 frustum.
 
+**Correction (measured in stage 8).** The frustum hypothesis is wrong; see "Stage 8 — shadow
+A/B" below. Widening the frustum from 0.63 m to 4 m changes the region by a mean of 0.68/255.
+Turning off the tray's `castShadow` changes it by 6.1/255 and removes the block with the straight
+edge.
+
 Measured (Chromium 1440x900, `measurements/stage-4-capture.json`): 8.39 ms/frame, 218 calls,
 103,556 triangles, 0 console errors.
 
@@ -257,3 +262,53 @@ Measured (Chromium 1440x900, `?ondemand=0` so the probe sees frames): 8.31 ms, 2
 103,556 tris, 0 errors. With on demand active and idle, the probe reads 0 calls / 0 triangles
 (`measurements/stage-7-idle-ondemand.json`). That means no frames rendered, not a broken scene.
 site-check's draw-call readout on stage 7 will show the same.
+
+## Stage 8 — final (as built)
+
+One page built from the pieces that held up: `stage-3/render.js` (light and post-processing),
+`stage-4/scene.js` (content, framing, flight), the stage 6 exploded view (the same `EXPLODE` and
+`LABELS` values, and explode.js Exploder/Labels/Xray/Picker) and the stage 7 degradation (tiers,
+auto-drop, poster, reduced motion, keyboard, on demand). Nothing frozen was edited.
+
+| Choice | Value | Why |
+|---|---|---|
+| Load | front → hero flight (2.8 s), as in stage 4. `?view=` or reduced motion jumps straight there | one camera flight (threejs-scene SKILL.md Camera) |
+| Exploded framing | `EXPLAIN`: hero direction, distance 1.0 m, target y 0.22. Lerped from hero by smoothstep(min(1, 2t)) until the visitor orbits, presses a view or a key | exploded-view SKILL.md "Camera and framing". The lifted knob (≈0.46 m) stays in frame at all 3 widths |
+| Labels | `.labels` gets class `on` only when t ≥ 0.04, so the assembled hero has no labels. Hidden below 600 px; `#part` names the part instead | assembled hero = clean composition; exploded = explainer |
+| X-ray | automatic at t ≥ 0.62, opacity 0.14, until the button is used | stage 6 value |
+| Poster | reuses `/stage-7/poster-*.webp` (same hero frame) | no duplicate bytes |
+| Shadow | env.js sizing unchanged (see A/B) | the frustum was not the cause |
+| Scroll film | not included | the stage 5 footage is an electric motor, not this grinder |
+
+### Stage 8 — shadow A/B (`measurements/stage-8-shadow-ab.txt`)
+
+`tools/shadow_ab.py` wraps `env.update` inside the page and renders the same hero frame
+(`?record=1`, Chromium 1440×900) three ways. It compares the crop x 1100–1440, y 560–800, which
+holds the "cut" edge:
+
+| Variant | Frustum half | Mean abs diff vs env.js (R,G,B /255) |
+|---|---|---|
+| env.js default | 0.629 m | — |
+| half 1.0 m, centre 0.3 m away from the sun | 1.0 m | 0.08, 0.04, 0.01 (max 12) |
+| half 4.0 m | 4.0 m | 0.68, 0.30, 0.11 (max 21) |
+
+`tools/shadow_tray.py` sets `castShadow` false on the tray meshes: 6.10, 2.69, 1.02 (max 30).
+With the tray not casting, the block with the straight edge disappears and only the grinder's
+long band remains (`.tmp/tray-nocast.png`, not committed). So the straight edge is the tray's own
+shadow at 9.0° sun elevation (sun direction −0.928, 0.156, 0.338). A rounded rectangle 18 mm high
+throws a shadow ≈ 11 cm long at that angle, and its straight long side projects as a straight
+edge. It is not clipping. A first draft of stage 8 widened the frustum (half 1.0, lead 0.3). The
+A/B showed no visible effect, so that draft was removed before commit.
+
+Measured (Chromium 1440×900, `measurements/stage-8-*.json`):
+
+| State | ms/frame | calls | triangles | errors |
+|---|---|---|---|---|
+| hero, `?view=hero&ondemand=0` | 8.32 | 218 | 103,556 | 0 |
+| exploded, `?explode=1&ondemand=0` | 8.49 | 216 | 99,236 | 0 |
+| idle, on demand (default URL) | 8.23 (rAF only) | 0 | 0 | 0 |
+
+Smoke test: Chromium + WebKit × 1440×900, 768×1024 and 390×844, default load, then the slider
+set to 1. 0 errors and 0 warnings in all 6 runs. 8 labels visible at 1440 and 768, 0 at 390
+(by design). X-ray switched on automatically. The camera ended at the EXPLAIN vantage
+(0.393, 0.375, 0.911).

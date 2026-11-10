@@ -4,14 +4,74 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
-  <title>Stage 8 · coffee-grinder-3d lab</title>
-  <meta name="description" content="Stage 8 of a procedural three.js coffee grinder study. Not built yet.">
+  <title>Stage 8 · final · coffee-grinder-3d lab</title>
+  <meta name="description" content="Stage 8: the final coffee grinder scene. Golden-hour light, rule-of-thirds composition, an exploded view with labels and x-ray, quality tiers, a static poster fallback, reduced motion and full keyboard control.">
+  <script type="importmap">
+    { "imports": {
+        "three": "/vendor/three/build/three.module.min.js",
+        "three/addons/": "/vendor/three/examples/jsm/"
+    } }
+  </script>
   <link rel="stylesheet" href="/shared/shell.css">
+  <link rel="preload" as="image" href="/stage-7/poster-wide.webp" media="(min-aspect-ratio: 1/1)">
+  <link rel="preload" as="image" href="/stage-7/poster-tall.webp" media="(max-aspect-ratio: 1/1)">
+  <style>
+    /* poster first (stage 7) */
+    #poster { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 0; }
+    canvas#gl { z-index: 1; opacity: 0; }
+    body.gl-ready canvas#gl { opacity: 1; }
+    body.gl-ready #poster { visibility: hidden; }
+    body.poster-only canvas#gl, body.poster-only .labels { display: none; }
+    canvas#gl:focus-visible { outline: 3px solid #ffd28a; outline-offset: -3px; }
+    .skip { position: fixed; left: 12px; top: 10px; z-index: 20; background: #e8e8e8; color: #000; padding: 6px 10px; border-radius: 3px; transform: translateY(-200%); }
+    .skip:focus { transform: none; }
+    /* labels (stage 6), shown only once the assembly starts to open */
+    .labels { position: fixed; inset: 0; z-index: 5; }
+    .labels:not(.on) { display: none; }
+    .label { font: 12px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; color: #1d1b19; background: rgba(236, 233, 225, .82); padding: 3px 6px; border-radius: 3px; }
+    .label b { display: block; color: #000; }
+    .label span { color: #4a4440; font-size: 11px; }
+    .label.focus { background: #1d1b19; color: #ece9e1; }
+    .label.focus b { color: #ffd28a; }
+    .label.focus span { color: #d8d2c8; }
+    .leader { fill: none; stroke: rgba(29, 27, 25, .7); stroke-width: 1; }
+    .leader.focus { stroke: #ff8a3d; stroke-width: 1.5; }
+    /* controls */
+    .caption .row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 4px; }
+    .caption .row > span { min-width: 6ch; color: #bdb6ab; }
+    .caption input[type=range] { width: 160px; accent-color: #ffd28a; }
+    .caption button { font: inherit; color: #e8e8e8; background: transparent; border: 1px solid rgba(255,255,255,.3); border-radius: 3px; padding: 2px 8px; min-height: 28px; min-width: 28px; cursor: pointer; }
+    .caption button[aria-pressed="true"] { background: #e8e8e8; color: #000; }
+    .caption button:focus-visible, .caption input:focus-visible, .stages a:focus-visible, .skip:focus-visible { outline: 2px solid #ffd28a; outline-offset: 2px; }
+    #status { color: #ffd28a; }
+    body.poster-only .caption .gl { display: none; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+    @media (max-width: 600px) { .labels .label, .labels svg { display: none !important; } .caption .long { display: none; } }
+  </style>
 </head>
 <body>
+  <a class="skip" href="#controls">Skip to scene controls</a>
+  <picture>
+    <source media="(max-aspect-ratio: 1/1)" srcset="/stage-7/poster-tall.webp">
+    <img id="poster" src="/stage-7/poster-wide.webp" width="1440" height="900" alt="The coffee grinder on a walnut tray at golden hour, three-quarter view, on the right third of the frame. Static image.">
+  </picture>
+  <canvas id="gl" tabindex="0" aria-label="Interactive 3D coffee grinder. With focus: arrow keys orbit, plus and minus zoom, 1 to 3 jump between views. Hover or tap a part to name it."></canvas>
+  <div class="labels" aria-hidden="true"></div>
   <nav class="stages" aria-label="Stages"></nav>
-  <p class="caption"><b>Stage 8</b> — not built yet.</p>
+  <div class="caption" id="controls" tabindex="-1"><b>Stage 8 — final.</b> <span class="long">Stage 3 light and materials, stage 4 composition and flight, the stage 6 exploded view and the stage 7 degradation, all on one page. Drag the explode slider to open the burr assembly; labels and x-ray follow. The poster is the stage 7 one, because the hero frame is the same. The stage 5 scroll film is left out because its footage shows an electric motor, not this grinder. The part geometry is illustrative, not a specific product.</span>
+    <div class="row gl"><label>explode <input id="explode" type="range" min="0" max="1" step="0.01" value="0" aria-label="Explode amount"></label><button id="xray" aria-pressed="false">x-ray body</button><span>part: <output id="part" aria-live="polite">—</output></span></div>
+    <div class="row gl" role="group" aria-label="View"><span>view</span><button data-view="front">1 front</button><button data-view="hero">2 hero</button><button data-view="low">3 low</button></div>
+    <div class="row gl" role="group" aria-label="Light"><span>light</span><button data-light="morning">morning</button><button data-light="golden">golden</button><button data-light="night">night</button></div>
+    <div class="row gl" role="group" aria-label="Quality"><span>quality</span><button data-quality="high">high</button><button data-quality="balanced">balanced</button><button data-quality="fast">fast</button></div>
+    <div id="status" role="status" aria-live="polite">Loading the 3D scene…</div>
+  </div>
+  <noscript>
+    <style>#controls, nav.stages:empty { display: none; }</style>
+    <nav class="stages" aria-label="Stages"><a href="/">home</a><a href="/stage-0/">0</a><a href="/stage-1/">1</a><a href="/stage-2/">2</a><a href="/stage-3/">3</a><a href="/stage-4/">4</a><a href="/stage-5/">5</a><a href="/stage-6/">6</a><a href="/stage-7/">7</a><a href="/stage-8/" aria-current="page">8</a></nav>
+    <p class="caption"><b>Stage 8 — final.</b> JavaScript is off, so this static poster is the whole page. The stage links above still work.</p>
+  </noscript>
   <script type="module" src="/shared/shell.js"></script>
   <script type="module" src="/shared/goatcounter.js"></script>
+  <script type="module" src="./main.js"></script>
 </body>
 </html>

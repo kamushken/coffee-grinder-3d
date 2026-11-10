@@ -1,0 +1,10 @@
+# python3 tools/shadow_ab.py  (frustum size A/B, crop x1100-1440 y560-800, 1440x900, chromium)
+envjs {"half": 0.629, "tgt": [0.01, 0, 0]}
+half1-lead03 {"half": 1, "tgt": [0.292, 0, -0.103]}
+half4 {"half": 4, "tgt": [0.01, 0, 0]}
+envjs vs half1-lead03: mean abs diff per channel [0.08, 0.04, 0.01], max 12
+envjs vs half4: mean abs diff per channel [0.68, 0.3, 0.11], max 21
+half1-lead03 vs half4: mean abs diff per channel [0.61, 0.27, 0.1], max 21
+
+# python3 tools/shadow_tray.py  (tray castShadow on/off, same crop)
+tray casts vs not: mean [6.1, 2.69, 1.02] max 30
