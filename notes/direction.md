@@ -53,6 +53,38 @@ sky fill in the shadows. Calm, expensive, tactile. Nothing glows, nothing spins 
 No tone mapping, no shadows: those belong to stage 2. The hopper is still opaque because
 glass transmission is a stage-3 material.
 
+## Stage 2 lighting (as set in `stage-2/main.js`)
+
+`lib/open-3d-skills/env.js` is used verbatim; presets are the starter's, not retuned. The only
+inputs are `scale` and the preset name. Numbers below were read back from the running page
+(`measurements/stage-2-blend-check.txt`) where marked "measured".
+
+| Parameter | Value | Why |
+| --- | --- | --- |
+| `createEnvironment` `scale` | 2 (m) | env.js derives fog density as `fogD * 120 / scale`. At scale 120 (starter) fog is ~0 at product distance; at scale 1 fog density is 0.504 and the slab is 90 % fogged at 3 m. At 2: 2.3 % fog at the 0.6 m camera distance, 43.5 % at 3 m, so the slab dissolves into the horizon colour as lighting.md asks ("Fog colour equals the horizon colour") without veiling the grinder. Computed in shell, see commit log |
+| preset | `golden` (default), `?light=` override | direction.md one-look: low sun, long shadow |
+| golden preset values (starter, unchanged) | skyEl 5, el 9, az 250, sunI 3.4, sunC `#ffb066`, hemiS `#f2c9a3`, hemiG `#4a3c2e`, hemiI 0.42, envI 0.62, turb 5.0, ray 2.4, mie 0.007, mieG 0.86, fogC `#dcae88`, fogD 0.0042, exp 0.72 | lighting.md: light 4° above the painted sun "so faces still read" |
+| blend | `env.set(name, 2.5)`; smoothstep over 2.5 s, PMREM refreshed every 6th frame (env.js) | measured golden→night: exposure 0.72 → 0.764 → 0.856 → 1.0, sunI 3.4 → 2.884 → 1.811 → 0.14 |
+| shadow map | 4096², `PCFSoftShadowMap` | SKILL.md default |
+| shadow frustum half-width | `clamp(dist * 0.85, scale*0.25, scale*4)` = 0.51 m (measured) | fitted to view; 0.249 mm per texel at 4096 |
+| shadow texel snapping | env.js, target snapped to whole texels | SKILL.md: "so shadows do not shimmer" |
+| `shadow.bias` | -0.0002 (measured) | env.js default |
+| `shadow.normalBias` | 0.0012 m (measured, = scale × 0.0006) | 1.2 mm; no acne visible on the body at golden; no peter-panning at the gasket |
+| screws `castShadow` | false | SKILL.md: "Keep castShadow off for small ... things" |
+| tone mapping | ACESFilmic, exposure from preset (0.72 golden) | SKILL.md |
+| composer target | HalfFloat, MSAA samples 4; renderer `antialias:false` | SKILL.md: "Canvas MSAA does nothing once post-processing is on" |
+| GTAO | radius 0.03, distanceExponent 1.5, thickness 0.03, scale 1.0, samples 16 | starter radius 0.9 / thickness 1.2 are for a 10 m pavilion; scaled to the grinder (~0.1 m features) so contact darkening sits where gasket meets slab and ring meets body, not as a halo |
+| GTAO denoise | radius 6, rings 2, samples 16 | starter values |
+| GTAO blend | 0.8 | starter value |
+| GTAO exclusions | everything with `userData.noAO` or `renderOrder < 0` (sky, dome, clouds) | starter SelectiveGTAO subclass |
+| bloom | strength 0.12 + 0.5·night, radius 0.5, threshold 0.9 − 0.15·night | starter values |
+| front fill light from stage 1 | removed | IBL from the sky now lights the front |
+| slab | radius 30 m disc, receives shadow | horizon line hidden by fog |
+
+Observed at stage 2: the night preset crushes the body to black (sunI 0.14, no emissives). That
+is what lighting.md describes ("Night is mostly the absence of light"); this product has no
+lamps, so night is shown but not the default.
+
 ## Material language (filled in at stage 3)
 
 See "Material rules" below.

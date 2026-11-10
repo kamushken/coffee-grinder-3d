@@ -1,0 +1,4 @@
+golden t=0       {'exposure': 0.72, 'sunI': 3.4, 'night': 0, 'shadowHalf': 0.51, 'mapSize': 4096, 'normalBias': 0.0012, 'bias': -0.0002}
+after +600ms      {'exposure': 0.764, 'sunI': 2.884, 'night': 0.158, 'shadowHalf': 0.51, 'mapSize': 4096, 'normalBias': 0.0012, 'bias': -0.0002}
+after +600ms      {'exposure': 0.856, 'sunI': 1.811, 'night': 0.487, 'shadowHalf': 0.51, 'mapSize': 4096, 'normalBias': 0.0012, 'bias': -0.0002}
+after +1600ms      {'exposure': 1, 'sunI': 0.14, 'night': 1, 'shadowHalf': 0.51, 'mapSize': 4096, 'normalBias': 0.0012, 'bias': -0.0002}

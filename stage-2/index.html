@@ -4,14 +4,28 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
-  <title>Stage 2 · coffee-grinder-3d lab</title>
-  <meta name="description" content="Stage 2 of a procedural three.js coffee grinder study. Not built yet.">
+  <title>Stage 2 · lighting · coffee-grinder-3d lab</title>
+  <meta name="description" content="Stage 2: the procedural coffee grinder lit with the threejs-scene sky and sun presets, fitted soft shadows and ambient occlusion.">
+  <script type="importmap">
+    { "imports": {
+        "three": "/vendor/three/build/three.module.min.js",
+        "three/addons/": "/vendor/three/examples/jsm/"
+    } }
+  </script>
   <link rel="stylesheet" href="/shared/shell.css">
+  <style>
+    .caption button { font: inherit; color: #e8e8e8; background: transparent; border: 1px solid rgba(255,255,255,.3); border-radius: 3px; padding: 2px 8px; margin: 4px 4px 0 0; min-height: 28px; cursor: pointer; }
+    .caption button[aria-pressed="true"] { background: #e8e8e8; color: #000; }
+    .caption button:focus-visible { outline: 2px solid #ffd28a; outline-offset: 2px; }
+  </style>
 </head>
 <body>
+  <canvas id="gl" aria-label="The coffee grinder on a travertine slab under a low golden sun, casting a long soft shadow."></canvas>
   <nav class="stages" aria-label="Stages"></nav>
-  <p class="caption"><b>Stage 2</b> — not built yet.</p>
+  <p class="caption"><b>Stage 2 — lighting.</b> threejs-scene env.js presets (sky, sun, hemisphere, fog, exposure, IBL from the sky) with blending, 4096 texel-snapped PCF soft shadow fitted to the view, GTAO, ACES. Materials and camera unchanged.<br>
+    <button data-light="morning">morning</button><button data-light="golden">golden</button><button data-light="night">night</button></p>
   <script type="module" src="/shared/shell.js"></script>
   <script type="module" src="/shared/goatcounter.js"></script>
+  <script type="module" src="./main.js"></script>
 </body>
 </html>
