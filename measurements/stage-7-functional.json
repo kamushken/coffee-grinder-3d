@@ -1,0 +1,194 @@
+{
+ "chromium": {
+  "tier_high": {
+   "q": "high",
+   "dpr": 1,
+   "shadow": 4096,
+   "status": "Quality: high (pinned).",
+   "errs": 0,
+   "errors": []
+  },
+  "tier_balanced": {
+   "q": "balanced",
+   "dpr": 1,
+   "shadow": 4096,
+   "status": "Quality: balanced (pinned).",
+   "errs": 0,
+   "errors": []
+  },
+  "tier_fast": {
+   "q": "fast",
+   "dpr": 1,
+   "shadow": 2048,
+   "status": "Quality: fast (pinned).",
+   "errs": 0,
+   "errors": []
+  },
+  "auto_drop": {
+   "q": "fast",
+   "status": "Quality: fast (auto, 32.7 ms average)."
+  },
+  "ondemand": {
+   "idle_before": 7,
+   "idle_after_2s": 7,
+   "after_arrow_key": 19
+  },
+  "poster_param": {
+   "fallback": "requested with ?quality=poster",
+   "posterVisible": "visible",
+   "canvas": "none",
+   "status": "Static poster: requested with ?quality=poster.",
+   "errors": []
+  },
+  "poster_nowebgl": {
+   "fallback": "this browser has no WebGL 2",
+   "errors": []
+  },
+  "poster_contextlost": {
+   "fallback": "the WebGL context was lost",
+   "errors": []
+  },
+  "nojs": {
+   "poster_img_complete": null
+  },
+  "reduced": {
+   "reduced": true,
+   "damping": false,
+   "pos": [
+    0.293,
+    0.25,
+    0.674
+   ],
+   "hero": [
+    0.2931,
+    0.2496,
+    0.674
+   ],
+   "night_after_0.4s": 1,
+   "errors": []
+  },
+  "tab_order": [
+   "Skip to scene ",
+   "gl",
+   "home",
+   "0",
+   "1",
+   "2",
+   "3",
+   "4",
+   "5",
+   "6",
+   "7",
+   "8",
+   "high",
+   "balanced",
+   "fast",
+   "front",
+   "hero",
+   "low",
+   "morning",
+   "golden",
+   "night",
+   "Skip to scene "
+  ],
+  "enter_fast": "fast",
+  "arrow_moves_camera": true,
+  "keyboard_errors": []
+ },
+ "webkit": {
+  "tier_high": {
+   "q": "high",
+   "dpr": 1,
+   "shadow": 4096,
+   "status": "Quality: high (pinned).",
+   "errs": 0,
+   "errors": []
+  },
+  "tier_balanced": {
+   "q": "balanced",
+   "dpr": 1,
+   "shadow": 4096,
+   "status": "Quality: balanced (pinned).",
+   "errs": 0,
+   "errors": []
+  },
+  "tier_fast": {
+   "q": "fast",
+   "dpr": 1,
+   "shadow": 2048,
+   "status": "Quality: fast (pinned).",
+   "errs": 0,
+   "errors": []
+  },
+  "auto_drop": {
+   "q": "fast",
+   "status": "Quality: fast (auto, 33.1 ms average)."
+  },
+  "ondemand": {
+   "idle_before": 3,
+   "idle_after_2s": 3,
+   "after_arrow_key": 10
+  },
+  "poster_param": {
+   "fallback": "requested with ?quality=poster",
+   "posterVisible": "visible",
+   "canvas": "none",
+   "status": "Static poster: requested with ?quality=poster.",
+   "errors": []
+  },
+  "poster_nowebgl": {
+   "fallback": "this browser has no WebGL 2",
+   "errors": []
+  },
+  "poster_contextlost": {
+   "fallback": "the WebGL context was lost",
+   "errors": []
+  },
+  "nojs": {
+   "poster_img_complete": null
+  },
+  "reduced": {
+   "reduced": true,
+   "damping": false,
+   "pos": [
+    0.293,
+    0.25,
+    0.674
+   ],
+   "hero": [
+    0.2931,
+    0.2496,
+    0.674
+   ],
+   "night_after_0.4s": 1,
+   "errors": []
+  },
+  "tab_order": [
+   "gl",
+   "Skip to scene ",
+   "gl",
+   "Skip to scene ",
+   "gl",
+   "Skip to scene ",
+   "gl",
+   "Skip to scene ",
+   "gl",
+   "Skip to scene ",
+   "gl",
+   "Skip to scene ",
+   "gl",
+   "Skip to scene ",
+   "gl",
+   "Skip to scene ",
+   "gl",
+   "Skip to scene ",
+   "gl",
+   "Skip to scene ",
+   "gl",
+   "Skip to scene "
+  ],
+  "enter_fast": "fast",
+  "arrow_moves_camera": true,
+  "keyboard_errors": []
+ }
+}

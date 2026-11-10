@@ -1,0 +1,52 @@
+{
+ "chromium": {
+  "dpr3_high": {
+   "dpr": 2,
+   "gtao": true
+  },
+  "dpr3_balanced": {
+   "dpr": 1.5,
+   "gtao": true
+  },
+  "dpr3_fast": {
+   "dpr": 1,
+   "gtao": true
+  },
+  "alt_tab_order": [
+   "Skip to scene ",
+   "gl",
+   "home",
+   "0",
+   "1",
+   "2",
+   "3",
+   "4"
+  ],
+  "nojs_screenshot": ".tmp/s7-nojs-chromium.png"
+ },
+ "webkit": {
+  "dpr3_high": {
+   "dpr": 2,
+   "gtao": true
+  },
+  "dpr3_balanced": {
+   "dpr": 1.5,
+   "gtao": true
+  },
+  "dpr3_fast": {
+   "dpr": 1,
+   "gtao": true
+  },
+  "alt_tab_order": [
+   "Skip to scene ",
+   "gl",
+   "home",
+   "0",
+   "1",
+   "2",
+   "3",
+   "4"
+  ],
+  "nojs_screenshot": ".tmp/s7-nojs-webkit.png"
+ }
+}

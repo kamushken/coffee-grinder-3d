@@ -241,3 +241,19 @@ come from stages 3–4.
   218 calls, 103,556 tris. 0 errors. Why the exploded count is lower is not investigated
   (UNCERTAIN).
 - Clip: `captures/stage-6-explode.mp4` (record.py 7 s at 30 fps, 960x600 → 640 px, 53,387 B).
+
+## Stage 7 — degradation (as built)
+
+| Feature | Implementation | Verified (`measurements/stage-7-functional*.json`, Chromium + WebKit) |
+|---|---|---|
+| Tiers | `TIERS = { high: DPR≤2, GTAO, 4096; balanced: DPR≤1.5, GTAO, 4096; fast: DPR 1, no GTAO, 2048 }` (threejs-scene SKILL.md Performance #2). `?quality=` pins a tier; buttons choose one | at DPR 3: high→2, balanced→1.5, fast→1. Shadow 4096/4096/2048 |
+| Auto-drop | starter rule: frames averaging over 1/40 s across a 3 s window with more than 60 frames → next tier. Off when pinned, chosen by hand, or recording. Idle time (no render) is excluded | main thread spun to 32 ms/frame → `fast (auto, 32.7 ms)` Chromium, `33.1 ms` WebKit |
+| Poster | `<picture>`: `poster-wide.webp` 1440×900, 14,478 B, and `poster-tall.webp` 585×1266, 9,052 B. Rendered from `/stage-4/?view=hero&record=1`. It is the first paint, preloaded, and the canvas fades in after frame 3. It stays on: `?quality=poster`, no WebGL 2, context creation failure, `webglcontextlost`, and JS off (`<noscript>` stage nav + caption) | all four triggers set `window.__fallback`, 0 errors. JS-off screenshot shows the poster, nav and caption |
+| Reduced motion | `prefers-reduced-motion` or `?motion=reduce`: no flight (jumps to hero), damping off, presets switch in 0.001 s, CSS transitions off | camera = hero vantage at load. `uNight` = 1 0.4 s after the night click |
+| Keyboard | skip link → canvas (tabindex 0, arrows orbit, +/− zoom, 1–3 views) → stage nav → quality → view → light. All native buttons/links with `:focus-visible` outlines. Live region `#status` | Chromium Tab order as listed; Enter on "fast" switches the tier; arrow keys move the camera. **WebKit: Tab only cycles skip link ↔ canvas.** That is Safari's default (Tab skips buttons/links unless "Press Tab to highlight each item" is on). Alt+Tab walks the full order in WebKit |
+| On demand | SKILL.md Performance #3. Renders while flying, for 0.1 s after any controls `change`, during light blends, and on resize/tier change. `?ondemand=0` disables it | idle: `rendered` stays at 7 (Chromium) / 3 (WebKit) over 2 s. One arrow key → +12 / +7 frames. The canvas keeps its last frame (no blank: stddev 52.5 with the poster hidden) |
+
+Measured (Chromium 1440x900, `?ondemand=0` so the probe sees frames): 8.31 ms, 218 calls,
+103,556 tris, 0 errors. With on demand active and idle, the probe reads 0 calls / 0 triangles
+(`measurements/stage-7-idle-ondemand.json`). That means no frames rendered, not a broken scene.
+site-check's draw-call readout on stage 7 will show the same.
