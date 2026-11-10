@@ -13,8 +13,17 @@
     } }
   </script>
   <link rel="stylesheet" href="/shared/shell.css">
+  <style>
+    /* Phase 3.6: say up front that the ugliness is intended */
+    .baseline-note { position: fixed; top: 10px; left: 12px; right: 12px; max-width: 44ch; margin: 0; padding: 8px 12px; z-index: 11;
+      background: #ffd28a; color: #111; border-radius: 4px; font-weight: 700; }
+    .baseline-note a { color: #111; }
+    .baseline-note a:focus-visible { outline: 2px solid #111; outline-offset: 2px; }
+    @media (max-width: 600px) { .baseline-note { top: 56px; } }
+  </style>
 </head>
 <body>
+  <p class="baseline-note">Deliberately ugly baseline. Compare with <a href="/stage-8/">stage 8</a>.</p>
   <canvas id="gl" aria-label="A manual burr coffee grinder rendered with ambient light only: a flat white silhouette."></canvas>
   <nav class="stages" aria-label="Stages"></nav>
   <p class="caption"><b>Stage 0 — slop baseline.</b> AmbientLight only, MeshStandardMaterial defaults on every part, dead-centre straight-on camera, no shadows, no tone mapping, no motion.</p>
