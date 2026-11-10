@@ -58,9 +58,40 @@ function showPoster(reason) {
   say(`Static poster: ${reason}.`); window.__fallback = reason; window.__ready = true;
 }
 
+// Phase 3.7 mobile boot: on a narrow viewport or a constrained connection the poster is the page
+// until the browser is idle (2.5 s at the latest) or the visitor first touches, scrolls or types.
+const conn = navigator.connection || {};
+export const BOOT = {
+  narrow: innerWidth < 600,
+  constrained: !!conn.saveData || ['slow-2g', '2g', '3g'].includes(conn.effectiveType),
+  idleTimeout: 2500,
+};
+// reduced motion keeps its existing path (immediate boot, no flight); recording never defers
+BOOT.defer = (BOOT.narrow || BOOT.constrained) && !REDUCED && !RECORD && params.get('boot') !== 'now';
+// the stage-8 page does not scroll, so a scroll gesture never fires 'scroll': wheel and touchmove
+// stand in for it (measured: WebKit 390 wheel produced no 'scroll' event)
+const INTENT = ['pointerdown', 'scroll', 'wheel', 'touchmove', 'keydown'];
+function deferredStart() {
+  let done = false;
+  const go = (why) => {
+    if (done) return; done = true;
+    INTENT.forEach((e) => removeEventListener(e, onIntent, true));
+    window.__bootReason = why; boot();
+  };
+  const onIntent = (e) => go(e.type);
+  INTENT.forEach((e) => addEventListener(e, onIntent, { capture: true, passive: true }));
+  window.__deferred = true;
+  say('Poster first; 3D loads shortly.');
+  // Safari has no requestIdleCallback: plain timeout there
+  if (typeof window.requestIdleCallback === 'function') requestIdleCallback(() => go('idle'), { timeout: BOOT.idleTimeout });
+  else setTimeout(() => go('timeout'), BOOT.idleTimeout);
+}
+
+// the WebGL 2 probe creates a context, so a deferred boot defers the probe too
+function boot() { if (!hasWebGL2()) showPoster('this browser has no WebGL 2'); else start(); }
 if (params.get('quality') === 'poster') showPoster('requested with ?quality=poster');
-else if (!hasWebGL2()) showPoster('this browser has no WebGL 2');
-else start();
+else if (BOOT.defer) deferredStart();
+else boot();
 
 function start() {
   const canvas = document.getElementById('gl');
