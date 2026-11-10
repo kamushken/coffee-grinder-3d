@@ -176,3 +176,32 @@ frustum.
 
 Measured (Chromium 1440x900, `measurements/stage-4-capture.json`): 8.39 ms/frame, 218 calls,
 103,556 triangles, 0 console errors.
+
+## Stage 5 — motion (as built)
+
+Follows scroll-film SKILL.md "Build" steps 2–4, applied to existing footage. No legs were
+generated.
+
+| Item | Value |
+|---|---|
+| Source | `.skills/open-3d-skills/examples/motor-take-apart.webp`: 129 frames, 800×480, every alpha pixel 255. Pillow reports a 67 ms frame duration (some frames return None). It shows an electric motor, not the grinder. It is the only local sequence in the repo examples |
+| Extraction | Pillow → 129 PNGs, flattened on `#d9b48f` (no effect, since the alpha is opaque) → lossless x264 leg at 15 fps (`.tmp/s5/leg.mp4`, 129 frames, checked with ffprobe `nb_read_frames`) |
+| Shipped | `prep.py video .tmp/s5/leg.mp4 stage-5/film/motor.mp4 --width 800 --fps 15 --gop 4` → 1,265,171 B, 129 frames, 8.6 s. Poster: frame 0, `stage-5/film/poster.webp`, 12,894 B |
+| Rejected | `prep.py frames` at lg 800 px: 1.7 MB, 13 kB/frame. At sm 480 px: 0.7 MB. Video is smaller than lg. Frames would be more exact, but the 129-frame film is short enough that GOP-4 seeks land on the key frames in both engines (checked: `film.shown` = 0/40/72/128 at every hold, Chromium and WebKit) |
+| Section | 600vh (SKILL.md: "one viewport of scroll per second of film"; the film is 8.6 s, and holds take up the rest) |
+| Keys | `[0,0] [0.1,0] [0.3,40] [0.42,40] [0.55,72] [0.67,72] [0.9,128] [1,128]`: four holds, one caption per hold |
+| Fit | `contain` (the source has a baked title and labels at the edges; `cover` crops them on phones) |
+| Reduced motion | engine default `"steps"`: it jumps between key frames |
+| Live scene | the stage-4 scene below the film. GL renders only while `.live` intersects; the flight fires once, at 50 % visibility. Pointer events and orbit only when ≥ 90 % visible, so scrolling never gets captured by OrbitControls |
+
+**Phones (SKILL.md "Phones").** The 16:9 film is letterboxed (`contain`) on a 390 px portrait
+screen. The subject stays whole but small. A portrait leg set would need generation:
+DOCUMENTED-NOT-RUN.
+
+**Pacing check.** `record.py ... --fps 8 --seconds 20 --scroll "0:0 18:100%"` → 160 frames,
+"no page errors". Re-encoded to `captures/stage-5-scroll.mp4` (480 px, 56,443 B).
+
+**DOCUMENTED-NOT-RUN:** motion-assets (no paid generation), scroll-film generation (keyframes,
+legs, `prep.py seams`: there is only one leg, so seams has nothing to score), cursor-rig (no
+painted character, needs 2–8 paid image-to-video clips), alpha-cutout (the footage is opaque,
+there is no chroma plate).

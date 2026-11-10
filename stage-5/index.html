@@ -4,14 +4,58 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
-  <title>Stage 5 · coffee-grinder-3d lab</title>
-  <meta name="description" content="Stage 5 of a procedural three.js coffee grinder study. Not built yet.">
+  <title>Stage 5 · motion · coffee-grinder-3d lab</title>
+  <meta name="description" content="Stage 5: a scroll-scrubbed film intro built with the open-3d-skills scroll-film engine, followed by the live three.js grinder.">
+  <script type="importmap">
+    { "imports": {
+        "three": "/vendor/three/build/three.module.min.js",
+        "three/addons/": "/vendor/three/examples/jsm/"
+    } }
+  </script>
   <link rel="stylesheet" href="/shared/shell.css">
+  <style>
+    html, body { height: auto; }
+    #film { position: relative; height: 600vh; background: #ece9e1; z-index: 2; }
+    #film .pin { position: sticky; top: 0; height: 100vh; overflow: hidden;
+      background: #ece9e1 url(/stage-5/film/poster.webp) center / contain no-repeat; }
+    #film canvas { width: 100%; height: 100%; display: block; }
+    .beat { position: absolute; left: 16px; top: 64px; max-width: 34ch; margin: 0; padding: 8px 10px; color: #1d1b19;
+      background: rgba(236, 233, 225, .88); border-left: 3px solid #6b4226; opacity: 0; transition: opacity .25s; pointer-events: none; }
+    .beat b { color: #000; }
+    .beat.on { opacity: 1; }
+    .live { height: 100vh; position: relative; z-index: 1; pointer-events: none; }
+    .caption details { margin-top: 4px; }
+    .caption summary { cursor: pointer; }
+    .caption summary:focus-visible, .caption button:focus-visible { outline: 2px solid #ffd28a; outline-offset: 2px; }
+    .caption button { font: inherit; color: #e8e8e8; background: transparent; border: 1px solid rgba(255,255,255,.3); border-radius: 3px; padding: 2px 8px; margin: 4px 4px 0 0; min-height: 28px; cursor: pointer; }
+    .caption button[aria-pressed="true"] { background: #e8e8e8; color: #000; }
+    @media (max-width: 600px) { .beat { top: 56px; right: 16px; max-width: none; } }
+  </style>
 </head>
 <body>
+  <canvas id="gl" aria-label="The coffee grinder on a walnut tray at golden hour, revealed after the scroll film. Drag to orbit."></canvas>
   <nav class="stages" aria-label="Stages"></nav>
-  <p class="caption"><b>Stage 5</b> — not built yet.</p>
+
+  <section id="film" aria-label="Scroll film: an electric motor taken apart (open-3d-skills example footage)">
+    <div class="pin">
+      <canvas aria-hidden="true"></canvas>
+      <p class="beat" data-at="0,0.1"><b>Scroll.</b> Scrolling drives this film one frame at a time.</p>
+      <p class="beat" data-at="0.3,0.42"><b>Apart.</b> Every part slides out along its own axis.</p>
+      <p class="beat" data-at="0.55,0.67"><b>X-ray.</b> The housing fades so the stator reads.</p>
+      <p class="beat" data-at="0.9,1.01"><b>Back together.</b> Keep scrolling for the live grinder.</p>
+    </div>
+  </section>
+  <section class="live" aria-label="Live three.js grinder"></section>
+
+  <div class="caption"><b>Stage 5 — motion.</b> A scroll-scrubbed intro built with the scroll-film engine (<code>scroll-film.js</code>, video mode). Source footage: the repo's own <code>examples/motor-take-apart.webp</code> (129 frames, 800×480), run through <code>prep.py video</code> at GOP 4 with no B-frames. It is not grinder footage. <span class="dnr">Generating the film (motion-assets / scroll-film keyframes and legs): DOCUMENTED-NOT-RUN, no paid API calls.</span> Below the film: the stage-4 scene, with a flight that starts when the scene scrolls into view.
+    <details><summary>Sub-sections not run</summary>
+      <span class="dnr">cursor-rig: DOCUMENTED-NOT-RUN.</span> It needs a painted character plus 2–8 image-to-video head-turn clips. There is no character in this brief, and the clips would be paid generation.<br>
+      <span class="dnr">alpha-cutout: DOCUMENTED-NOT-RUN.</span> It needs a clip generated on a chroma plate. The motor footage has an opaque background (alpha 255 on every pixel), so there was nothing to key.
+    </details>
+    <button data-light="morning">morning</button><button data-light="golden">golden</button><button data-light="night">night</button></div>
+
   <script type="module" src="/shared/shell.js"></script>
   <script type="module" src="/shared/goatcounter.js"></script>
+  <script type="module" src="./main.js"></script>
 </body>
 </html>
