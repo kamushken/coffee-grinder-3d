@@ -1,0 +1,16 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script type="importmap">{ "imports": { "three": "/vendor/three/build/three.module.min.js", "three/addons/": "/vendor/three/examples/jsm/" } }</script>
+<style>html,body{margin:0;height:100%}canvas{width:100%;height:100%;display:block}</style></head><body><canvas id="gl"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { createRig } from '/stage-3/render.js';
+import { grinderMaterials } from '/stage-3/materials.js';
+import { buildGrinder } from '/shared/grinder.js';
+const cam = new THREE.PerspectiveCamera(30, innerWidth/innerHeight, 0.01, 200); cam.position.set(0.12, 0.16, 0.18);
+const t = new THREE.Vector3(0, 0.113, 0); cam.lookAt(t);
+const rig = createRig({ canvas: gl, camera: cam });
+const { assembly, parts } = buildGrinder(grinderMaterials());
+for (const k of Object.keys(parts)) if (!['burrInner','burrOuter','shaft'].includes(k)) parts[k].visible = false;
+parts.burrOuter.position.x = 0.09; rig.scene.add(assembly); rig.markNoAO();
+let n=0; (function f(){ rig.render(t); if(++n===3) { window.__ready=true; const progs = rig.renderer.info.programs.map(p=>p.cacheKey.slice(0,40)); console.log('programs', progs.length, progs.filter(k=>k.includes('burr')).length); } requestAnimationFrame(f); })();
+</script></body></html>

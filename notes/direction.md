@@ -85,9 +85,39 @@ Observed at stage 2: the night preset crushes the body to black (sunI 0.14, no e
 is what lighting.md describes ("Night is mostly the absence of light"); this product has no
 lamps, so night is shown but not the default.
 
-## Material language (filled in at stage 3)
+## Material rules (stage 3, `stage-3/materials.js` RULES)
 
-See "Material rules" below.
+One rule per family. Each part gets its own material instance (exploded-view: "give each part
+its own materials"). Rule of thumb that ties them together: **only steel is metallic; only
+glass is smooth; clearcoat only where a real finish would have a lacquer layer.**
+
+| Family | Parts | metalness | roughness | clearcoat / cc roughness | Other | Why |
+| --- | --- | --- | --- | --- | --- | --- |
+| Glass | hopper | 0 | 0.04 | 0 | `MeshPhysicalMaterial`, transmission 1, thickness 0.0025 m, IOR 1.5, attenuationColor `#d6e6dc`, attenuationDistance 0.12 m, specularIntensity 1; `castShadow` false, `noAO` | soda-lime glass; 2.5 mm wall; a faint green only in thick sections; clear glass throws no solid shadow and must not get AO |
+| Brushed steel | screws, ring, shaft, crank | 0.9 | 0.34 × brushed roughnessMap (0.80–1.00) | 0 | anisotropy 0.6, anisotropyRotation 0, colour `#c8c4bc` | exploded-view: "Metals read through roughness 0.3 to 0.45 and metalness 0.8 to 0.95" |
+| Burr steel | burrInner, burrOuter | 0.9 | 0.28 base, patched | 0 | steel rule + the shader patch below | hardened, freshly machined: a little smoother than brushed parts |
+| Matte powder coat | body | 0 | 0.62 × orange-peel roughnessMap (0.88–1.00) | 0.18 / 0.55 | colour `#2f3a33` | exploded-view: "painted parts through a clearcoat"; kept low so it reads matte, not glossy |
+| Rubber | gasket | 0 | 0.88 | 0 | specularIntensity 0.35, sheen 0.25, sheenRoughness 0.8, sheenColor `#3a3632` | rubber has a soft dusty edge highlight, almost no specular |
+| Wood | knob | 0 | 0.52 | 0.35 / 0.35 | canvas walnut grain map 256×1024 around `#6b4226` | oiled-and-waxed hardwood: a soft satin layer |
+| Stone (scene) | slab | 0 | 0.82 | — | `MeshStandardMaterial`, canvas travertine 1024², repeat 60 (1 m tile) | honed travertine |
+
+### The one shader patch: burr highlight
+
+`patchBurr()` via `onBeforeCompile`, cache key `burr-groove-v1` (shaders.md rule 2). Fragment-only,
+so no `customDepthMaterial` is needed (shaders.md rule 1 applies to vertex displacement).
+
+| Uniform | Value | Effect |
+| --- | --- | --- |
+| `uPitch` | 0.0009 m | lathe groove pitch along the burr axis, in part-local space so the pattern moves with the part when exploded |
+| `uRange` | (0.55, 1.35) | roughness multiplier swept across each groove: the sun draws fine bright rings |
+| `uGlint` | 0.35 | `directSpecular *= 1 + 0.35·6·(1−|n·v|)^4`: brightens cutting edges at grazing angles |
+
+Close-up check: `captures/stage-3-burr-patch.webp` (rendered by `tools/burr-closeup.html`,
+burrs isolated, outer burr shifted 9 cm).
+
+## Material language (summary)
+
+See "Material rules" above.
 
 ## Camera language
 
