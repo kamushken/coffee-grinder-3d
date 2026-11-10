@@ -1,0 +1,15 @@
+/* Lab shell shared by every route. Frozen after Phase 1: stage-specific styling lives in the
+   stage's own folder so earlier stages never change when later ones are built. */
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: #000; color: #e8e8e8; }
+body { font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; outline: none; touch-action: none; }
+.caption { position: fixed; left: 12px; bottom: 12px; right: 12px; max-width: 62ch; margin: 0; padding: 8px 10px;
+  background: rgba(0, 0, 0, .62); color: #e8e8e8; border-radius: 4px; z-index: 10; }
+.caption b { color: #fff; }
+.caption .dnr { color: #ffb36b; }
+.stages { position: fixed; top: 10px; right: 10px; display: flex; flex-wrap: wrap; gap: 2px; z-index: 10;
+  background: rgba(0, 0, 0, .62); padding: 4px; border-radius: 4px; }
+.stages a { color: #e8e8e8; text-decoration: none; min-width: 28px; min-height: 28px; display: grid; place-items: center; border-radius: 3px; }
+.stages a:hover { background: rgba(255, 255, 255, .14); }
+.stages a[aria-current="page"] { background: #e8e8e8; color: #000; }

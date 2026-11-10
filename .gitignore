@@ -1,0 +1,10 @@
+# cloned skills repo under test (pinned hash in README.md), never committed
+.skills/
+# local toolchain: python venv, Playwright browsers, static ffmpeg, npm cache
+.tools/
+# Playwright / Lighthouse / recorder temp dirs
+.tmp/
+.netlify/
+.DS_Store
+__pycache__/
+*.pyc

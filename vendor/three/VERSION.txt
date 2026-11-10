@@ -1,0 +1,5 @@
+three.js r169 (npm three@0.169.0), vendored verbatim from the npm tarball.
+Source: https://registry.npmjs.org/three/-/three-0.169.0.tgz
+tarball sha256: c86d0937570fb425d981e156ddf919c43dbc45d4e91fd7c8dd0de56723b3ec71
+Version chosen to match the threejs-scene starter import map (three@0.169.0).
+License: MIT, see LICENSE. build/three.module.min.js keeps its @license header.

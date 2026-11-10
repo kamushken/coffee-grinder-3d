@@ -1,0 +1,13 @@
+# Static site, no framework, no build step. The repo root is the publish directory.
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/vendor/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/captures/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
