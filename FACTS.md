@@ -130,7 +130,7 @@ Decoded response bodies until ready + 2 s, 1440×900. Served uncompressed (`serv
 
 Stages 7/8 grew by ~35 KB: the poster went from 14,478 to 48,994 B (fix 3).
 
-### site-check (`check.py`, unmodified; `measurements/site-check/`)
+### site-check (`check.py`; unmodified through 3.5, one local patch in 3.7, see SKILL BUGS; `measurements/site-check/`)
 
 Widths 1440, 768, 390 (390 = phone emulation: touch, DPR 2), Chromium and WebKit, plus a
 reduced-motion pass at 1440 per engine.
@@ -141,11 +141,13 @@ reduced-motion pass at 1440 per engine.
 | 2, 3, 4, 5, 6 | after fix 1 (3.5) | 40 | 0 |
 | 7, 8 (default + `?ondemand=0`) | after fix 3 (3.5) | 28 | 0 |
 
+| 5 with `--scroll-steps 4`, patched `check.py` | 3.7 | 16 | 0 |
+
 0 page errors, 0 failed requests, 0 blank canvases, 0 horizontal overflow; every run exited 0.
-Note: `check.py --scroll-steps` on stage 5 crashed inside the script (`ZeroDivisionError` in
-`blank()`: at scroll 1.0 the film canvas is at y = −900, fully off screen, so the crop is empty).
-That is a site-check bug, not a page bug; stage 5 was re-run without `--scroll-steps` (8 shots,
-0 problems), and the live part is covered by `tools/frametime.py` (scrolled to the end, 0 errors).
+In 3.5, `check.py --scroll-steps` crashed on stage 5 (see SKILL BUGS). After the 3.7 patch the
+same command ran: 3 widths, scroll 0 / 0.33 / 0.67 / 1.0 at 1440 and reduced motion, for both engines.
+That is 16 shots and 0 problems. At scroll 1.0 the shot shows the live stage-4 scene (218 calls);
+the film canvas is off screen and is now skipped instead of crashing.
 
 ### Lighthouse 12.8.2 (3.5) (`tools/lh.py`; `measurements/lighthouse/summary.json`)
 
@@ -277,6 +279,59 @@ items (poster 40–60 KB, LCP element = poster, mismatch audit gone).
 | Lighthouse performance, stage 0 mobile | ≥ 90 | 79 | **FAIL** (baseline; 687 KB three.js) |
 | CLS, all measured | ≤ 0.1 | ≤ 0.012 | PASS |
 | Lighthouse BP / SEO | ≥ 90 | 100 / 100 | PASS |
+
+---
+
+## SKILL BUGS
+
+Bugs found in the open-3d-skills scripts (`.skills/open-3d-skills` @ `53beb89`, gitignored). Each
+patch is local and minimal. The diff is kept in `measurements/phase-3.7/`.
+
+### 1. site-check `check.py --scroll-steps`: ZeroDivisionError when a canvas is fully off screen
+
+Found in Phase 3.5, patched in 3.7. Command:
+`check.py http://127.0.0.1:4321/stage-5/ --browser both --widths 1440,768,390 --ready "window.__ready === true" --scroll-steps 4`.
+At scroll 1.0 the stage-5 film canvas sits at y = −900 in a 1440×900 viewport. `blank()` clamps the
+box to the screenshot, which leaves a crop of zero area. `ImageStat` then divides by a pixel count of 0:
+
+```
+default-chromium-1440-scroll067                                 8.3 ms/frame
+Traceback (most recent call last):
+  File ".../site-check/scripts/check.py", line 205, in <module>
+    main()
+  File ".../check.py", line 186, in main
+    results.append(shoot(b, bname, join(args.query[0]), widths[0], out, args, scroll=s))
+  File ".../check.py", line 128, in shoot
+    blanks = [c for c in probe["canvases"] if blank(img, {k: v * scale for k, v in c.items()})]
+  File ".../check.py", line 128, in <listcomp>
+    ...
+  File ".../check.py", line 92, in blank
+    return max(ImageStat.Stat(crop).stddev) < 1.5
+  File ".../PIL/ImageStat.py", line 157, in stddev
+    return [math.sqrt(self.var[i]) for i in self.bands]
+  File ".../PIL/ImageStat.py", line 150, in <listcomp>
+    (self.sum2[i] - (self.sum[i] ** 2.0) / self.count[i]) / self.count[i]
+ZeroDivisionError: float division by zero
+```
+
+Patch (`measurements/phase-3.7/check-py.patch`): an off-screen canvas is "not blank", because
+nothing of it is visible to judge.
+
+```diff
+@@ -88,7 +88,10 @@
+ def blank(img, box):
+     x, y, w, h = (int(v) for v in (box["x"], box["y"], box["w"], box["h"]))
+-    crop = img.crop((max(x, 0), max(y, 0), min(x + w, img.width), min(y + h, img.height))).convert("L")
++    x0, y0, x1, y1 = max(x, 0), max(y, 0), min(x + w, img.width), min(y + h, img.height)
++    if x1 <= x0 or y1 <= y0:
++        return False  # canvas entirely off-screen: nothing visible to call blank
++    crop = img.crop((x0, y0, x1, y1)).convert("L")
+     return max(ImageStat.Stat(crop).stddev) < 1.5
+```
+
+Re-run with the patch: 16 shots, 0 problems (`measurements/site-check/stage-5-report.json`).
+A canvas that is only partly off screen was already handled by the clamp. The patch changes only
+the zero-area case.
 
 ---
 

@@ -1,0 +1,14 @@
+--- a/skills/site-check/scripts/check.py	2026-11-10 20:46:18
++++ b/skills/site-check/scripts/check.py	2026-11-10 20:46:26
+@@ -88,7 +88,10 @@
+ 
+ def blank(img, box):
+     x, y, w, h = (int(v) for v in (box["x"], box["y"], box["w"], box["h"]))
+-    crop = img.crop((max(x, 0), max(y, 0), min(x + w, img.width), min(y + h, img.height))).convert("L")
++    x0, y0, x1, y1 = max(x, 0), max(y, 0), min(x + w, img.width), min(y + h, img.height)
++    if x1 <= x0 or y1 <= y0:
++        return False  # canvas entirely off-screen: nothing visible to call blank
++    crop = img.crop((x0, y0, x1, y1)).convert("L")
+     return max(ImageStat.Stat(crop).stddev) < 1.5
+ 
+ 
