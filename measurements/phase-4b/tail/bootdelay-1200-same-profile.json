@@ -1,0 +1,112 @@
+[
+ {
+  "run": 1,
+  "perf": 99,
+  "tbt": 109,
+  "bootup": 84,
+  "obsLCP": 1078,
+  "obsLoad": 1059,
+  "top_blocking": [
+   [
+    "Unattributable",
+    311
+   ],
+   [
+    "/.netlify/scripts/hud?variant=public",
+    143
+   ],
+   [
+    "/stage-8/boot.js",
+    59
+   ]
+  ]
+ },
+ {
+  "run": 2,
+  "perf": 84,
+  "tbt": 650,
+  "bootup": 1422,
+  "obsLCP": 777,
+  "obsLoad": 772,
+  "top_blocking": [
+   [
+    "/stage-8/main.js",
+    1179
+   ],
+   [
+    "/stage-3/render.js",
+    357
+   ],
+   [
+    "Unattributable",
+    310
+   ]
+  ]
+ },
+ {
+  "run": 3,
+  "perf": 100,
+  "tbt": 23,
+  "bootup": 97,
+  "obsLCP": 710,
+  "obsLoad": 685,
+  "top_blocking": [
+   [
+    "/.netlify/scripts/hud?variant=public",
+    135
+   ],
+   [
+    "Unattributable",
+    118
+   ],
+   [
+    "/stage-8/boot.js",
+    73
+   ]
+  ]
+ },
+ {
+  "run": 4,
+  "perf": 100,
+  "tbt": 29,
+  "bootup": 101,
+  "obsLCP": 674,
+  "obsLoad": 654,
+  "top_blocking": [
+   [
+    "Unattributable",
+    210
+   ],
+   [
+    "/.netlify/scripts/hud?variant=public",
+    107
+   ],
+   [
+    "/stage-8/boot.js",
+    77
+   ]
+  ]
+ },
+ {
+  "run": 5,
+  "perf": 100,
+  "tbt": 24,
+  "bootup": 99,
+  "obsLCP": 690,
+  "obsLoad": 671,
+  "top_blocking": [
+   [
+    "/.netlify/scripts/hud?variant=public",
+    157
+   ],
+   [
+    "Unattributable",
+    124
+   ],
+   [
+    "/stage-8/boot.js",
+    71
+   ]
+  ]
+ }
+]

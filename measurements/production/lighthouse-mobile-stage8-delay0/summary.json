@@ -1,0 +1,571 @@
+{
+ "stage-8-mobile-bootdelay0": {
+  "protocol": "1 discarded warm-up + 5 runs, same profile, Lighthouse 12.8.2 simulate",
+  "median": {
+   "performance": 83,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100,
+   "first-contentful-paint": 892.692,
+   "largest-contentful-paint": 1389.315,
+   "total-blocking-time": 683,
+   "cumulative-layout-shift": 0,
+   "speed-index": 2761.902,
+   "interactive": 2309.315,
+   "observedFirstContentfulPaint": 1049,
+   "observedLargestContentfulPaint": 1049,
+   "observedLoad": 1028,
+   "observedDomContentLoaded": 1027
+  },
+  "url": "https://coffee-grinder-3d.netlify.app/stage-8/?bootdelay=0",
+  "spread": {
+   "performance": [
+    81,
+    83
+   ],
+   "accessibility": [
+    100,
+    100
+   ],
+   "best-practices": [
+    100,
+    100
+   ],
+   "seo": [
+    100,
+    100
+   ],
+   "first-contentful-paint": [
+    887.102,
+    1044.901
+   ],
+   "largest-contentful-paint": [
+    1377.244,
+    1529.901
+   ],
+   "total-blocking-time": [
+    633.5,
+    750
+   ],
+   "cumulative-layout-shift": [
+    0,
+    0.001
+   ],
+   "speed-index": [
+    2270.735,
+    3405.945
+   ],
+   "interactive": [
+    2280.692,
+    2458.901
+   ],
+   "observedFirstContentfulPaint": [
+    486,
+    1483
+   ],
+   "observedLargestContentfulPaint": [
+    577,
+    1483
+   ],
+   "observedLoad": [
+    547,
+    1456
+   ],
+   "observedDomContentLoaded": [
+    546,
+    1456
+   ]
+  },
+  "lcp_elements": [
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"https://coffee-grinder-3d.netlify.app/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"https://coffee-grinder-3d.netlify.app/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"https://coffee-grinder-3d.netlify.app/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"https://coffee-grinder-3d.netlify.app/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   },
+   {
+    "selector": "body.gl-ready > picture > img#poster",
+    "snippet": "<img id=\"poster\" src=\"https://coffee-grinder-3d.netlify.app/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+    "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+   }
+  ],
+  "failing_last_run": [
+   [
+    "total-blocking-time",
+    "Total Blocking Time",
+    0.44
+   ],
+   [
+    "max-potential-fid",
+    "Max Potential First Input Delay",
+    0.02
+   ],
+   [
+    "mainthread-work-breakdown",
+    "Minimize main-thread work",
+    0
+   ],
+   [
+    "bootup-time",
+    "Reduce JavaScript execution time",
+    0
+   ],
+   [
+    "valid-source-maps",
+    "Missing source maps for large first-party JavaScript",
+    0
+   ],
+   [
+    "unused-javascript",
+    "Reduce unused JavaScript",
+    0.5
+   ],
+   [
+    "cache-insight",
+    "Use efficient cache lifetimes",
+    0
+   ],
+   [
+    "image-delivery-insight",
+    "Improve image delivery",
+    0
+   ],
+   [
+    "network-dependency-tree-insight",
+    "Network dependency tree",
+    0
+   ],
+   [
+    "render-blocking-insight",
+    "Render blocking requests",
+    0.5
+   ]
+  ],
+  "runs": [
+   {
+    "scores": {
+     "performance": 82,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 1044.9006,
+     "largest-contentful-paint": 1529.9006,
+     "total-blocking-time": 741.5,
+     "cumulative-layout-shift": 0.000896,
+     "speed-index": 2270.735012527428,
+     "interactive": 2458.9006
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 486,
+     "observedLargestContentfulPaint": 577,
+     "observedLoad": 547,
+     "observedDomContentLoaded": 546
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"https://coffee-grinder-3d.netlify.app/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.4
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.02
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0.5
+     ],
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 81,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 888.3154999999999,
+     "largest-contentful-paint": 1389.3155,
+     "total-blocking-time": 750,
+     "cumulative-layout-shift": 0,
+     "speed-index": 3101.285438687892,
+     "interactive": 2309.3154999999997
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 1198,
+     "observedLargestContentfulPaint": 1198,
+     "observedLoad": 1174,
+     "observedDomContentLoaded": 1174
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"https://coffee-grinder-3d.netlify.app/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.39
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.02
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0.5
+     ],
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 83,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 892.692,
+     "largest-contentful-paint": 1378.692,
+     "total-blocking-time": 633.5,
+     "cumulative-layout-shift": 0,
+     "speed-index": 3405.9453992829717,
+     "interactive": 2280.692
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 1483,
+     "observedLargestContentfulPaint": 1483,
+     "observedLoad": 1456,
+     "observedDomContentLoaded": 1456
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"https://coffee-grinder-3d.netlify.app/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "speed-index",
+      "Speed Index",
+      0.89
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.47
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.04
+     ],
+     [
+      "server-response-time",
+      "Reduce initial server response time",
+      0
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0.5
+     ],
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0
+     ],
+     [
+      "document-latency-insight",
+      "Document request latency",
+      0
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 83,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 887.102,
+     "largest-contentful-paint": 1413.1019999999999,
+     "total-blocking-time": 683,
+     "cumulative-layout-shift": 0,
+     "speed-index": 2733.019596650136,
+     "interactive": 2298.102
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 1049,
+     "observedLargestContentfulPaint": 1049,
+     "observedLoad": 1028,
+     "observedDomContentLoaded": 1027
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"https://coffee-grinder-3d.netlify.app/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.43
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.03
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0.5
+     ],
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 83,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 965.2435,
+     "largest-contentful-paint": 1377.2435,
+     "total-blocking-time": 673,
+     "cumulative-layout-shift": 0,
+     "speed-index": 2761.902183537605,
+     "interactive": 2314.2435
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 1047,
+     "observedLargestContentfulPaint": 1047,
+     "observedLoad": 1021,
+     "observedDomContentLoaded": 1021
+    },
+    "lcp_element": {
+     "selector": "body.gl-ready > picture > img#poster",
+     "snippet": "<img id=\"poster\" src=\"https://coffee-grinder-3d.netlify.app/stage-7/poster-tall.webp\" width=\"1440\" height=\"900\" fetchpriority=\"high\" decoding=\"sync\" alt=\"The coffee grinder on a walnut tray at golden hour, three-quarter view, on\u2026\">",
+     "label": "The coffee grinder on a walnut tray at golden hour, three-quarter view, on the \u2026"
+    },
+    "failing": [
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.44
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.02
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0.5
+     ],
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0
+     ],
+     [
+      "image-delivery-insight",
+      "Improve image delivery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   }
+  ]
+ }
+}

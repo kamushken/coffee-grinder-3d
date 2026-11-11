@@ -1,0 +1,421 @@
+{
+ "stage-5-mobile-fix": {
+  "protocol": "1 discarded warm-up + 5 runs, same profile, Lighthouse 12.8.2 simulate",
+  "median": {
+   "performance": 100,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100,
+   "first-contentful-paint": 905.61,
+   "largest-contentful-paint": 1114.212,
+   "total-blocking-time": 59,
+   "cumulative-layout-shift": 0,
+   "speed-index": 2086.42,
+   "interactive": 1233.314,
+   "observedFirstContentfulPaint": 1086,
+   "observedLargestContentfulPaint": 1086,
+   "observedLoad": 1348,
+   "observedDomContentLoaded": 1097
+  },
+  "url": "https://coffee-grinder-3d.netlify.app/stage-5/",
+  "spread": {
+   "performance": [
+    79,
+    100
+   ],
+   "accessibility": [
+    100,
+    100
+   ],
+   "best-practices": [
+    100,
+    100
+   ],
+   "seo": [
+    100,
+    100
+   ],
+   "first-contentful-paint": [
+    774.88,
+    970.212
+   ],
+   "largest-contentful-paint": [
+    787.38,
+    1233.314
+   ],
+   "total-blocking-time": [
+    0,
+    842.5
+   ],
+   "cumulative-layout-shift": [
+    0,
+    0
+   ],
+   "speed-index": [
+    1760.738,
+    3915.947
+   ],
+   "interactive": [
+    1120.812,
+    2752.38
+   ],
+   "observedFirstContentfulPaint": [
+    920,
+    1108
+   ],
+   "observedLargestContentfulPaint": [
+    920,
+    1108
+   ],
+   "observedLoad": [
+    1169,
+    1459
+   ],
+   "observedDomContentLoaded": [
+    996,
+    1239
+   ]
+  },
+  "lcp_elements": [
+   {
+    "selector": "body.film-ready > div.caption",
+    "snippet": "<div class=\"caption\">",
+    "label": "Stage 5 \u2014 motion. A scroll-scrubbed intro built with the scroll-film engine (sc\u2026"
+   },
+   {
+    "selector": "body.film-ready > div.caption",
+    "snippet": "<div class=\"caption\">",
+    "label": "Stage 5 \u2014 motion. A scroll-scrubbed intro built with the scroll-film engine (sc\u2026"
+   },
+   {
+    "selector": "body.film-ready > div.caption",
+    "snippet": "<div class=\"caption\">",
+    "label": "Stage 5 \u2014 motion. A scroll-scrubbed intro built with the scroll-film engine (sc\u2026"
+   },
+   {
+    "selector": "body.film-ready > div.caption",
+    "snippet": "<div class=\"caption\">",
+    "label": "Stage 5 \u2014 motion. A scroll-scrubbed intro built with the scroll-film engine (sc\u2026"
+   },
+   {
+    "selector": "body.film-ready > div.caption",
+    "snippet": "<div class=\"caption\">",
+    "label": "Stage 5 \u2014 motion. A scroll-scrubbed intro built with the scroll-film engine (sc\u2026"
+   }
+  ],
+  "failing_last_run": [
+   [
+    "speed-index",
+    "Speed Index",
+    0.82
+   ],
+   [
+    "total-blocking-time",
+    "Total Blocking Time",
+    0.35
+   ],
+   [
+    "max-potential-fid",
+    "Max Potential First Input Delay",
+    0.03
+   ],
+   [
+    "valid-source-maps",
+    "Missing source maps for large first-party JavaScript",
+    0
+   ],
+   [
+    "unused-javascript",
+    "Reduce unused JavaScript",
+    0.5
+   ],
+   [
+    "cache-insight",
+    "Use efficient cache lifetimes",
+    0
+   ],
+   [
+    "network-dependency-tree-insight",
+    "Network dependency tree",
+    0
+   ],
+   [
+    "render-blocking-insight",
+    "Render blocking requests",
+    0.5
+   ]
+  ],
+  "runs": [
+   {
+    "scores": {
+     "performance": 100,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 905.61,
+     "largest-contentful-paint": 1199.6100000000001,
+     "total-blocking-time": 37,
+     "cumulative-layout-shift": 0,
+     "speed-index": 2014.7594501295084,
+     "interactive": 1199.6100000000001
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 1098,
+     "observedLargestContentfulPaint": 1098,
+     "observedLoad": 1348,
+     "observedDomContentLoaded": 1239
+    },
+    "lcp_element": {
+     "selector": "body.film-ready > div.caption",
+     "snippet": "<div class=\"caption\">",
+     "label": "Stage 5 \u2014 motion. A scroll-scrubbed intro built with the scroll-film engine (sc\u2026"
+    },
+    "failing": [
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 100,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 946.314,
+     "largest-contentful-paint": 1233.3139999999999,
+     "total-blocking-time": 0,
+     "cumulative-layout-shift": 0,
+     "speed-index": 1760.7377198854442,
+     "interactive": 1233.3139999999999
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 930,
+     "observedLargestContentfulPaint": 930,
+     "observedLoad": 1273,
+     "observedDomContentLoaded": 996
+    },
+    "lcp_element": {
+     "selector": "body.film-ready > div.caption",
+     "snippet": "<div class=\"caption\">",
+     "label": "Stage 5 \u2014 motion. A scroll-scrubbed intro built with the scroll-film engine (sc\u2026"
+    },
+    "failing": [
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 100,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 970.212,
+     "largest-contentful-paint": 1114.212,
+     "total-blocking-time": 59,
+     "cumulative-layout-shift": 0,
+     "speed-index": 2086.419773736763,
+     "interactive": 1120.812
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 1108,
+     "observedLargestContentfulPaint": 1108,
+     "observedLoad": 1404,
+     "observedDomContentLoaded": 1097
+    },
+    "lcp_element": {
+     "selector": "body.film-ready > div.caption",
+     "snippet": "<div class=\"caption\">",
+     "label": "Stage 5 \u2014 motion. A scroll-scrubbed intro built with the scroll-film engine (sc\u2026"
+    },
+    "failing": [
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 79,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 774.88,
+     "largest-contentful-paint": 787.38,
+     "total-blocking-time": 842.5,
+     "cumulative-layout-shift": 0,
+     "speed-index": 3544.883429211684,
+     "interactive": 2752.38
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 920,
+     "observedLargestContentfulPaint": 920,
+     "observedLoad": 1169,
+     "observedDomContentLoaded": 1166
+    },
+    "lcp_element": {
+     "selector": "body.film-ready > div.caption",
+     "snippet": "<div class=\"caption\">",
+     "label": "Stage 5 \u2014 motion. A scroll-scrubbed intro built with the scroll-film engine (sc\u2026"
+    },
+    "failing": [
+     [
+      "speed-index",
+      "Speed Index",
+      0.87
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.34
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.01
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0.5
+     ],
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0.5
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 79,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 867.4035,
+     "largest-contentful-paint": 1012.4035,
+     "total-blocking-time": 832.9999999999999,
+     "cumulative-layout-shift": 0,
+     "speed-index": 3915.9467553862805,
+     "interactive": 2720.4035000000003
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 1086,
+     "observedLargestContentfulPaint": 1086,
+     "observedLoad": 1459,
+     "observedDomContentLoaded": 1073
+    },
+    "lcp_element": {
+     "selector": "body.film-ready > div.caption",
+     "snippet": "<div class=\"caption\">",
+     "label": "Stage 5 \u2014 motion. A scroll-scrubbed intro built with the scroll-film engine (sc\u2026"
+    },
+    "failing": [
+     [
+      "speed-index",
+      "Speed Index",
+      0.82
+     ],
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.35
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.03
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0.5
+     ],
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   }
+  ]
+ }
+}

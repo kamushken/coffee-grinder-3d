@@ -1,0 +1,32 @@
+[
+ {
+  "run": 1,
+  "perf": 100,
+  "tbt": 90,
+  "lcp": 1444,
+  "fcp": 956,
+  "cls": 0,
+  "bootup": 89,
+  "mainthread": 549
+ },
+ {
+  "run": 2,
+  "perf": 98,
+  "tbt": 108,
+  "lcp": 1612,
+  "fcp": 1112,
+  "cls": 0,
+  "bootup": 100,
+  "mainthread": 605
+ },
+ {
+  "run": 3,
+  "perf": 100,
+  "tbt": 72,
+  "lcp": 1352,
+  "fcp": 906,
+  "cls": 0,
+  "bootup": 93,
+  "mainthread": 527
+ }
+]
