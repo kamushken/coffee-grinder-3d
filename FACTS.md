@@ -192,6 +192,8 @@ The dynamic import did what you asked: the entry script has no static imports, t
 - `Cache-Control: public, max-age=31536000, immutable` for `/vendor/*` and `/captures/*`. Neither path is content-hashed, so a changed file must get a new name. This is noted in the file.
 - Text compression: Netlify's CDN applies brotli/gzip to text types itself; there is no setting for it. **Not confirmed**, because nothing is deployed yet. The curl checks are in `HANDOFF.md`. UNCERTAIN 6 stays open until they are run.
 
+> **Superseded for the deployed site.** The mobile rows below were measured against `127.0.0.1` with no compression and no CDN. On the live site the same code scores mobile 83 / LCP 1.37 s / TBT 653 ms, and 99 / 1.37 s / 105 ms with `?bootdelay=1200`. See **PRODUCTION**. The rows stay as the local history.
+
 ### Against the thresholds after 4a
 
 | Check | Threshold | Measured | Result |
@@ -256,6 +258,142 @@ The live scene is the same code. The 1440 figure moved by up to ~1 ms across 3 r
 **Captures updated:**
 - `captures/stage-5.webp` (44,476 B, the front hold with caption 1);
 - `captures/stage-5-scroll.mp4` (`record.py --fps 8 --seconds 20 --scroll "0:0 18:100%"`, "no page errors", 480 px, 57,329 B).
+
+## PRODUCTION — the deployed site (https://coffee-grinder-3d.netlify.app)
+
+These numbers are from the **live site**, not from `127.0.0.1`. They are kept separate on purpose: the local headless numbers above measure our code on this machine with no network, no CDN and no TLS; these measure the same code behind Netlify's edge. Do not compare a figure from one section with a figure from the other.
+
+Deploy measured: commit `aa836a6`, git-based build from `origin main`. All runs on 2026-11-11, M1 Pro, Lighthouse 12.8.2 via `npx`, Chrome for Testing 1223, Metal ANGLE, one discarded warm-up per config then 5 runs. Raw reports in `measurements/production/`.
+
+### 1. HEADERS (`measurements/production/handoff-checks.txt`)
+
+| Resource | `content-encoding` | `cache-control` |
+|---|---|---|
+| `/` , `/stage-8/` , `/stage-5/` (documents) | **br** | `public,max-age=0,must-revalidate` |
+| `/stage-8/main.js` , `/stage-5/main.js` | **br** | `public,max-age=0,must-revalidate` |
+| `/shared/shell.css` | **br** | `public,max-age=0,must-revalidate` |
+| `/vendor/three/build/three.module.min.js` | **br** | **`public,max-age=31536000,immutable`** |
+| `/vendor/three/examples/jsm/controls/OrbitControls.js` | **br** | `public,max-age=31536000,immutable` |
+| `/captures/*.webp` | br | `public,max-age=31536000,immutable` |
+| `/stage-5/film/grinder.mp4` | — (already compressed) | `public,max-age=0,must-revalidate` |
+
+- Netlify applies brotli to text types itself and there is no switch for it; before the deploy this was a guess, now it is measured.
+- **`/stage-8/` is not "none".** Netlify's default for HTML and for unhashed files is `public,max-age=0,must-revalidate`, which revalidates on every visit. Nothing in `netlify.toml` overrides it, and that is what we want for HTML: a stale HTML page pointing at a changed `main.js` would be a bug. The two immutable rules cover the only large, stable assets.
+- Lua/curl artefact worth recording: `curl --compressed` here refuses brotli (`curl: (56) Unrecognized content encoding type`), so the header is printed but the body is not decoded. `curl` on this macOS build has no brotli. The `content-length` values above are therefore the *compressed* sizes, and the decoded sizes come from Playwright instead.
+
+### 2. RANGE REQUEST ON THE FILM
+
+```
+HTTP/2 206
+accept-ranges: bytes
+content-range: bytes 0-999/1095473
+content-type: video/mp4
+content-length: 1000
+```
+
+The engine seeks by byte range, so 206 is what it needs.
+
+### 3. WHAT IS AND IS NOT PUBLIC
+
+`[build] publish = "."` publishes the repository root, so every tracked file at the root is reachable. Measured:
+
+| Path | Status |
+|---|---|
+| `/.tools/env.sh` | **404** |
+| `/.skills/open-3d-skills/skills/site-check/SKILL.md` | **404** |
+| `/.tmp/` | **404** |
+| `/netlify.toml` | **404** |
+| `/tools/` , `/measurements/` , `/captures/` (directory listings) | **404** |
+| `/stage-5/film/motor.mp4` (deleted file) | **404** |
+| `/FACTS.md` , `/HANDOFF.md` , `/README.md` , `/LICENSE` , `/notes/direction.md` | **200** |
+| `/tools/lh.py` , `/measurements/phase-4a/lighthouse/summary.json` | **200** |
+| `/stage-8` , `/stage-5` (no trailing slash) | **301 → `/stage-8/` , `/stage-5/`** |
+
+- The dot-directories are not served: Netlify's publish step skips dot-prefixed paths. That is why the tools, skills and temp trees are private without a rule.
+- **But `git grep`-clean is not the same as unpublished.** The docs, the tool sources and the measurements are readable by anyone. They contain no secrets (checked in `0625130`), and the measurements are part of the point of this repo, so they stay. It is recorded here so that nobody assumes the repo root is private.
+
+### 4. TRANSFERRED BYTES, COMPRESSION ON (`measurements/production/weight-transferred.json`)
+
+Playwright, 1440×900, `request.sizes().responseBodySize` — that is post-compression wire bytes, after `load` plus 4 s and a small scroll. `response.body()` was **not** used: it returns the decoded body and overstated `/stage-8/` by 3.4×.
+
+| Page | Requests | Transferred | Largest item |
+|---|---|---|---|
+| `/stage-8/` | 32 | **287,324 B (280.6 KiB)** | three 162,192 B (br, from 687,458) |
+| `/stage-5/` | 32 | **1,336,934 B (1,305.6 KiB)** | film 1,096,221 B + three 162,149 B |
+| `/` (index) | 13 | **322,947 B (315.4 KiB)** | nine WebP cards, 300.6 KiB total |
+
+- The film is 82 % of `/stage-5/` and is deliberately not compressed again; WebP and H.264 do not compress.
+- three.js goes from 687,458 B to 162,192 B, a 4.2× reduction, on every 3D page.
+- Netlify injects `/netlify/scripts/hud?variant=public` (10,939 B) into every page. It is not ours and cannot be removed from the repo; it is counted in the totals above.
+- Files with no `content-encoding`, all correct: `.webp`, `.mp4`, and the tiny unhashed `shared/goatcounter.js` (673 B) and `CopyShader.js` (657 B), which are below the CDN's compression threshold.
+
+### 5. LIGHTHOUSE, mobile, stage 8 — default vs `?bootdelay=1200`
+
+Same protocol, same profile per config, warm-up discarded. Median [min–max] of 5.
+
+| | default | `?bootdelay=1200` | Local 4a (for shape only) |
+|---|---|---|---|
+| **Performance** | **83** [80–85] | **99** [83–100] | 62 [60–67] (3.8) |
+| FCP, Lantern | 884 ms | 871 ms | — |
+| **LCP, Lantern** | **1,369 ms** [1,227–1,518] | **1,370 ms** [1,257–1,480] | 6,310 ms |
+| LCP, observed | 1,024 ms [794–1,239] | 1,084 ms [926–1,927] | 68 ms |
+| **TBT** | **653 ms** [575–812] | **105 ms** [16–660] | 365 ms |
+| CLS | 0 in 4/5, 0.003 in 1 | 0 in 4/5, 0.003 in 1 | — |
+| Speed Index | 2,875 ms | 2,485 ms | — |
+| TTI, Lantern | 2,289 ms | 1,468 ms | — |
+| a11y / best-practices / SEO | 100 / 100 / 100 | 100 / 100 / 100 | 100 / 100 / 100 |
+
+- **The mobile targets are met on the deployed site and were never met locally.** Performance 83 ≥ 80, LCP 1.37 s ≤ 3.0 s, TBT 653 ms — that one still fails the ≤ 300 ms target. This is the opposite of what 3.8 predicted, and the mechanism is the CDN, not new code: three.js arrives from Netlify's edge in 162 KB compressed instead of 687 KB, so Lantern's model spends far less of the simulated timeline on it. The local 62 / 6.31 s were real numbers for a server with no compression and no edge. The earlier "FAIL" rows describe 3.8 on localhost and stay as history.
+- **`?bootdelay=1200` is where the win is.** TBT drops 653 → 105 ms (median) and TTI 2,289 → 1,468 ms, because the 3D boot no longer blocks inside the measured window. LCP is unchanged (1,369 vs 1,370 ms): the poster is still the LCP element and it never waited for three.js.
+- The bootdelay spread is honest and wide: one run at 660 ms TBT and 83 performance, four at 16–124 ms and 98–100. That is a warm-up/cold-cache effect on the deferred import, not a code path — the four fast runs are all after the discarded warm-up plus one full run.
+- Failing audits, both configs: `valid-source-maps` (we ship no `.map`), `unused-javascript` (45 % of three.js is unused by this scene — the single-file build cannot be tree-shaken), `cache-insight` (HTML at `max-age=0` by design), `image-delivery-insight`, `render-blocking-insight`. The last three are Netlify/Lighthouse heuristics on a 3 KB HTML page, not defects.
+- `bootup-time` attributes the blocking work on mobile: `stage-8/main.js` 1,602 ms of scripting, then `stage-3/render.js` 386 ms.
+
+### 6. LIGHTHOUSE, desktop, stage 8 — CLS on the deployed site
+
+| | Prod | Local 4a |
+|---|---|---|
+| **Performance** | **98** [96–99] | 97 [97–97] |
+| **CLS** | **0.000 in 5/5** | 0.000 in 5/5 |
+| LCP, Lantern | 479 ms [311–517] | 1,180 ms |
+| LCP, observed | 1,144 ms [919–2,079] | 63 ms |
+| TBT | 66 ms [36–85] | 54 ms |
+| LCP element | `img#poster` in 5/5 | `img#poster` |
+
+The CLS fix from 4a holds on the edge: 0 in every one of 5 desktop runs, and no `layout-shift` entry in the mobile runs either (0.003 in one mobile run is a single sub-pixel shift, below the 0.1 limit and below anything I could attribute).
+
+### 7. LIGHTHOUSE, mobile, stage 5 — the page we changed
+
+| | Prod |
+|---|---|
+| **Performance** | **79** [78–81] |
+| LCP, Lantern | 1,821 ms [1,070–1,965] |
+| LCP, observed | 1,293 ms [1,276–1,420] |
+| **TBT** | **895 ms** [753–976] |
+| CLS | **0 in 5/5** |
+| a11y / best-practices / SEO | 100 / 100 / 100 |
+| LCP element | `#film > .pin > .frame` (the film frame, 5/5) |
+
+- TBT 895 ms is the worst number in this document and it is not a regression against a previous stage 5 number (none was taken on prod or mobile before). `bootup-time`: `stage-5/main.js` 1,021 ms, `scroll-film.js` 417 ms, `Unattributable` 376 ms. The page builds the stage-4 scene and the scroll engine in the same boot as the film, so the two compete.
+- LCP is the film frame, not the poster, because the frame is the larger painted box; that is by layout, and it is still 1.8 s.
+- Not fixed here, and not asked for: stage 5 has no `?bootdelay` and no deferred boot. The same trick that took stage 8's TBT from 653 to 105 ms would apply, but it is a code change and belongs to its own task.
+
+### 8. CLS at 390 px, measured in the page (`tools/cls_probe.py` → `measurements/production/cls-390.json`)
+
+PerformanceObserver on `layout-shift` with `buffered: true`, 5 runs per size per page, on the deployed site, plus a geometry read of the caption against the film.
+
+| Page | Viewport | CLS median | Non-zero runs | Caption | Caption height | Film height | Overlap |
+|---|---|---|---|---|---|---|---|
+| stage 8 | 390×844@2 | **0.00000** | 0/5 | fixed | 243 px | 844 px | 242.6 px (by design) |
+| stage 8 | 360×640@2 | **0.00000** | 0/5 | fixed | 248 px | 640 px | 247.6 px (by design) |
+| stage 8 | 414×896@2 | **0.00000** | 0/5 | fixed | 243 px | 896 px | 242.6 px (by design) |
+| stage 5 | 390×844@2 | **0.00000** | 0/5 | **static** | 319 px | 620 px | **0** |
+| stage 5 | 360×640@2 | **0.00000** | 0/5 | **static** | 348 px | 416 px | **0** |
+| stage 5 | 414×896@2 | **0.00000** | 0/5 | **static** | 319 px | 691 px | **0** |
+
+- Zero layout-shift entries at every size, 0 page errors. The 390 px requirement is met on the deployed build, not only locally.
+- The stage-8 overlap is intended: that caption is fixed over the canvas, which is the established pattern on stages 1–8. The defect this task fixed was stage 5 only, where the caption covered the *film*, and there the overlap is now 0 at every width below 600 px.
+- Film height on stage 5 at 390 px went from 248 px (before) to 620 px (after). At 360×640 it is still only 416 px of viewport for the film, but the caption no longer sits on top of it.
 
 ## Skills: what actually ran
 
@@ -690,9 +828,11 @@ so they are not mistaken for measured facts.
 4. **Retina frame time is from headless.** A visible Safari or Chrome window on the same Mac may differ.
 5. **WebKit Tab order** (stage 7/8): Tab only cycles skip link ↔ canvas; attributed to Safari's
    default "Tab skips links/buttons". Real Safari with the preference changed was not tested.
-6. **Netlify transfer sizes, caching and compression**: not measured, no deploy yet. `netlify.toml`
-   sets the cache headers (4a); compression is the platform's. `uses-text-compression` should
-   disappear there. The curl checks to close this are in `HANDOFF.md`.
+6. **RESOLVED — measured on the deployed site.** Brotli on every text type, `immutable` on
+   `/vendor/*` and `/captures/*`, `public,max-age=0,must-revalidate` on HTML and unhashed JS, Range
+   requests 206, transferred bytes for `/`, `/stage-8/` and `/stage-5/`. Raw output:
+   `measurements/production/handoff-checks.txt`; numbers: PRODUCTION sections 1–5. The one part that
+   stays open is now item 15: the repo root being published.
 7. **The stage-5 video on real iOS Safari** (Range seeking, `playsinline`, GOP-4 scrubbing): only
    Playwright WebKit on macOS.
 8. **Phone performance in general**: 390@2 is a desktop GPU with a phone-sized viewport; Lighthouse
@@ -702,7 +842,8 @@ so they are not mistaken for measured facts.
 10. **Why mobile LCP stays at 6.3 s simulated.** Updated in 3.8.
     - Measured: dynamic `import()` alone did not change it (6.31 s). Neither did arming the idle callback after `load` + 2 rAF (5.86 s). The poster-only floor is 1.35 s, so three.js is what the model puts in front of the LCP.
     - Not measured: *why* Lantern keeps a dynamically imported module in the LCP graph. I read it as "the request started before the observed LCP"; I did not trace this in Lighthouse's code.
-    - Not tested: whether a longer delay before the import brings the simulated LCP to the 1.35 s floor. Phase 4a added `?bootdelay=<ms>` to make that testable; Lighthouse was not run with it.
+    - **Tested on the deployed site (PRODUCTION 5):** a longer delay does not bring the simulated LCP to the floor. `?bootdelay=1200` gives LCP 1,370 ms against 1,369 ms default — no change. It cuts TBT 653 → 105 ms. So the delay moves blocking time, not the LCP. What moved the LCP from 6.31 s to 1.37 s was compression on the CDN, not a timing change in our code.
+    - Still not explained: why the local simulated LCP was 6.31 s while the deployed one is 1.37 s under the same Lantern model. The measurable difference in the input is 687 KB uncompressed vs 162 KB compressed; I did not decompose the two.
 11. **Deferred boot on real phones.** The trigger conditions (`innerWidth < 600`, `navigator.connection`)
    were emulated. `navigator.connection` does not exist in Safari/WebKit, so there only the
    viewport rule applies. WebKit has no `requestIdleCallback`, so iOS boots on the 2.5 s timeout
@@ -715,4 +856,13 @@ so they are not mistaken for measured facts.
    as Playwright's screenshot landing before WebKit composites its first frame, a tool artefact and
    not a black page, but it is not traced. Whether real Safari ever shows the black frame was not
    tested.
-14. **RESOLVED in 4a (`7b893d3`).** Desktop CLS 0.032 on stage 8 (3.8), in 3 of 5 runs. The cause was `shell.js` building the corner nav and prev/next after first paint, which grew `#controls`; neither listed candidate was the cause. Both navs are now static HTML. CLS is 0 in 5/5 desktop runs. See "Phase 4a".
+14. **RESOLVED in 4a (`7b893d3`).** Desktop CLS 0.032 on stage 8 (3.8), in 3 of 5 runs. The cause was `shell.js` building the corner nav and prev/next after first paint, which grew `#controls`; neither listed candidate was the cause. Both navs are now static HTML. CLS is 0 in 5/5 desktop runs, and 0.000 in 5/5 on the deployed site (PRODUCTION 6). See "Phase 4a".
+15. **The repository root is published.** `[build] publish = "."` serves `FACTS.md`, `HANDOFF.md`,
+    `notes/`, `tools/*.py` and `measurements/` at 200 (PRODUCTION 3). No secrets are in them (checked
+    in `0625130`), and the measurements are part of the deliverable, so this is a recorded state, not
+    a defect. If the docs should be private, the fix is a redirect rule or moving the site into a
+    subdirectory; not done, because it would change every URL.
+16. **Stage 5 has no deferred boot and no `?bootdelay`.** Its mobile TBT on the deployed site is
+    895 ms, the worst figure in this document (`bootup-time`: `stage-5/main.js` 1,021 ms,
+    `scroll-film.js` 417 ms). Not fixed: it was not asked for, and stage 8 showed the cure is a code
+    change, not a config change.

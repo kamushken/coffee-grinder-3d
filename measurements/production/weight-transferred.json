@@ -1,0 +1,750 @@
+[
+ {
+  "path": "/stage-8/",
+  "requests": 32,
+  "wire_body_bytes": 287324,
+  "wire_header_bytes": 0,
+  "wire_total_bytes": 287324,
+  "wire_total_kib": 280.6,
+  "by_type_kib": {
+   "document": 3.3,
+   "image": 48.0,
+   "script": 228.6,
+   "stylesheet": 0.8
+  },
+  "with_encoding": 29,
+  "errors": [],
+  "rows": [
+   {
+    "url": "/stage-8/",
+    "status": 200,
+    "type": "document",
+    "encoding": "br",
+    "wire_body": 3362,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/.netlify/scripts/hud?variant=public",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 10840,
+    "wire_headers": 0,
+    "cache": "public,max-age=60,stale-while-revalidate=600"
+   },
+   {
+    "url": "/stage-7/poster-wide.webp",
+    "status": 200,
+    "type": "image",
+    "encoding": "",
+    "wire_body": 49127,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/shared/shell.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 1045,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/shared/shell.css",
+    "status": 200,
+    "type": "stylesheet",
+    "encoding": "br",
+    "wire_body": 797,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/stage-8/boot.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 1877,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/shared/goatcounter.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "",
+    "wire_body": 673,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/stage-8/main.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 5110,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/stage-3/render.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 1849,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/stage-4/scene.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2611,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/lib/open-3d-skills/explode.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 3396,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/EffectComposer.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 1262,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/UnrealBloomPass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2893,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/lib/open-3d-skills/kit.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2474,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/shared/grinder.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 3313,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/RenderPass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 721,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/OutputPass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 933,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/stage-3/materials.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2590,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/lib/open-3d-skills/env.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 3689,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/controls/OrbitControls.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 6668,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/build/three.module.min.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 162192,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/GTAOPass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 3306,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/MaskPass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 708,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/ShaderPass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 735,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/shaders/CopyShader.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "",
+    "wire_body": 657,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/Pass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 768,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/shaders/PoissonDenoiseShader.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2240,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/shaders/LuminosityHighPassShader.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 566,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/shaders/OutputShader.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 653,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/objects/Sky.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2797,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/shaders/GTAOShader.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 3984,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/math/SimplexNoise.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 3488,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   }
+  ]
+ },
+ {
+  "path": "/stage-5/",
+  "requests": 32,
+  "wire_body_bytes": 1336934,
+  "wire_header_bytes": 0,
+  "wire_total_bytes": 1336934,
+  "wire_total_kib": 1305.6,
+  "by_type_kib": {
+   "document": 3.3,
+   "fetch": 1070.5,
+   "image": 7.4,
+   "script": 223.6,
+   "stylesheet": 0.8
+  },
+  "with_encoding": 28,
+  "errors": [],
+  "rows": [
+   {
+    "url": "/stage-5/",
+    "status": 200,
+    "type": "document",
+    "encoding": "br",
+    "wire_body": 3369,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/shared/shell.css",
+    "status": 200,
+    "type": "stylesheet",
+    "encoding": "br",
+    "wire_body": 796,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/.netlify/scripts/hud?variant=public",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 10916,
+    "wire_headers": 0,
+    "cache": "public,max-age=60,stale-while-revalidate=600"
+   },
+   {
+    "url": "/shared/shell.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 1044,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/shared/goatcounter.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "",
+    "wire_body": 673,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/stage-5/main.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2344,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/stage-5/film/poster.webp",
+    "status": 200,
+    "type": "image",
+    "encoding": "",
+    "wire_body": 7626,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/lib/open-3d-skills/scroll-film.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2954,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/stage-4/scene.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2551,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/stage-3/render.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 1851,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/vendor/three/build/three.module.min.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 162149,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/lib/open-3d-skills/kit.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2474,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/stage-3/materials.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2528,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/shared/grinder.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 3316,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/controls/OrbitControls.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 6668,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/EffectComposer.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 1263,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/OutputPass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 880,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/RenderPass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 768,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/UnrealBloomPass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2946,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/GTAOPass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 3304,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/lib/open-3d-skills/env.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 3670,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/ShaderPass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 730,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/Pass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 795,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/shaders/CopyShader.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "",
+    "wire_body": 657,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/postprocessing/MaskPass.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 708,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/shaders/LuminosityHighPassShader.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 566,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/shaders/OutputShader.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 630,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/shaders/GTAOShader.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 3973,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/math/SimplexNoise.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 3512,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/objects/Sky.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2801,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/vendor/three/examples/jsm/shaders/PoissonDenoiseShader.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 2251,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/stage-5/film/grinder.mp4",
+    "status": 200,
+    "type": "fetch",
+    "encoding": "",
+    "wire_body": 1096221,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   }
+  ]
+ },
+ {
+  "path": "/",
+  "requests": 13,
+  "wire_body_bytes": 322947,
+  "wire_header_bytes": 0,
+  "wire_total_bytes": 322947,
+  "wire_total_kib": 315.4,
+  "by_type_kib": {
+   "document": 2.6,
+   "image": 300.6,
+   "script": 11.3,
+   "stylesheet": 0.8
+  },
+  "with_encoding": 3,
+  "errors": [],
+  "rows": [
+   {
+    "url": "/",
+    "status": 200,
+    "type": "document",
+    "encoding": "br",
+    "wire_body": 2707,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/.netlify/scripts/hud?variant=public",
+    "status": 200,
+    "type": "script",
+    "encoding": "br",
+    "wire_body": 10916,
+    "wire_headers": 0,
+    "cache": "public,max-age=60,stale-while-revalidate=600"
+   },
+   {
+    "url": "/shared/shell.css",
+    "status": 200,
+    "type": "stylesheet",
+    "encoding": "br",
+    "wire_body": 828,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/shared/goatcounter.js",
+    "status": 200,
+    "type": "script",
+    "encoding": "",
+    "wire_body": 702,
+    "wire_headers": 0,
+    "cache": "public,max-age=0,must-revalidate"
+   },
+   {
+    "url": "/captures/stage-6.webp",
+    "status": 200,
+    "type": "image",
+    "encoding": "",
+    "wire_body": 50428,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/captures/stage-0.webp",
+    "status": 200,
+    "type": "image",
+    "encoding": "",
+    "wire_body": 11797,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/captures/stage-2.webp",
+    "status": 200,
+    "type": "image",
+    "encoding": "",
+    "wire_body": 22450,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/captures/stage-7.webp",
+    "status": 200,
+    "type": "image",
+    "encoding": "",
+    "wire_body": 45637,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/captures/stage-1.webp",
+    "status": 200,
+    "type": "image",
+    "encoding": "",
+    "wire_body": 15839,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/captures/stage-3.webp",
+    "status": 200,
+    "type": "image",
+    "encoding": "",
+    "wire_body": 35988,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/captures/stage-4.webp",
+    "status": 200,
+    "type": "image",
+    "encoding": "",
+    "wire_body": 36408,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/captures/stage-5.webp",
+    "status": 200,
+    "type": "image",
+    "encoding": "",
+    "wire_body": 44599,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   },
+   {
+    "url": "/captures/stage-8.webp",
+    "status": 200,
+    "type": "image",
+    "encoding": "",
+    "wire_body": 44648,
+    "wire_headers": 0,
+    "cache": "public,max-age=31536000,immutable"
+   }
+  ]
+ }
+]

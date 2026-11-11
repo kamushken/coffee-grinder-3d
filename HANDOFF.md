@@ -91,7 +91,32 @@ Each figure is from 1 discarded warm-up + 5 runs; median [min–max]. The LCP el
 
 - Poster-only floor, mobile (`?quality=poster`, nothing imported): performance 98, simulated LCP 1.35 s, TBT 0.
 - Stage 0 mobile: 79. This is the baseline and was kept as it is on purpose.
-- **Mobile targets FAIL:** ≥ 80 / ≤ 3.0 s / ≤ 300 ms against a measured 62 / 6.31 s / 365 ms. Lantern models the three.js load and compile ahead of the poster LCP. The real paint happens at about 68 ms. See UNCERTAIN 10.
+- **These are localhost numbers and they do not describe the deployed site.** Against `127.0.0.1`, mobile missed the targets: 62 / 6.31 s / 365 ms against ≥ 80 / ≤ 3.0 s / ≤ 300 ms. On the deployed site the same code scores **83 / 1.37 s / 653 ms**, and **99 / 1.37 s / 105 ms** with `?bootdelay=1200`, because three.js arrives compressed from the CDN. See "Deployed site" below.
+
+### Deployed site (`https://coffee-grinder-3d.netlify.app`, commit `aa836a6`)
+
+Lighthouse 12.8.2, 1 discarded warm-up + 5 runs per config, median [min–max]. Raw reports in `measurements/production/`.
+
+| | Mobile default | Mobile `?bootdelay=1200` | Desktop |
+|---|---|---|---|
+| Performance | **83** [80–85] | **99** [83–100] | **98** [96–99] |
+| LCP, Lantern | 1,369 ms [1,227–1,518] | 1,370 ms [1,257–1,480] | 479 ms [311–517] |
+| LCP, observed | 1,024 ms [794–1,239] | 1,084 ms [926–1,927] | 1,144 ms [919–2,079] |
+| TBT | **653 ms** [575–812] | **105 ms** [16–660] | 66 ms [36–85] |
+| CLS | 0 in 4/5, 0.003 in 1 | 0 in 4/5, 0.003 in 1 | **0.000 in 5/5** |
+| a11y / BP / SEO | 100 / 100 / 100 | 100 / 100 / 100 | 100 / 100 / 100 |
+
+Stage 5 mobile on the deployed site: performance **79** [78–81], LCP 1,821 ms, TBT **895 ms** [753–976], CLS **0 in 5/5**. It has no `?bootdelay`; that is UNCERTAIN 16.
+
+Transferred bytes with compression on (Playwright, wire size):
+
+| Page | Requests | Transferred |
+|---|---|---|
+| `/stage-8/` | 32 | **287,324 B (280.6 KiB)** — three.js 162,192 B from 687,458 |
+| `/stage-5/` | 32 | **1,336,934 B (1,305.6 KiB)** — film 1,096,221 + three.js 162,149 |
+| `/` | 13 | **322,947 B (315.4 KiB)** |
+
+CLS at phone widths on the deployed site, measured with a PerformanceObserver in the page (`tools/cls_probe.py`), 5 runs each: **0.00000** at 390×844, 360×640 and 414×896, on both stage 8 and stage 5, 0 non-zero runs, 0 page errors.
 
 ### Frame time and GPU work
 
@@ -169,7 +194,8 @@ The source is pushed to https://github.com/kamushken/coffee-grinder-3d. That is 
 
 - `sites:create` creates `.netlify/state.json`, which is gitignored.
 - `--dir .` matches `publish = "."` in `netlify.toml`. There is no build command, so the CLI uploads the files as they are on disk.
-- `.skills/`, `.tools/` and `.tmp/` are also on disk. As far as I know the CLI skips dot-directories when it uploads; I have not run it, so check that `<site>.netlify.app/.tools/env.sh` returns 404 after the deploy (last curl below).
+- `.skills/`, `.tools/` and `.tmp/` are also on disk. As far as I know the CLI skips dot-directories when it uploads; I have not run it, so check that `<site>.netlify.app/.tools/env.sh` returns 404 after the deploy (last curl below). On the deployed site it is 404, and so are `/.skills/...` and `/.tmp/`.
+- **The checkout root is public.** `publish = "."` serves everything tracked outside a dot-directory: `/FACTS.md`, `/HANDOFF.md`, `/README.md`, `/LICENSE`, `/notes/direction.md`, `/tools/lh.py` and `/measurements/...` all return 200. Directory listings (`/tools/`, `/measurements/`) return 404, and `netlify.toml` returns 404. No secrets are in the published files (checked in `0625130`). This is recorded, not fixed; see UNCERTAIN 15.
 - Alternative: push the repo to a Git host and import it in the Netlify UI with build command empty and publish directory `.`. Only committed files are deployed that way.
 
 ### Post-deploy checks (they close UNCERTAIN 6)

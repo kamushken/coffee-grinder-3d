@@ -1,0 +1,546 @@
+{
+ "stage-5-mobile": {
+  "protocol": "1 discarded warm-up + 5 runs, same profile, Lighthouse 12.8.2 simulate",
+  "median": {
+   "performance": 79,
+   "accessibility": 100,
+   "best-practices": 100,
+   "seo": 100,
+   "first-contentful-paint": 782.752,
+   "largest-contentful-paint": 1821.166,
+   "total-blocking-time": 895,
+   "cumulative-layout-shift": 0,
+   "speed-index": 2471.424,
+   "interactive": 2717.49,
+   "observedFirstContentfulPaint": 909,
+   "observedLargestContentfulPaint": 1293,
+   "observedLoad": 1612,
+   "observedDomContentLoaded": 1612
+  },
+  "url": "https://coffee-grinder-3d.netlify.app/stage-5/",
+  "spread": {
+   "performance": [
+    78,
+    81
+   ],
+   "accessibility": [
+    100,
+    100
+   ],
+   "best-practices": [
+    100,
+    100
+   ],
+   "seo": [
+    100,
+    100
+   ],
+   "first-contentful-paint": [
+    771.99,
+    812.898
+   ],
+   "largest-contentful-paint": [
+    1070.198,
+    1964.99
+   ],
+   "total-blocking-time": [
+    753,
+    976
+   ],
+   "cumulative-layout-shift": [
+    0,
+    0
+   ],
+   "speed-index": [
+    2113.225,
+    2807.026
+   ],
+   "interactive": [
+    2601.252,
+    2787.398
+   ],
+   "observedFirstContentfulPaint": [
+    801,
+    1320
+   ],
+   "observedLargestContentfulPaint": [
+    1276,
+    1420
+   ],
+   "observedLoad": [
+    1544,
+    2081
+   ],
+   "observedDomContentLoaded": [
+    1544,
+    2081
+   ]
+  },
+  "lcp_elements": [
+   {
+    "selector": "body.film-ready > section#film > div.pin > div.frame",
+    "snippet": "<div class=\"frame\">",
+    "label": "body.film-ready > section#film > div.pin > div.frame"
+   },
+   {
+    "selector": "body.film-ready > section#film > div.pin > div.frame",
+    "snippet": "<div class=\"frame\">",
+    "label": "body.film-ready > section#film > div.pin > div.frame"
+   },
+   {
+    "selector": "body.film-ready > section#film > div.pin > div.frame",
+    "snippet": "<div class=\"frame\">",
+    "label": "body.film-ready > section#film > div.pin > div.frame"
+   },
+   {
+    "selector": "body.film-ready > section#film > div.pin > div.frame",
+    "snippet": "<div class=\"frame\">",
+    "label": "body.film-ready > section#film > div.pin > div.frame"
+   },
+   {
+    "selector": "body.film-ready > section#film > div.pin > div.frame",
+    "snippet": "<div class=\"frame\">",
+    "label": "body.film-ready > section#film > div.pin > div.frame"
+   }
+  ],
+  "failing_last_run": [
+   [
+    "total-blocking-time",
+    "Total Blocking Time",
+    0.32
+   ],
+   [
+    "max-potential-fid",
+    "Max Potential First Input Delay",
+    0
+   ],
+   [
+    "mainthread-work-breakdown",
+    "Minimize main-thread work",
+    0
+   ],
+   [
+    "bootup-time",
+    "Reduce JavaScript execution time",
+    0
+   ],
+   [
+    "valid-source-maps",
+    "Missing source maps for large first-party JavaScript",
+    0
+   ],
+   [
+    "unused-javascript",
+    "Reduce unused JavaScript",
+    0
+   ],
+   [
+    "cache-insight",
+    "Use efficient cache lifetimes",
+    0.5
+   ],
+   [
+    "lcp-discovery-insight",
+    "LCP request discovery",
+    0
+   ],
+   [
+    "network-dependency-tree-insight",
+    "Network dependency tree",
+    0
+   ],
+   [
+    "render-blocking-insight",
+    "Render blocking requests",
+    0.5
+   ]
+  ],
+  "runs": [
+   {
+    "scores": {
+     "performance": 81,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 782.7520000000001,
+     "largest-contentful-paint": 1818.752,
+     "total-blocking-time": 753,
+     "cumulative-layout-shift": 0,
+     "speed-index": 2549.562780049133,
+     "interactive": 2601.2520000000004
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 860,
+     "observedLargestContentfulPaint": 1276,
+     "observedLoad": 1612,
+     "observedDomContentLoaded": 1612
+    },
+    "lcp_element": {
+     "selector": "body.film-ready > section#film > div.pin > div.frame",
+     "snippet": "<div class=\"frame\">",
+     "label": "body.film-ready > section#film > div.pin > div.frame"
+    },
+    "failing": [
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.39
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0.01
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0.5
+     ],
+     [
+      "lcp-discovery-insight",
+      "LCP request discovery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 79,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 779.1980000000001,
+     "largest-contentful-paint": 1070.198,
+     "total-blocking-time": 915.0000000000002,
+     "cumulative-layout-shift": 0,
+     "speed-index": 2807.0255597232153,
+     "interactive": 2745.6980000000003
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 1320,
+     "observedLargestContentfulPaint": 1420,
+     "observedLoad": 2081,
+     "observedDomContentLoaded": 2081
+    },
+    "lcp_element": {
+     "selector": "body.film-ready > section#film > div.pin > div.frame",
+     "snippet": "<div class=\"frame\">",
+     "label": "body.film-ready > section#film > div.pin > div.frame"
+    },
+    "failing": [
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.31
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0.5
+     ],
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0
+     ],
+     [
+      "lcp-discovery-insight",
+      "LCP request discovery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 79,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 785.1655000000001,
+     "largest-contentful-paint": 1821.1655,
+     "total-blocking-time": 861,
+     "cumulative-layout-shift": 0,
+     "speed-index": 2113.224716750577,
+     "interactive": 2712.6655
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 801,
+     "observedLargestContentfulPaint": 1285,
+     "observedLoad": 1561,
+     "observedDomContentLoaded": 1561
+    },
+    "lcp_element": {
+     "selector": "body.film-ready > section#film > div.pin > div.frame",
+     "snippet": "<div class=\"frame\">",
+     "label": "body.film-ready > section#film > div.pin > div.frame"
+    },
+    "failing": [
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.33
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0.5
+     ],
+     [
+      "lcp-discovery-insight",
+      "LCP request discovery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 78,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 812.8975,
+     "largest-contentful-paint": 1856.8975,
+     "total-blocking-time": 976,
+     "cumulative-layout-shift": 0,
+     "speed-index": 2471.424184215549,
+     "interactive": 2787.3975
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 909,
+     "observedLargestContentfulPaint": 1376,
+     "observedLoad": 1660,
+     "observedDomContentLoaded": 1660
+    },
+    "lcp_element": {
+     "selector": "body.film-ready > section#film > div.pin > div.frame",
+     "snippet": "<div class=\"frame\">",
+     "label": "body.film-ready > section#film > div.pin > div.frame"
+    },
+    "failing": [
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.28
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0.5
+     ],
+     [
+      "lcp-discovery-insight",
+      "LCP request discovery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   },
+   {
+    "scores": {
+     "performance": 79,
+     "accessibility": 100,
+     "best-practices": 100,
+     "seo": 100
+    },
+    "metrics": {
+     "first-contentful-paint": 771.9895,
+     "largest-contentful-paint": 1964.9895000000001,
+     "total-blocking-time": 895,
+     "cumulative-layout-shift": 0,
+     "speed-index": 2343.1292704374296,
+     "interactive": 2717.4895
+    },
+    "observed": {
+     "observedFirstContentfulPaint": 960,
+     "observedLargestContentfulPaint": 1293,
+     "observedLoad": 1544,
+     "observedDomContentLoaded": 1544
+    },
+    "lcp_element": {
+     "selector": "body.film-ready > section#film > div.pin > div.frame",
+     "snippet": "<div class=\"frame\">",
+     "label": "body.film-ready > section#film > div.pin > div.frame"
+    },
+    "failing": [
+     [
+      "total-blocking-time",
+      "Total Blocking Time",
+      0.32
+     ],
+     [
+      "max-potential-fid",
+      "Max Potential First Input Delay",
+      0
+     ],
+     [
+      "mainthread-work-breakdown",
+      "Minimize main-thread work",
+      0
+     ],
+     [
+      "bootup-time",
+      "Reduce JavaScript execution time",
+      0
+     ],
+     [
+      "valid-source-maps",
+      "Missing source maps for large first-party JavaScript",
+      0
+     ],
+     [
+      "unused-javascript",
+      "Reduce unused JavaScript",
+      0
+     ],
+     [
+      "cache-insight",
+      "Use efficient cache lifetimes",
+      0.5
+     ],
+     [
+      "lcp-discovery-insight",
+      "LCP request discovery",
+      0
+     ],
+     [
+      "network-dependency-tree-insight",
+      "Network dependency tree",
+      0
+     ],
+     [
+      "render-blocking-insight",
+      "Render blocking requests",
+      0.5
+     ]
+    ]
+   }
+  ]
+ }
+}

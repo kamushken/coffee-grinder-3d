@@ -1,0 +1,65 @@
+# HANDOFF verification against https://coffee-grinder-3d.netlify.app
+# 2026-11-11T08:45:16Z
+
+## content-encoding and cache-control
+--- /stage-8/main.js
+HTTP/2 200 
+cache-control: public,max-age=0,must-revalidate
+content-encoding: br
+content-type: application/javascript; charset=UTF-8
+server: Netlify
+content-length: 5002
+--- /vendor/three/build/three.module.min.js
+HTTP/2 200 
+cache-control: public,max-age=31536000,immutable
+content-encoding: br
+content-type: application/javascript; charset=UTF-8
+server: Netlify
+--- /stage-5/main.js
+HTTP/2 200 
+cache-control: public,max-age=0,must-revalidate
+content-encoding: br
+content-type: application/javascript; charset=UTF-8
+server: Netlify
+content-length: 2241
+--- /shared/shell.css
+HTTP/2 200 
+cache-control: public,max-age=0,must-revalidate
+content-encoding: br
+content-type: text/css; charset=UTF-8
+server: Netlify
+content-length: 688
+--- /stage-8/
+HTTP/2 200 
+cache-control: public,max-age=0,must-revalidate
+content-encoding: br
+content-type: text/html; charset=UTF-8
+server: Netlify
+content-length: 3066
+--- /vendor/three/examples/jsm/controls/OrbitControls.js
+HTTP/2 200 
+cache-control: public,max-age=31536000,immutable
+content-encoding: br
+content-type: application/javascript; charset=UTF-8
+server: Netlify
+content-length: 6565
+
+## range request on the stage-5 film
+HTTP/2 206 
+accept-ranges: bytes
+cache-control: public,max-age=0,must-revalidate
+content-range: bytes 0-999/1095473
+content-type: video/mp4
+content-length: 1000
+
+## private paths must be 404
+/.tools/env.sh                                             404
+/.skills/open-3d-skills/skills/site-check/SKILL.md         404
+/.tmp/                                                     404
+/stage-5/film/motor.mp4                                    404
+/measurements/phase-4a/lighthouse/summary.json             200
+
+## redirects / trailing slash
+/stage-8                                                   301 -> https://coffee-grinder-3d.netlify.app/stage-8/
+/stage-5                                                   301 -> https://coffee-grinder-3d.netlify.app/stage-5/
+/index.html                                                200 -> 

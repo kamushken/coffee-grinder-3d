@@ -65,7 +65,9 @@ Homebrew is not present on this machine.
 
 Phase 3.6 (UX only, scenes untouched): every stage page has prev/next links with stage titles (`3877b2e`); stage 0 has a visible "Compare with stage 8" note (`ebb05ac`); stages 1–4 and 6 have a CSS sky-to-ground background, so the page is never black before the first WebGL frame (`3c20c6d`). Details are in `FACTS.md` under "Phase 3.6".
 
-Phase 4a (pre-deploy, scenes untouched): the corner nav and prev/next are static HTML in every stage page, and the stage 0–4 captions are `<div>`, which removes the desktop CLS 0.032 (`7b893d3`). Stage 8 takes `?bootdelay=<ms>` (default 0): on the deferred (mobile) path the 3D import waits until at least `load + ms` (`4fc0d72`). `netlify.toml` publishes the root with no build and long immutable caching for `/vendor/*` and `/captures/*` (`6e2e566`). Deploy notes are in `HANDOFF.md`.
+Phase 4a (pre-deploy, scenes untouched): the corner nav and prev/next are static HTML in every stage page, and the stage 0-4 captions are `<div>`, which removes the desktop CLS 0.032 (`7b893d3`). Stage 8 takes `?bootdelay=<ms>` (default 0): on the deferred (mobile) path the 3D import waits until at least `load + ms` (`4fc0d72`). `netlify.toml` publishes the root with no build and long immutable caching for `/vendor/*` and `/captures/*` (`6e2e566`). Deploy notes are in `HANDOFF.md`.
+
+Deployed at https://coffee-grinder-3d.netlify.app (commit `aa836a6`). The live numbers differ from the local ones and the difference is the CDN: mobile Lighthouse on the edge is **83 / LCP 1.37 s / TBT 653 ms**, and **99 / 1.37 s / 105 ms** with `?bootdelay=1200`, against 62 / 6.31 s / 365 ms localhost, because three.js is served at 162 KB brotli instead of 687 KB. Desktop CLS is 0 in 5/5, and 0.00000 in 15 phone runs at 390/360/414 px. See `FACTS.md` under "PRODUCTION". The repository root is published as-is (docs, tools, measurements); dot-directories are not.
 
 Stage 8 URL params (read in `stage-8/boot.js` and `stage-8/main.js`): `quality` (`poster`, `fast`, `balanced`, `high`), `boot=now` (skip the deferred boot), `bootdelay=<ms>`, `motion=reduce`, `ondemand=0`, `record`, plus `explode`, `xray`, `light`, `view` for the scene state.
 
@@ -82,6 +84,19 @@ python3 .skills/open-3d-skills/skills/frame-capture/scripts/serve.py . --port 43
 
 Any static server works for browsing; serve.py answers Range requests, which the stage-5 video
 needs for seeking.
+
+Deployed measurements can be repeated against the live site with the same tools:
+
+```bash
+python3 tools/lh.py perf   --pages stage-8 --forms mobile,desktop --runs 5 --base https://coffee-grinder-3d.netlify.app
+python3 tools/lh.py perf   --pages stage-8 --forms mobile --runs 5 --base https://coffee-grinder-3d.netlify.app \
+                           --query '?bootdelay=1200' --tag bootdelay1200
+python3 tools/cls_probe.py --pages stage-8,stage-5 --runs 5 --sizes 390x844@2
+```
+
+`--base` tells `lh.py` to run the same warm-up + 5 protocol against a deployed origin instead of
+`127.0.0.1`. `tools/cls_probe.py` reads `layout-shift` entries from the page itself, so it reports the
+observed CLS rather than Lantern's model.
 
 ## License
 
