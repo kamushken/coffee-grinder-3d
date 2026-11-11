@@ -2,6 +2,7 @@
 
 A manual burr coffee grinder made only from procedural three.js geometry. There are nine frozen stages, plus an index page. The project is a measured test of the open-3d-skills repo.
 
+- Repository: https://github.com/kamushken/coffee-grinder-3d
 - Static site: no framework, no build step, no npm install.
 - Every number below comes from `FACTS.md`, which also names the file each was measured into. Where a number here and `FACTS.md` disagree, `FACTS.md` is right.
 
@@ -163,6 +164,8 @@ npx --yes netlify-cli@latest sites:create --name <site>                # or: ...
 npx --yes netlify-cli@latest deploy --dir . --message "phase 4a"       # draft URL, check it first
 npx --yes netlify-cli@latest deploy --dir . --prod --message "phase 4a" # production
 ```
+
+The source is pushed to https://github.com/kamushken/coffee-grinder-3d. That is the simpler route: import that repository in the Netlify UI, set build command empty and publish directory `.`, and every push to `main` deploys.
 
 - `sites:create` creates `.netlify/state.json`, which is gitignored.
 - `--dir .` matches `publish = "."` in `netlify.toml`. There is no build command, so the CLI uploads the files as they are on disk.
