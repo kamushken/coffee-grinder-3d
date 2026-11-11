@@ -16,10 +16,25 @@ SAMPLES = [0.04, 0.19, 0.36, 0.57, 0.86]   # front hold, flight, hero hold, expl
 SIZES = [(1440, 900, 1), (768, 1024, 1), (390, 844, 2)]
 CHROMIUM_ARGS = ["--use-angle=metal", "--enable-gpu", "--ignore-gpu-blocklist"]
 
+# Geometry: where the film actually is drawn inside the canvas (the engine letterboxes with
+# fit: contain and offsets by focus), versus the visible beat and the fixed stage caption.
 STATE = """() => { const f = window.__app.film; const on = [...document.querySelectorAll('#film .beat.on')].map(e => e.textContent);
-  const c = document.querySelector('#film canvas').getBoundingClientRect(), n = document.querySelector('#film .note').getBoundingClientRect();
+  const c = document.querySelector('#film canvas'), r = c.getBoundingClientRect();
+  const sw = (f.video && f.video.videoWidth) || 16, sh = (f.video && f.video.videoHeight) || 9;
+  const s = Math.min(r.width / sw, r.height / sh), dw = sw * s, dh = sh * s;
+  const img = { l: r.left + (r.width - dw) * f.focus[0], t: r.top + (r.height - dh) * f.focus[1], w: dw, h: dh };
+  img.b = img.t + img.h;
+  const hit = (a, b) => !!(a && b) && a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b;
+  const box = (el) => { if (!el) return null; const q = el.getBoundingClientRect();
+    return { l: q.left, t: q.top, r: q.right, b: q.bottom }; };
+  const beat = box(document.querySelector('#film .beat.on')), note = document.querySelector('#film .note');
+  const stage = box(document.querySelector('.caption'));
+  const noteBox = box(note);
   return { progress: +f.progress.toFixed(3), shown: f.shown, frame: +f.frame.toFixed(2), count: f.count, on,
-           noteBottom: Math.round(n.bottom), canvasTop: Math.round(c.top), canvasH: Math.round(c.height) }; }"""
+           noteBottom: Math.round(noteBox.b), canvasTop: Math.round(r.top), canvasH: Math.round(r.height),
+           img: { l: Math.round(img.l), t: Math.round(img.t), r: Math.round(img.l + img.w), b: Math.round(img.b), h: Math.round(img.h) },
+           beatTop: beat ? Math.round(beat.t) : null, gap: beat ? Math.round(beat.t - img.b) : null,
+           beatOnFilm: hit(beat, img), beatUnderStageCaption: hit(beat, stage), noteOnFilm: hit(noteBox, img) }; }"""
 
 
 def run(b, engine, w, h, dpr, reduced, shots):
@@ -57,7 +72,10 @@ def main():
     for r in out:
         print(r["engine"], r["size"], "reduced" if r["reduced"] else "", "errors:", len(r["errors"]))
         for s in r["rows"]: print("  ", s["sample"], "shown", s["shown"], "count", s["count"], "on", [t[:28] for t in s["on"]],
-                                  "note->canvas", s["noteBottom"], s["canvasTop"], "h", s["canvasH"])
+                                  "| film y", s["img"]["t"], "-", s["img"]["b"], "h", s["img"]["h"],
+                                  "| beat y", s["beatTop"], "gap", s["gap"],
+                                  "| beat on film:", s["beatOnFilm"], "beat under caption:", s["beatUnderStageCaption"],
+                                  "note on film:", s["noteOnFilm"])
     json.dump(out, open(a.out, "w"), indent=1)
     tw = 360; th = 260; cols = len(SAMPLES); rows = len(shots) // cols
     sheet = Image.new("RGB", (tw * cols, th * rows), (40, 40, 40))

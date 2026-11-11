@@ -34,11 +34,12 @@ const film = new ScrollFilm({
   onUpdate: ({ progress }) => { for (const b of beats) b.el.classList.toggle('on', progress >= b.at[0] && progress < b.at[1]); },
   onReady: () => { filmReady = true; document.body.classList.add('film-ready'); },
 });
-// Portrait: the 16:9 film is letterboxed (contain). Centred, its lower half sits under the fixed
-// stage caption, so in portrait it is pinned to the top of the frame and the beat goes below it.
-const portrait = matchMedia('(orientation: portrait)');
-const placeFilm = () => { film.focus = [0.5, portrait.matches ? 0 : 0.5]; film.shown = -1; };
-portrait.addEventListener('change', placeFilm); placeFilm();
+
+// The stage caption is fixed over the bottom of the page. Reserve its height inside the pinned
+// frame, so the film and the beat always sit above it whatever the caption's size is.
+const cap = document.querySelector('.caption');
+const setCapH = () => document.documentElement.style.setProperty('--cap-h', `${cap.offsetHeight}px`);
+new ResizeObserver(setCapH).observe(cap); setCapH();
 
 // --- live scene (stage 4, unchanged) ---------------------------------------------------------
 const canvas = document.getElementById('gl');

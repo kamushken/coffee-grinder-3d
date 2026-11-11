@@ -209,9 +209,9 @@ frame → one camera move → the hero frame → the exploded view. The motor fi
 | Frame map | mean absolute difference between neighbouring frames: frames 0–7 and 62–82 are still (≤ 0.82/255 against the first frame of the run, encoder noise), 7–62 is the flight, 82–142 the explode, 142–149 the end hold |
 | Section | 600vh |
 | Keys | `[0,7] [0.08,7] [0.3,62] [0.42,62] [0.42,82] [0.72,142] [1,142]`. 0–0.08 front hold · 0.08–0.30 flight · 0.30–0.42 hero hold · 0.42–0.72 explode · 0.72–1.00 final hold. Frames 62 and 82 show the same picture, so the step at 0.42 is invisible: it skips the recording's own 1.3 s hero still |
-| Captions | four, one per beat: front hold, flight, hero hold, then "The same scroll drives the exploded view." from 0.42 to the end (explode + final hold). They sit top-left on the film; in portrait they sit just below it |
+| Captions | four, one per beat: front hold, flight, hero hold, then "The same scroll drives the exploded view." from 0.42 to the end (explode + final hold). They sit in a band BELOW the film at every width, never over it |
 | Note above the film | the given sentence, in a dark strip at the top of the pinned frame |
-| Fit | `contain`. Landscape: centred. Portrait: `focus [0.5, 0]` pins the film to the top of the frame (in the middle, half of it sat under the fixed stage caption on a 390 px screen) |
+| Fit | `contain`. The pinned frame is a column: the note, the film, then the caption band, centred in the space left above the fixed stage caption (its height is measured into `--cap-h`). The four captions share one grid cell, so a longer beat never resizes the film |
 | Reduced motion | engine default `"steps"` (unchanged): it jumps to the nearest key frame (7, 62, 82, 142) |
 | Live scene | unchanged: the stage-4 scene below the film |
 

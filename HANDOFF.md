@@ -56,9 +56,9 @@ All stills are Chromium, WebP q82. Each still's capture JSON is `measurements/<n
 | `stage-3.webp` | 1440×900, 35,874 B | Stage 3: material families (brushed steel, walnut, glass hopper with transmission). |
 | `stage-3-burr-patch.webp` | 800×560, 10,912 B | Close-up of the one shader patch, the burr highlight (`tools/burr-closeup.html`). |
 | `stage-4.webp` | 1440×900, 36,294 B | Stage 4: rule-of-thirds composition on the walnut tray, hero view after the flight. |
-| `stage-5.webp` | 1440×900, 48,356 B | Stage 5 scroll film at the front hold: frame from our stage-8 recording, first caption, note above the film. |
+| `stage-5.webp` | 1440×900, 44,476 B | Stage 5 scroll film at the front hold: frame from our stage-8 recording, first caption, note above the film. |
 | `stage-5-live.webp` | 1440×900, 44,216 B | Stage 5 after the film: the live three.js grinder below it. |
-| `stage-5-scroll.mp4` | 480×270, 20 s, 82,050 B | Stage 5 scrolled top to bottom: front → flight → hero → explode in the film, then the live scene. |
+| `stage-5-scroll.mp4` | 480×270, 20 s, 57,329 B | Stage 5 scrolled top to bottom: front → flight → hero → explode in the film, then the live scene. |
 | `stage-6.webp` | 1440×900, 50,246 B | Stage 6 fully exploded (`?explode=1`): burr assembly apart, body x-rayed, labels on. |
 | `stage-6-assembled.webp` | 1440×900, 52,638 B | Stage 6 assembled, explode at 0. |
 | `stage-6-explode.mp4` | 640×400, 7 s, 53,387 B | Stage 6 explode slider going from 0 to 1: crank, hopper, ring and burrs separating. |
@@ -157,7 +157,7 @@ One skill bug was found and patched locally: site-check `--scroll-steps` raises 
 The Netlify CLI is not installed on this machine. These commands run it through `npx`, as was done for Lighthouse. Run them from the repo root.
 
 ```bash
-cd /Users/kamushken/Desktop/coffee-grinder-3d
+cd ~/coffee-grinder-3d
 npx --yes netlify-cli@latest login                                     # opens the browser once
 npx --yes netlify-cli@latest sites:create --name <site>                # or: ... link, for an existing site
 npx --yes netlify-cli@latest deploy --dir . --message "phase 4a"       # draft URL, check it first

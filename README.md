@@ -83,6 +83,12 @@ python3 .skills/open-3d-skills/skills/frame-capture/scripts/serve.py . --port 43
 Any static server works for browsing; serve.py answers Range requests, which the stage-5 video
 needs for seeking.
 
+## License
+
+MIT, see `LICENSE`. The geometry and the code are this project's. Two pieces of third-party material keep
+their own MIT licenses, named in the same file: three.js r169 (`vendor/three/`) and the open-3d-skills
+runtime files (`lib/open-3d-skills/`, pinned commit `53beb89`).
+
 ## Analytics
 
 GoatCounter snippet in `shared/goatcounter.js` with the named placeholder `GOATCOUNTER_CODE`.

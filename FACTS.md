@@ -216,10 +216,13 @@ The dynamic import did what you asked: the entry script has no static imports, t
   - The frame numbers come from measured frame-to-frame differences of the encoded film. Frames 0–7 and 62–82 are still: ≤ 0.82/255 against the first frame of each run.
 - Four captions, in your wording. The note above the film is your exact sentence.
 - `fit: contain`. Reduced motion is the engine's `"steps"`, unchanged.
-- In portrait the film is pinned to the top of the frame, with the caption under it. Centred, half of it sat under the fixed stage caption at 390 px.
+- **Layout, fixed after review:** the pinned frame is a column — the note, then the film, then a band reserved for the beat — centred in the space left above the fixed stage caption. The caption's height is measured into `--cap-h` by a `ResizeObserver` in `main.js`.
+  - The four captions share one grid cell, so the band is as tall as the longest and the film never resizes between beats.
+  - Earlier builds put the beat over the film; on 1440 that hid the bottom of the picture, and on 390 the film's lower half sat under the stage caption.
+  - `tools/film_probe.py` now measures this (`beat on film`, `beat under caption`): both are false at 35 of 35 samples, 1440/768/390 × Chromium/WebKit × 5 beats + reduced motion.
 - The live scene below is unchanged.
 
-**Film probe** (`tools/film_probe.py` → `measurements/phase-5r/film-probe.json`)
+**Film probe** (`tools/film_probe.py` → `measurements/phase-5r/film-probe.json`), after the layout fix
 - Setup: Chromium + WebKit × 1440×900 / 768×1024 / 390×844@2, scrolled to the middle of each beat.
 - Frame shown: 7 / 34–35 / 62 / 112 / 142 in all six runs.
 - The right caption is on in every sample.
@@ -227,7 +230,7 @@ The dynamic import did what you asked: the entry script has no static imports, t
 - 0 page errors.
 
 **site-check stage 5** (`check.py`, 3.7-patched, `--browser both --widths 1440,768,390 --scroll-steps 4 --ready "window.__ready === true"`; `measurements/site-check/stage-5-report.json`)
-- 16 shots, **0 with problems**, 0 errors, 0 blank canvases, no overflow.
+- 16 shots, **0 with problems**, 0 errors, 0 blank canvases, no overflow (one WebKit run showed a cancelled blob fetch in a first pass; a re-run of the same set had none, and it did not touch layout or GL).
 - Ready in 0.35–0.74 s.
 - 0 calls while the film covers the scene; 218 calls at scroll 1.0 (the live scene).
 - Contact sheet viewed: the caption and the hold are correct at 0 / 0.33 / 0.67, and the live scene shows at 1.0.
@@ -236,23 +239,23 @@ The dynamic import did what you asked: the entry script has no static imports, t
 
 | | 3.5 | now |
 |---|---|---|
-| Chromium uncapped 1440 / 768 / 390@2 | 8.44 / 5.17 / 7.99 ms | 8.75 / 5.54 / 8.59 ms |
+| Chromium uncapped 1440 / 768 / 390@2 | 8.44 / 5.17 / 7.99 ms | 8.85 / 5.63 / 8.82 ms (first of 3 runs; 1440 spread 8.85–9.59) |
 | WebKit (60 Hz cap) | 16.67 ×3 | 16.67 ×3 |
 | calls / triangles | 218 / 103,556 | 218 / 103,556 |
 
-The live scene is the same code. I read the 0.3–0.6 ms difference as run-to-run variation; I did not test it with repeated runs.
+The live scene is the same code. The 1440 figure moved by up to ~1 ms across 3 runs (8.85 / 9.00 / 9.59), so I read the difference against 3.5 as run-to-run variation, not a regression.
 
 **Page weight** (`tools/weigh.py`; `measurements/phase-5r/weight-{chromium,webkit}.json`; 1440×900, decoded bodies until ready + 2 s)
 
 | | 3.5 | now |
 |---|---|---|
-| Chromium | 32 req, 2,143,671 B (video 1,265,171) | 32 req, **1,972,842 B** (video 1,095,473, poster 7,498, three 807,195) |
-| WebKit | 100 req, 2,161,894 B | 106 req, 2,013,743 B. WebKit issues extra Range requests for the video |
+| Chromium | 32 req, 2,143,671 B (video 1,265,171) | 32 req, **1,973,533 B** (video 1,095,473, poster 7,498, three 807,195) |
+| WebKit | 100 req, 2,161,894 B | 106 req, 2,014,434 B. WebKit issues extra Range requests for the video |
 | console / blank canvases | 0 / 0 | 0 / 0 |
 
 **Captures updated:**
-- `captures/stage-5.webp` (48,356 B, the front hold with caption 1);
-- `captures/stage-5-scroll.mp4` (`record.py --fps 8 --seconds 20 --scroll "0:0 18:100%"`, "no page errors", 480 px, 82,050 B).
+- `captures/stage-5.webp` (44,476 B, the front hold with caption 1);
+- `captures/stage-5-scroll.mp4` (`record.py --fps 8 --seconds 20 --scroll "0:0 18:100%"`, "no page errors", 480 px, 57,329 B).
 
 ## Skills: what actually ran
 
@@ -548,7 +551,7 @@ Lighting and material parameters are the values in code; full tables with reason
 - FOV 38 (fitFov), hero dir (0.42, 0.17, 1) at 0.74 m, thirds via setViewOffset, flight 2.8 s. Tray: kit.js sweep 0.34 × 0.22 m.
 
 ### Stage 5 — motion (`97fc3fd`, DPR fix `c6e169e`, caption `ffc900c`, film rebuilt `8f74572`)
-- Frame (live part, rebuild): 8.75 / 5.54 / 8.59 ms (3.5: 8.44 / 5.17 / 7.99). While the film is on screen GL is paused (0 calls). 1,972,842 B (video 1,095,473). 0 console, 0 blank.
+- Frame (live part, after the layout fix): 8.85 / 5.63 / 8.82 ms (3.5: 8.44 / 5.17 / 7.99; 3 runs, 1440 spread 8.85–9.59). While the film is on screen GL is paused (0 calls). 1,973,533 B (video 1,095,473). 0 console, 0 blank.
 - **Footage since `8f74572`: our own stage-8 recording**, 0–10 s, 800 px, 15 fps, GOP 4, 150 frames, 600vh. Before that it was the skills repo's `examples/motor-take-apart.webp` (an electric motor); see "Stage 5 rebuilt" above. Generation, cursor-rig and alpha-cutout: DOCUMENTED-NOT-RUN.
 
 ### Stage 6 — explainer (`fd6b800`, DPR fix `c6e169e`)
