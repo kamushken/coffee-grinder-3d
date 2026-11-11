@@ -116,7 +116,7 @@ Values are the median with the min–max spread in brackets. The LCP element is 
 
 **TBT 365 ms versus 301 ms in 3.7.** The spreads overlap ([300–393] vs [294–372]). I don't treat this as a regression or as an improvement. The blocking work is the same three.js parse plus first-frame compile, only started from `import()`.
 
-**Desktop CLS 0.032** in 3 of 5 runs. It was ≤ 0.012 in 3.5 and is under the 0.1 limit. I did not trace the source; it is listed as UNCERTAIN 14.
+**Desktop CLS 0.032** in 3 of 5 runs. It was ≤ 0.012 in 3.5 and is under the 0.1 limit. I did not trace the source in 3.8; it was traced and fixed in Phase 4a (see below).
 
 ### Against the 3.8 thresholds (your revision)
 
@@ -134,6 +134,73 @@ Values are the median with the min–max spread in brackets. The LCP element is 
 | Stage 0 mobile | left at 79 | not re-measured. It is the baseline: no poster, no deferred boot, static three.js import, left on purpose | — (by design) |
 
 The dynamic import did what you asked: the entry script has no static imports, the poster depends on no module, and an import failure falls back to the poster. It did **not** reach the mobile targets. Lantern still models three.js ahead of the LCP, because the import starts before the poster paints. See the A/Bs above.
+
+## Phase 4a: pre-deploy
+
+### 1. Desktop CLS 0.032 traced and fixed (`7b893d3`)
+
+**Trace.**
+- Lighthouse desktop, 5 runs before the fix: CLS 0, 0.03195, 0.03195, 0, 0.03195. The `layout-shifts` audit names `div#controls` in each non-zero run. The zero runs have no layout-shift entries at all.
+- A PerformanceObserver (`layout-shift`, with `sources`) plus a MutationObserver probe, 1350×940 desktop:
+  - `shared/shell.js` built the corner nav (`nav.stages`) and the prev/next links (`.prevnext`, appended to the first `.caption`) *after* first paint, at about 16–46 ms;
+  - `nav.stages` grew from 8 to 36 px tall; `#controls` grew from 311 to 352 px, and because it is bottom-anchored its top moved from y 617 to 576;
+  - the shift value is 0.03195, the same as Lighthouse's number.
+- Whether it counted depended on whether first paint landed before shell.js ran. That is why 3 of 5 runs, not 5 of 5.
+- So the cause was neither of the two candidates I had listed (the `#status` line, `gl-ready`). After the fix both still change during boot and the probe records 0 shift entries, so neither moves layout.
+
+**Fix.**
+- The corner nav and prev/next are now static HTML in all nine stage pages. `shell.js` only builds them if they are missing (`!nav.children.length`, no `.prevnext` in the caption).
+- Stages 0–4 had the caption as `<p>`. A `<nav>` inside a `<p>` makes the parser close the `<p>`, which left a small residual shift (0.0013–0.013 on stages 0, 1, 4). Those captions are now `<div class="caption">`, which has the same CSS.
+- The duplicate navs inside `<noscript>` on stages 7 and 8 are removed, since the static one is always there.
+- No scene, light or camera code changed. Screenshots of stages 0, 4 and 8 compared before and after: the same.
+
+**Re-measure.**
+- PerformanceObserver probe, all nine stages at 1350 and 390, 2 runs each: 0 layout-shift entries.
+- Lighthouse 12.8.2 stage 8 desktop, 1 warm-up + 5 runs (`measurements/phase-4a/lighthouse/summary.json`):
+
+| | 3.8 | 4a |
+|---|---|---|
+| **CLS** | 0.032 in 3/5 | **0.000 in 5/5** [0–0] |
+| Performance | 97 [97–97] | 97 [97–97] |
+| LCP, Lantern | 1.17 s [1.13–1.21] | 1.18 s [1.14–1.21] |
+| LCP, observed | 61 ms [49–79] | 63 ms [50–66] |
+| TBT | 49 ms [44–53] | 54 ms [45–56] |
+
+- Lighthouse accessibility, index + stages 0–8 (`measurements/phase-4a/lighthouse-a11y/summary.json`): **100 on all 10 pages**, 0 failing audits.
+
+### 2. `?bootdelay=<ms>` on stage 8 (`4fc0d72`)
+
+- `stage-8/boot.js` reads `bootdelay` (integer ms, default 0; negative or non-numeric reads as 0).
+- In the deferred path, once a trigger fires (idle callback, the 2.5 s timeout on WebKit, or the first pointerdown/scroll/wheel/touchmove/keydown), the import waits until at least `loadEventEnd + bootdelay`. If that moment has already passed, it starts at once. With 0 the code path is the 3.8 one: `boot()` is called directly.
+- The immediate path (desktop, reduced motion, `?record`, `?boot=now`) ignores the param. So do `?quality=poster`, the no-WebGL 2 poster and the import-failure poster, because the delay only wraps the deferred trigger.
+- `tools/boot_test.py --extra bootdelay=N` appends the param to every case. It also records `bootAt` and `loadEnd`.
+
+**At 0 vs 3.8** (`measurements/phase-4a/boot-bootdelay-0.json` vs `measurements/phase-3.8/boot.json`, 28 cases):
+- Behavioural fields (boot reason, tier, DPR, fallback, final status text, ready, final poster/gl-ready, context-loss result, page errors): **0 differences.**
+- Timing fields differ in a few cases: whether `gl-ready` / the poster is visible at the 150 ms sample on the fast paths, and the frame count before the tier hook in `firstFrameTier` (0 vs 1).
+- To check whether that is noise, I ran the unchanged 3.8 `boot.js` (from `ef722e3`) against its own committed run (`measurements/phase-4a/boot-3.8-rerun.json`). It differs in **3 of 28 cases, on exactly the same timing fields.** So these are run-to-run timing, not a behaviour change. "Exactly" holds on every field that is deterministic; the 150 ms snapshots are not deterministic even for the same code.
+
+**At 1200** (`measurements/phase-4a/boot-bootdelay-1200.json`):
+- Every deferred case: `bootAt − loadEnd` = 1200–1204 ms, or 2500–2502 ms in the WebKit timeout cases, where the 2.5 s timeout fires after the floor. 0 cases started before the floor.
+- Immediate cases: `bootAt` 14–43 ms, as at 0.
+- All fallbacks are unchanged: `?quality=poster`, no WebGL 2, context lost after deferred boot, module import fails. 0 page errors.
+- Lighthouse was **not** re-run with `?bootdelay`. Whether a delay brings the mobile Lantern LCP down toward the 1.35 s floor (UNCERTAIN 10) is still not measured.
+
+### 3. `netlify.toml` (`6e2e566`)
+
+- `[build] publish = "."`, no `command`: no build runs.
+- `Cache-Control: public, max-age=31536000, immutable` for `/vendor/*` and `/captures/*`. Neither path is content-hashed, so a changed file must get a new name. This is noted in the file.
+- Text compression: Netlify's CDN applies brotli/gzip to text types itself; there is no setting for it. **Not confirmed**, because nothing is deployed yet. The curl checks are in `HANDOFF.md`. UNCERTAIN 6 stays open until they are run.
+
+### Against the thresholds after 4a
+
+| Check | Threshold | Measured | Result |
+|---|---|---|---|
+| CLS, stage 8 desktop, 5 runs | 0 in all | 0.000 in 5/5 | PASS |
+| Accessibility, 10 pages | 100 | 100 ×10 | PASS |
+| boot_test `?bootdelay=0` | same as 3.8 | 0 behavioural differences; timing differences within the 3.8 self-rerun noise | PASS |
+| boot_test `?bootdelay=1200` | import ≥ load + 1200 in deferred paths, fallbacks intact | 0 early starts; all fallbacks pass; 0 errors | PASS |
+| Mobile targets (≥ 80, ≤ 3.0 s, ≤ 300 ms) | from 3.8 | not re-measured in 4a; 3.8 values stand: 62 / 6.31 s / 365 ms | **FAIL** (unchanged) |
 
 ## Skills: what actually ran
 
@@ -568,8 +635,9 @@ so they are not mistaken for measured facts.
 4. **Retina frame time is from headless.** A visible Safari or Chrome window on the same Mac may differ.
 5. **WebKit Tab order** (stage 7/8): Tab only cycles skip link ↔ canvas; attributed to Safari's
    default "Tab skips links/buttons". Real Safari with the preference changed was not tested.
-6. **Netlify transfer sizes and caching**: not measured, no deploy yet. `uses-text-compression` should
-   disappear there.
+6. **Netlify transfer sizes, caching and compression**: not measured, no deploy yet. `netlify.toml`
+   sets the cache headers (4a); compression is the platform's. `uses-text-compression` should
+   disappear there. The curl checks to close this are in `HANDOFF.md`.
 7. **The stage-5 video on real iOS Safari** (Range seeking, `playsinline`, GOP-4 scrubbing): only
    Playwright WebKit on macOS.
 8. **Phone performance in general**: 390@2 is a desktop GPU with a phone-sized viewport; Lighthouse
@@ -579,7 +647,7 @@ so they are not mistaken for measured facts.
 10. **Why mobile LCP stays at 6.3 s simulated.** Updated in 3.8.
     - Measured: dynamic `import()` alone did not change it (6.31 s). Neither did arming the idle callback after `load` + 2 rAF (5.86 s). The poster-only floor is 1.35 s, so three.js is what the model puts in front of the LCP.
     - Not measured: *why* Lantern keeps a dynamically imported module in the LCP graph. I read it as "the request started before the observed LCP"; I did not trace this in Lighthouse's code.
-    - Not tested: whether a longer delay before the import brings the simulated LCP to the 1.35 s floor.
+    - Not tested: whether a longer delay before the import brings the simulated LCP to the 1.35 s floor. Phase 4a added `?bootdelay=<ms>` to make that testable; Lighthouse was not run with it.
 11. **Deferred boot on real phones.** The trigger conditions (`innerWidth < 600`, `navigator.connection`)
    were emulated. `navigator.connection` does not exist in Safari/WebKit, so there only the
    viewport rule applies. WebKit has no `requestIdleCallback`, so iOS boots on the 2.5 s timeout
@@ -592,4 +660,4 @@ so they are not mistaken for measured facts.
    as Playwright's screenshot landing before WebKit composites its first frame, a tool artefact and
    not a black page, but it is not traced. Whether real Safari ever shows the black frame was not
    tested.
-14. **Desktop CLS 0.032 on stage 8 (3.8)**, in 3 of 5 runs. The source was not traced. Candidates: the status line text changing, or the caption rows when `gl-ready` is set. Both are under the 0.1 limit.
+14. **RESOLVED in 4a (`7b893d3`).** Desktop CLS 0.032 on stage 8 (3.8), in 3 of 5 runs. The cause was `shell.js` building the corner nav and prev/next after first paint, which grew `#controls`; neither listed candidate was the cause. Both navs are now static HTML. CLS is 0 in 5/5 desktop runs. See "Phase 4a".

@@ -61,9 +61,13 @@ Homebrew is not present on this machine.
 | `/stage-5/` | motion: scroll-scrubbed intro (scroll-film), cursor-rig / alpha-cutout DOCUMENTED-NOT-RUN | frozen `97fc3fd`, DPR fix `c6e169e`, caption `ffc900c` · `captures/stage-5*.webp`, `stage-5-scroll.mp4` |
 | `/stage-6/` | explainer: exploded-view of the burr assembly, x-ray, labels, picking | frozen `fd6b800`, DPR fix `c6e169e` · `captures/stage-6*.webp`, `stage-6-explode.mp4` |
 | `/stage-7/` | degradation: quality tiers, poster fallback, reduced motion, keyboard nav | frozen `d8817ea`, LCP fix `c74bff1` · `captures/stage-7*.webp` |
-| `/stage-8/` | final: stage 3 light + stage 4 composition + stage 6 explainer + stage 7 degradation | frozen `cf86b51` (+ record fix `6cee84a`, LCP fix `c74bff1`, 3.7: tier ladder `a79406d`, mobile deferred boot `b7c5437`, mobile fast default `26f74c1`; 3.8: dynamic import entry `boot.js` `457e36c`) · `captures/stage-8*.webp` |
+| `/stage-8/` | final: stage 3 light + stage 4 composition + stage 6 explainer + stage 7 degradation | frozen `cf86b51` (+ record fix `6cee84a`, LCP fix `c74bff1`, 3.7: tier ladder `a79406d`, mobile deferred boot `b7c5437`, mobile fast default `26f74c1`; 3.8: dynamic import entry `boot.js` `457e36c`; 4a: `?bootdelay=<ms>` `4fc0d72`) · `captures/stage-8*.webp` |
 
 Phase 3.6 (UX only, scenes untouched): every stage page has prev/next links with stage titles (`3877b2e`); stage 0 has a visible "Compare with stage 8" note (`ebb05ac`); stages 1–4 and 6 have a CSS sky-to-ground background, so the page is never black before the first WebGL frame (`3c20c6d`). Details are in `FACTS.md` under "Phase 3.6".
+
+Phase 4a (pre-deploy, scenes untouched): the corner nav and prev/next are static HTML in every stage page, and the stage 0–4 captions are `<div>`, which removes the desktop CLS 0.032 (`7b893d3`). Stage 8 takes `?bootdelay=<ms>` (default 0): on the deferred (mobile) path the 3D import waits until at least `load + ms` (`4fc0d72`). `netlify.toml` publishes the root with no build and long immutable caching for `/vendor/*` and `/captures/*` (`6e2e566`). Deploy notes are in `HANDOFF.md`.
+
+Stage 8 URL params (read in `stage-8/boot.js` and `stage-8/main.js`): `quality` (`poster`, `fast`, `balanced`, `high`), `boot=now` (skip the deferred boot), `bootdelay=<ms>`, `motion=reduce`, `ondemand=0`, `record`, plus `explode`, `xray`, `light`, `view` for the scene state.
 
 Each stage is frozen once its capture is committed. Phase 3.5 lifted the freeze for bugfixes only (no art changes); each fix is its own commit, listed in `FACTS.md`. Shared code in `shared/` is frozen at the
 point the first stage using it is captured; later stages fork rather than edit.
