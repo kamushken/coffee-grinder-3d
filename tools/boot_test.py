@@ -22,6 +22,7 @@ STATE = """() => ({ deferred: !!window.__deferred, bootReason: window.__bootReas
   tier: window.__app ? window.__app.quality : null, dpr: window.__app ? window.__app.renderer.getPixelRatio() : null,
   fallback: window.__fallback || null, status: document.getElementById('status').textContent, t: Math.round(performance.now()),
   firstFrameTier: window.__firstFrameTier || null, modulesAt: window.__modulesAt || null,
+  bootAt: window.__bootAt ?? null, loadEnd: Math.round(performance.getEntriesByType('navigation')[0]?.loadEventEnd || 0) || null,
   threeLoadedAt150: performance.getEntriesByType('resource').some(e => e.name.includes('three.module')) })"""
 # records the tier at the first renderer.render call, to prove fast is chosen before frame 1
 FIRST = """(() => { const iv = setInterval(() => { const a = window.__app; if (!a) return; clearInterval(iv);
@@ -29,7 +30,12 @@ FIRST = """(() => { const iv = setInterval(() => { const a = window.__app; if (!
   a.renderer.render = (...x) => { if (!done) { done = true; window.__firstFrameTier = a.quality + '@' + a.renderer.getPixelRatio() + ' (frames before hook: ' + before + ')'; } return r(...x); }; }, 0); })();"""
 
 
+EXTRA = ""  # Phase 4a: e.g. "bootdelay=1200", appended to every case's query
+
+
 def case(b, name, w, h, dpr=2, q="", init=None, reduced=False, act=None, mobile=True, block=None):
+    if EXTRA:
+        q = (q + "&" if q else "?") + EXTRA
     ctx = b.new_context(viewport={"width": w, "height": h}, device_scale_factor=dpr,
                         is_mobile=mobile and b.browser_type.name == "chromium", has_touch=mobile,
                         reduced_motion="reduce" if reduced else "no-preference")
@@ -60,6 +66,9 @@ def case(b, name, w, h, dpr=2, q="", init=None, reduced=False, act=None, mobile=
 
 
 def main():
+    global EXTRA
+    if len(sys.argv) > 2 and sys.argv[1] == "--extra":
+        EXTRA = sys.argv[2]
     out = []
     with sync_playwright() as p:
         for eng in ("chromium", "webkit"):
@@ -87,7 +96,8 @@ def main():
         f, a = r["final"], r["at_load_150ms"]
         print(f"{r['engine']:8} {r['case']:48} deferred={a['deferred']!s:5} glAt150={a['glReady']!s:5} boot={f['bootReason']!s:11} "
               f"ready@{f['t']:>5}ms tier={f['tier']!s:8} dpr={f['dpr']} first={f['firstFrameTier']} fallback={f['fallback']} "
-              f"lost={r['context_lost'] and r['context_lost']['fallback']} errs={len(r['page_errors'])}", file=sys.stderr)
+              f"lost={r['context_lost'] and r['context_lost']['fallback']} errs={len(r['page_errors'])} "
+              f"load={f['loadEnd']} bootAt={f['bootAt']}", file=sys.stderr)
     print(json.dumps(out, indent=1))
 
 

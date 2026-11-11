@@ -22,6 +22,11 @@ const BOOT = {
   narrow: innerWidth < 600,
   constrained: !!conn.saveData || ['slow-2g', '2g', '3g'].includes(conn.effectiveType),
   idleTimeout: 2500,
+  // Phase 4a: ?bootdelay=<ms> (default 0). A deferred start imports the 3D code no earlier than
+  // this many ms after the load event, whatever fired it (idle, timeout or a gesture). 0 = 3.8
+  // behaviour exactly (boot runs synchronously inside the trigger). The immediate path (desktop,
+  // reduced motion, record) ignores it.
+  delay: Math.max(0, parseInt(params.get('bootdelay') ?? '0', 10) || 0),
 };
 // reduced motion keeps its existing path (immediate boot, no flight); recording never defers
 BOOT.defer = (BOOT.narrow || BOOT.constrained) && !REDUCED && !RECORD && params.get('boot') !== 'now';
@@ -32,6 +37,7 @@ const INTENT = ['pointerdown', 'scroll', 'wheel', 'touchmove', 'keydown'];
 // the WebGL 2 probe creates a context, so a deferred boot defers the probe too; three and the
 // stage modules are fetched only after the probe passes
 async function boot() {
+  window.__bootAt = Math.round(performance.now());
   if (!hasWebGL2()) { showPoster('this browser has no WebGL 2'); return; }
   let mod;
   try { mod = await import('/stage-8/main.js'); }
@@ -41,12 +47,23 @@ async function boot() {
   catch (e) { console.warn('stage 8: start failed', e); showPoster('WebGL failed to start'); }
 }
 
+// run fn no earlier than BOOT.delay ms after the load event; with delay 0, run it now
+function afterFloor(fn) {
+  if (!BOOT.delay) { fn(); return; }
+  const wait = () => {
+    const loadEnd = performance.getEntriesByType('navigation')[0]?.loadEventEnd || performance.now();
+    const left = loadEnd + BOOT.delay - performance.now();
+    if (left > 0) setTimeout(fn, left); else fn();
+  };
+  if (document.readyState === 'complete') wait(); else addEventListener('load', () => setTimeout(wait, 0), { once: true });
+}
+
 function deferredStart() {
   let done = false;
   const go = (why) => {
     if (done) return; done = true;
     INTENT.forEach((e) => removeEventListener(e, onIntent, true));
-    window.__bootReason = why; boot();
+    window.__bootReason = why; afterFloor(boot);
   };
   const onIntent = (e) => go(e.type);
   INTENT.forEach((e) => addEventListener(e, onIntent, { capture: true, passive: true }));
