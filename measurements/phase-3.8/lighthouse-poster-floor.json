@@ -1,0 +1,23 @@
+[
+ {
+  "first-contentful-paint": 902,
+  "largest-contentful-paint": 1352,
+  "total-blocking-time": 0,
+  "perf": 98,
+  "obsLCP": 63
+ },
+ {
+  "first-contentful-paint": 904,
+  "largest-contentful-paint": 1354,
+  "total-blocking-time": 0,
+  "perf": 98,
+  "obsLCP": 68
+ },
+ {
+  "first-contentful-paint": 903,
+  "largest-contentful-paint": 1353,
+  "total-blocking-time": 0,
+  "perf": 98,
+  "obsLCP": 64
+ }
+]

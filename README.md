@@ -61,7 +61,7 @@ Homebrew is not present on this machine.
 | `/stage-5/` | motion: scroll-scrubbed intro (scroll-film), cursor-rig / alpha-cutout DOCUMENTED-NOT-RUN | frozen `97fc3fd`, DPR fix `c6e169e`, caption `ffc900c` · `captures/stage-5*.webp`, `stage-5-scroll.mp4` |
 | `/stage-6/` | explainer: exploded-view of the burr assembly, x-ray, labels, picking | frozen `fd6b800`, DPR fix `c6e169e` · `captures/stage-6*.webp`, `stage-6-explode.mp4` |
 | `/stage-7/` | degradation: quality tiers, poster fallback, reduced motion, keyboard nav | frozen `d8817ea`, LCP fix `c74bff1` · `captures/stage-7*.webp` |
-| `/stage-8/` | final: stage 3 light + stage 4 composition + stage 6 explainer + stage 7 degradation | frozen `cf86b51` (+ record fix `6cee84a`, LCP fix `c74bff1`, 3.7: tier ladder `a79406d`, mobile deferred boot `b7c5437`, mobile fast default `26f74c1`) · `captures/stage-8*.webp` |
+| `/stage-8/` | final: stage 3 light + stage 4 composition + stage 6 explainer + stage 7 degradation | frozen `cf86b51` (+ record fix `6cee84a`, LCP fix `c74bff1`, 3.7: tier ladder `a79406d`, mobile deferred boot `b7c5437`, mobile fast default `26f74c1`; 3.8: dynamic import entry `boot.js` `457e36c`) · `captures/stage-8*.webp` |
 
 Phase 3.6 (UX only, scenes untouched): every stage page has prev/next links with stage titles (`3877b2e`); stage 0 has a visible "Compare with stage 8" note (`ebb05ac`); stages 1–4 and 6 have a CSS sky-to-ground background, so the page is never black before the first WebGL frame (`3c20c6d`). Details are in `FACTS.md` under "Phase 3.6".
 

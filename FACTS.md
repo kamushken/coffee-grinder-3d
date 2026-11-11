@@ -58,6 +58,83 @@ Screenshots are taken as fast as the engine allows from navigation to 1.5 s. A s
 
 `check.py http://127.0.0.1:4321/ --browser both --widths 1440,768,390` reported: 8 shots, 0 with problems, 0 errors, 0 blank canvases, no overflow. That covers 3 widths × 2 engines, plus reduced motion at 1440. Contact sheet looked at: 3 columns at 1440, 2 at 768, 1 at 390 in both engines.
 
+## Phase 3.8: dynamic import on stage 8 (`457e36c`)
+
+### The change
+
+- The entry script is now `stage-8/boot.js`, with no static imports. It decides which path to take:
+  - poster only (`?quality=poster`);
+  - deferred boot (narrow, saveData or 2g/3g);
+  - immediate boot (desktop, reduced motion, record).
+- It probes WebGL 2, then runs `await import('/stage-8/main.js')` inside try/catch. If the import fails, the page falls back to the poster with "the 3D code failed to load".
+- `stage-8/main.js` now exports `start()` and no longer runs anything on import.
+- The poster is the `<picture>` in the HTML and is preloaded. It does not depend on any module.
+
+### Verification
+
+- `tools/boot_test.py` → `measurements/phase-3.8/boot.json`:
+  - all 26 original cases give the same boot reason, tier, DPR, fallback and context-loss result as 3.7. I diffed the two JSON files: 0 differences;
+  - 0 page errors;
+  - the poster is visible at 150 ms in every case.
+- One case was added: the module import is blocked with `route.abort` on `stage-8/main.js`. In both engines the page falls back to the poster with "the 3D code failed to load" (28 cases in total).
+- When boot is deferred, three.js is now fetched only after boot. At 150 ms three was not yet requested in the WebKit deferred cases, nor in the Chromium gesture cases.
+  - In Chromium the idle callback fires before 150 ms in headless mode, so three was already loaded there.
+- site-check stage 8 (patched `check.py`, `--ready "window.__ready === true"`), default and `?ondemand=0` query sets, 1440/768/390, Chromium and WebKit, plus reduced motion:
+  - 16 shots, 0 with problems, 0 errors, 0 blank canvases, no overflow;
+  - 218 calls and 103,556 tris at 1440/768; 142 / 64,452 at 390 (the fast tier);
+  - ready in 0.35–0.57 s, except WebKit at 390: 2.9 s. That is the deferred-boot timeout, because WebKit has no rIC;
+  - contact sheet viewed;
+  - output in `measurements/site-check/stage-8-report.json`.
+
+### Lighthouse 12.8.2, stage 8: 1 discarded warm-up + 5 runs (`measurements/phase-3.8/lighthouse/summary.json`)
+
+Values are the median with the min–max spread in brackets. The LCP element is `img#poster` in 10 of 10 runs.
+
+| | Mobile (simulated) | Desktop (simulated) |
+|---|---|---|
+| Performance | **62** [60–67] (3.7: 63) | **97** [97–97] |
+| FCP, Lantern | 3.53 s [3.08–3.61] | 0.73 s [0.69–0.73] |
+| **LCP, Lantern (simulated)** | **6.31 s** [5.26–6.39] (3.7: 6.31) | **1.17 s** [1.13–1.21] |
+| **LCP, observed (trace)** | **68 ms** [49–79] | **61 ms** [49–79] |
+| TBT | 365 ms [300–393] (3.7: 301 [294–372]) | 49 ms [44–53] |
+| CLS | 0 | 0.032 in 3 of 5 runs, 0 in 2 |
+| TTI, Lantern | 6.46 s | 1.28 s |
+
+**Observed versus simulated LCP.**
+- *Observed* LCP (`observedLargestContentfulPaint` in the `metrics` audit) is when the poster actually painted in the trace on this machine. It is what a visitor on this hardware and network sees: 49–79 ms.
+- *Simulated* LCP (Lantern, `largest-contentful-paint.numericValue`) is a model. It replays the page's dependency graph under 4× CPU slowdown and a 150 ms RTT / 1.6 Mbps link, and it decides which requests and CPU tasks sit in front of the LCP.
+- Lighthouse scores the simulated number. The two numbers measure different things; neither one is "wrong".
+
+**Why the simulated LCP did not move. The A/B is measured; the mechanism is a reading of the reports.**
+- In every mobile trace the dynamic import still *starts* before the observed LCP: `boot.js` at 15 ms, `main.js` at 41 ms, `three.module.min.js` (687 KB) at 43 ms, the poster painted at 58 ms. Unthrottled, Chromium's `requestIdleCallback` fires within milliseconds.
+- My reading: Lantern keeps in the LCP graph every request and task that started before the observed LCP time. So `import()` moves three off the static graph, but not out of the simulation.
+- Lighthouse's own phase split, mobile run 1: TTFB 452 ms, load delay 1,210 ms, load time 114 ms, render delay 4,530 ms (72 %).
+- **A/B 1, measured, not committed:** I armed the idle callback only after `load` + 2 rAF, 3 runs. `main.js` started at 64 ms and LCP was at 75 ms, so three still started before LCP. Lantern LCP was 5.86 s [5.41–6.39] and performance 64. The change did not help, so I reverted it; the committed `boot.js` is unchanged.
+- **A/B 2, the floor, measured:** `?quality=poster` (no module is ever imported), 1 warm-up + 3 runs (`measurements/phase-3.8/lighthouse-poster-floor.json`). Performance **98**, Lantern LCP **1.35 s**, FCP 0.90 s, TBT **0 ms**, observed LCP 63–68 ms.
+  - So with three out of the picture the simulated LCP is 1.35 s. The 6.3 s is three.js loading and compiling in the model. Neither the HTML nor the poster accounts for it.
+- What would move the simulated number: starting the import only after the observed LCP. That needs a timer or an interaction gate long enough for Lantern's observed timeline. On this machine LCP is at about 60 ms, so a few hundred ms would probably do, but I did not test it. It would trade real 3D start time for a better score, so I left it for you to decide.
+
+**TBT 365 ms versus 301 ms in 3.7.** The spreads overlap ([300–393] vs [294–372]). I don't treat this as a regression or as an improvement. The blocking work is the same three.js parse plus first-frame compile, only started from `import()`.
+
+**Desktop CLS 0.032** in 3 of 5 runs. It was ≤ 0.012 in 3.5 and is under the 0.1 limit. I did not trace the source; it is listed as UNCERTAIN 14.
+
+### Against the 3.8 thresholds (your revision)
+
+| Check | Threshold | Measured | Result |
+|---|---|---|---|
+| boot_test, 26 cases incl. every poster fallback, context loss after deferred boot, reduced-motion immediate path | all pass | 26/26 identical to 3.7, 0 errors; +2 import-failure cases pass | PASS |
+| site-check stage 8, 2 query sets × 3 widths × 2 engines | 0 problems | 16 shots, 0 problems | PASS |
+| Frame, stage 8 Retina 1440@2, **balanced pinned** | ≤ 16.7 ms | 12.10 ms [12.08–12.17] (measured in 3.7; 3.8 does not touch the render path) | PASS |
+| Frame, stage 8 Retina, high pinned | informational | 38.72 ms (3.7) | — |
+| Retina | closed | — | not re-reported |
+| Lighthouse performance, stage 8 mobile | ≥ 80 | **62** [60–67] | **FAIL** |
+| LCP simulated, stage 8 mobile | ≤ 3.0 s | **6.31 s** [5.26–6.39] (observed: 68 ms) | **FAIL** |
+| TBT, stage 8 mobile | ≤ 300 ms | **365 ms** [300–393] | **FAIL** |
+| Lighthouse performance, stage 8 desktop | (≥ 90, as before) | 97 [97–97] | PASS |
+| Stage 0 mobile | left at 79 | not re-measured. It is the baseline: no poster, no deferred boot, static three.js import, left on purpose | — (by design) |
+
+The dynamic import did what you asked: the entry script has no static imports, the poster depends on no module, and an import failure falls back to the poster. It did **not** reach the mobile targets. Lantern still models three.js ahead of the LCP, because the import starts before the poster paints. See the A/Bs above.
+
 ## Skills: what actually ran
 
 | Skill | Status | Evidence |
@@ -499,10 +576,10 @@ so they are not mistaken for measured facts.
    mobile is simulated throttling. No real phone was used.
 9. **The Phase 3 Lighthouse outlier (58)** did not recur with the warm-up protocol (spread 93–97),
    which fits a cold shader cache but does not prove it.
-10. **Why the deferred boot leaves mobile LCP at 6.3 s.** The explanation above comes from reading
-   one Lighthouse report: Lantern counts the statically imported module graph as LCP render delay.
-   It was not tested with a dynamic `import()`, which was out of scope. The cause is a reading of the
-   report, not an A/B.
+10. **Why mobile LCP stays at 6.3 s simulated.** Updated in 3.8.
+    - Measured: dynamic `import()` alone did not change it (6.31 s). Neither did arming the idle callback after `load` + 2 rAF (5.86 s). The poster-only floor is 1.35 s, so three.js is what the model puts in front of the LCP.
+    - Not measured: *why* Lantern keeps a dynamically imported module in the LCP graph. I read it as "the request started before the observed LCP"; I did not trace this in Lighthouse's code.
+    - Not tested: whether a longer delay before the import brings the simulated LCP to the 1.35 s floor.
 11. **Deferred boot on real phones.** The trigger conditions (`innerWidth < 600`, `navigator.connection`)
    were emulated. `navigator.connection` does not exist in Safari/WebKit, so there only the
    viewport rule applies. WebKit has no `requestIdleCallback`, so iOS boots on the 2.5 s timeout
@@ -515,3 +592,4 @@ so they are not mistaken for measured facts.
    as Playwright's screenshot landing before WebKit composites its first frame, a tool artefact and
    not a black page, but it is not traced. Whether real Safari ever shows the black frame was not
    tested.
+14. **Desktop CLS 0.032 on stage 8 (3.8)**, in 3 of 5 runs. The source was not traced. Candidates: the status line text changing, or the caption rows when `gl-ready` is set. Both are under the 0.1 limit.

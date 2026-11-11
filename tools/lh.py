@@ -55,6 +55,15 @@ def failing(rep):
     return out
 
 
+# Phase 3.8: what the trace actually recorded (observed*) next to Lantern's simulated metric
+OBSERVED = ["observedFirstContentfulPaint", "observedLargestContentfulPaint", "observedLoad", "observedDomContentLoaded"]
+
+
+def observed(rep):
+    items = ((rep["audits"].get("metrics") or {}).get("details") or {}).get("items") or [{}]
+    return {k: items[0].get(k) for k in OBSERVED}
+
+
 def perf(a):
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     summary = {}
@@ -71,11 +80,12 @@ def perf(a):
                 rep = lh(url_of(page), str(p), form, prof.resolve(), "performance,accessibility,best-practices,seo")
                 r = {"scores": {c: round(v["score"] * 100) for c, v in rep["categories"].items()},
                      "metrics": {m: rep["audits"][m]["numericValue"] for m in METRICS},
-                     "lcp_element": lcp_element(rep), "failing": failing(rep)}
+                     "observed": observed(rep), "lcp_element": lcp_element(rep), "failing": failing(rep)}
                 runs.append(r)
                 print(f"{key:20} run {i + 1}  perf {r['scores']['performance']:3}  FCP {r['metrics']['first-contentful-paint']:7.0f}  "
                       f"LCP {r['metrics']['largest-contentful-paint']:7.0f}  TBT {r['metrics']['total-blocking-time']:5.0f}  "
-                      f"CLS {r['metrics']['cumulative-layout-shift']:.3f}  LCP el {(r['lcp_element'] or {}).get('selector')}", flush=True)
+                      f"CLS {r['metrics']['cumulative-layout-shift']:.3f}  obsLCP {r['observed']['observedLargestContentfulPaint']}  "
+                      f"LCP el {(r['lcp_element'] or {}).get('selector')}", flush=True)
                 # keep one full report per config; trim the rest to the summary to keep the repo small
                 if i > 0:
                     p.unlink()
@@ -83,16 +93,20 @@ def perf(a):
             summary[key] = {
                 "protocol": f"1 discarded warm-up + {a.runs} runs, same profile, Lighthouse 12.8.2 simulate",
                 "median": {**{c: med([r["scores"][c] for r in runs]) for c in runs[0]["scores"]},
-                           **{m: round(med([r["metrics"][m] for r in runs]), 3) for m in METRICS}},
+                           **{m: round(med([r["metrics"][m] for r in runs]), 3) for m in METRICS},
+                           **{k: med([r["observed"][k] for r in runs]) for k in OBSERVED}},
                 "spread": {**{c: [min(r["scores"][c] for r in runs), max(r["scores"][c] for r in runs)] for c in runs[0]["scores"]},
-                           **{m: [round(min(r["metrics"][m] for r in runs), 3), round(max(r["metrics"][m] for r in runs), 3)] for m in METRICS}},
+                           **{m: [round(min(r["metrics"][m] for r in runs), 3), round(max(r["metrics"][m] for r in runs), 3)] for m in METRICS},
+                           **{k: [min(r["observed"][k] for r in runs), max(r["observed"][k] for r in runs)] for k in OBSERVED}},
                 "lcp_elements": [r["lcp_element"] for r in runs],
                 "failing_last_run": runs[-1]["failing"],
                 "runs": runs,
             }
             m = summary[key]["median"]; s = summary[key]["spread"]
             print(f"{key:20} MEDIAN perf {m['performance']} [{s['performance'][0]}-{s['performance'][1]}]  "
-                  f"LCP {m['largest-contentful-paint']:.0f} [{s['largest-contentful-paint'][0]:.0f}-{s['largest-contentful-paint'][1]:.0f}]", flush=True)
+                  f"LCP {m['largest-contentful-paint']:.0f} [{s['largest-contentful-paint'][0]:.0f}-{s['largest-contentful-paint'][1]:.0f}]  "
+                  f"observed LCP {m['observedLargestContentfulPaint']} {s['observedLargestContentfulPaint']}  "
+                  f"TBT {m['total-blocking-time']:.0f} [{s['total-blocking-time'][0]:.0f}-{s['total-blocking-time'][1]:.0f}]", flush=True)
     (out / "summary.json").write_text(json.dumps(summary, indent=1))
 
 
