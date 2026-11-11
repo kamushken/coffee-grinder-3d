@@ -170,7 +170,9 @@ The dynamic import did what you asked: the entry script has no static imports, t
 
 ### 2. `?bootdelay=<ms>` on stage 8 (`4fc0d72`)
 
-- `stage-8/boot.js` reads `bootdelay` (integer ms, default 0; negative or non-numeric reads as 0).
+> This is the 4a record, when the default was 0. Since 4b the default is 1200; see section 9. The description below still holds for `?bootdelay=0`, which is exactly how the pre-4b path is restored.
+
+- `stage-8/boot.js` reads `bootdelay` (integer ms; default **0 in 4a, 1200 since 4b**; negative or non-numeric reads as 0).
 - In the deferred path, once a trigger fires (idle callback, the 2.5 s timeout on WebKit, or the first pointerdown/scroll/wheel/touchmove/keydown), the import waits until at least `loadEventEnd + bootdelay`. If that moment has already passed, it starts at once. With 0 the code path is the 3.8 one: `boot()` is called directly.
 - The immediate path (desktop, reduced motion, `?record`, `?boot=now`) ignores the param. So do `?quality=poster`, the no-WebGL 2 poster and the import-failure poster, because the delay only wraps the deferred trigger.
 - `tools/boot_test.py --extra bootdelay=N` appends the param to every case. It also records `bootAt` and `loadEnd`.
@@ -263,7 +265,7 @@ The live scene is the same code. The 1440 figure moved by up to ~1 ms across 3 r
 
 These numbers are from the **live site**, not from `127.0.0.1`. They are kept separate on purpose: the local headless numbers above measure our code on this machine with no network, no CDN and no TLS; these measure the same code behind Netlify's edge. Do not compare a figure from one section with a figure from the other.
 
-Deploy measured: commit `aa836a6`, git-based build from `origin main`. All runs on 2026-11-11, M1 Pro, Lighthouse 12.8.2 via `npx`, Chrome for Testing 1223, Metal ANGLE, one discarded warm-up per config then 5 runs. Raw reports in `measurements/production/`.
+Deploy measured: commit `aa836a6` for sections 1–8, then `bc97823` and `d0597b2` for the Phase 4b re-measure in sections 9–11 (the caption-order fix is the last of the three, so every 4b number is from `d0597b2`). All runs on 2026-11-11, M1 Pro, Lighthouse 12.8.2 via `npx`, Chrome for Testing 1223, Metal ANGLE, one discarded warm-up per config then 5 runs. Raw reports in `measurements/production/`, 4b batches in the `*-4b/`, `*-stage5-fix/` and `*-delay0/` subdirectories.
 
 ### 1. HEADERS (`measurements/production/handoff-checks.txt`)
 
@@ -331,6 +333,8 @@ Playwright, 1440×900, `request.sizes().responseBodySize` — that is post-compr
 
 Same protocol, same profile per config, warm-up discarded. Median [min–max] of 5.
 
+> Read this section as history. At the time of measurement `?bootdelay=1200` was an opt-in parameter; since 4b it is the default and the plain `default` column now means `?bootdelay=0`. The 4b re-measure is section 9, and its column names follow the new meaning.
+
 | | default | `?bootdelay=1200` | Local 4a (for shape only) |
 |---|---|---|---|
 | **Performance** | **83** [80–85] | **99** [83–100] | 62 [60–67] (3.8) |
@@ -345,7 +349,7 @@ Same protocol, same profile per config, warm-up discarded. Median [min–max] of
 
 - **The mobile targets are met on the deployed site and were never met locally.** Performance 83 ≥ 80, LCP 1.37 s ≤ 3.0 s, TBT 653 ms — that one still fails the ≤ 300 ms target. This is the opposite of what 3.8 predicted, and the mechanism is the CDN, not new code: three.js arrives from Netlify's edge in 162 KB compressed instead of 687 KB, so Lantern's model spends far less of the simulated timeline on it. The local 62 / 6.31 s were real numbers for a server with no compression and no edge. The earlier "FAIL" rows describe 3.8 on localhost and stay as history.
 - **`?bootdelay=1200` is where the win is.** TBT drops 653 → 105 ms (median) and TTI 2,289 → 1,468 ms, because the 3D boot no longer blocks inside the measured window. LCP is unchanged (1,369 vs 1,370 ms): the poster is still the LCP element and it never waited for three.js.
-- The bootdelay spread is honest and wide: one run at 660 ms TBT and 83 performance, four at 16–124 ms and 98–100. That is a warm-up/cold-cache effect on the deferred import, not a code path — the four fast runs are all after the discarded warm-up plus one full run.
+- The bootdelay spread is honest and wide: one run at 660 ms TBT and 83 performance, four at 16–124 ms and 98–100. **This section originally guessed a warm-up/cold-cache effect. Section 11 tests that and it is wrong** — cold-profile runs are the clean ones and the slow run reproduces in a warm profile. The cause is the stage-8 compile landing inside the TBT window when first paint is fast enough (section 11).
 - Failing audits, both configs: `valid-source-maps` (we ship no `.map`), `unused-javascript` (45 % of three.js is unused by this scene — the single-file build cannot be tree-shaken), `cache-insight` (HTML at `max-age=0` by design), `image-delivery-insight`, `render-blocking-insight`. The last three are Netlify/Lighthouse heuristics on a 3 KB HTML page, not defects.
 - `bootup-time` attributes the blocking work on mobile: `stage-8/main.js` 1,602 ms of scripting, then `stage-3/render.js` 386 ms.
 
@@ -374,9 +378,9 @@ The CLS fix from 4a holds on the edge: 0 in every one of 5 desktop runs, and no 
 | a11y / best-practices / SEO | 100 / 100 / 100 |
 | LCP element | `#film > .pin > .frame` (the film frame, 5/5) |
 
-- TBT 895 ms is the worst number in this document and it is not a regression against a previous stage 5 number (none was taken on prod or mobile before). `bootup-time`: `stage-5/main.js` 1,021 ms, `scroll-film.js` 417 ms, `Unattributable` 376 ms. The page builds the stage-4 scene and the scroll engine in the same boot as the film, so the two compete.
-- LCP is the film frame, not the poster, because the frame is the larger painted box; that is by layout, and it is still 1.8 s.
-- Not fixed here, and not asked for: stage 5 has no `?bootdelay` and no deferred boot. The same trick that took stage 8's TBT from 653 to 105 ms would apply, but it is a code change and belongs to its own task.
+- TBT 895 ms was at the time the worst number in this document and it was not a regression against a previous stage 5 number (none was taken on prod or mobile before). `bootup-time`: `stage-5/main.js` 1,021 ms, `scroll-film.js` 417 ms, `Unattributable` 376 ms. The page built the stage-4 scene and the scroll engine in the same boot as the film, so the two competed.
+- LCP is the film frame, not the poster, because the frame is the larger painted box; that is by layout, and it was still 1.8 s.
+- **Fixed in 4b, section 9.** Stage 5 now has the same deferred entry and the same 1200 ms floor, and the deployed mobile TBT is 59 ms [0–842] against 947 ms [884–1,040] at `?bootdelay=0`. Table in section 9.
 
 ### 8. CLS at 390 px, measured in the page (`tools/cls_probe.py` → `measurements/production/cls-390.json`)
 
@@ -394,6 +398,76 @@ PerformanceObserver on `layout-shift` with `buffered: true`, 5 runs per size per
 - Zero layout-shift entries at every size, 0 page errors. The 390 px requirement is met on the deployed build, not only locally.
 - The stage-8 overlap is intended: that caption is fixed over the canvas, which is the established pattern on stages 1–8. The defect this task fixed was stage 5 only, where the caption covered the *film*, and there the overlap is now 0 at every width below 600 px.
 - Film height on stage 5 at 390 px went from 248 px (before) to 620 px (after). At 360×640 it is still only 416 px of viewport for the film, but the caption no longer sits on top of it.
+
+### 9. Phase 4b: 1200 ms is the mobile default, and stage 5 gets the same treatment
+
+Deploy measured: `bc97823`, then `d0597b2` for the caption-order fix. Same protocol (warm-up discarded + 5), median [min–max], on the deployed site.
+
+**The change.**
+- Stage 8: `?bootdelay` now defaults to **1200** on the deferred path instead of 0. `?bootdelay=0` restores the pre-4b behaviour exactly. Desktop, reduced motion, `?record`, `?boot=now` never reach the floor, so nothing about them changed.
+- Stage 5: new [`stage-5/boot.js`](stage-5/boot.js:1), a copy of the stage-8 pattern. The page had no entry module: `main.js` fetched the 1.07 MB film and built the three.js scene in the same task that the page loaded, which is why its mobile TBT was 895 ms. Now the whole of `main.js` — film fetch included — is behind the same floor, and `main.js` runs nothing at import time (`start()` is called by `boot.js`).
+- Gesture listeners are attached **before** `requestIdleCallback` and the 2.5 s timeout, so a pointerdown, wheel, touchmove or keydown wins over both — but the floor still applies underneath: a gesture at 200 ms starts the work at load + 1200, not at 200 ms. That is deliberate; otherwise touching the page would pull the compile back into the measured window.
+- While the floor runs, stage 5 shows its CSS poster (the film's hero frame, 7.5 KB) and the page stays scrollable.
+
+**Stage 8 mobile**
+
+| | default (now 1200) | `?bootdelay=0` | 4a default (was 0) |
+|---|---|---|---|
+| **Performance** | **100** [83–100] | 83 [81–83] | 83 [80–85] |
+| LCP, Lantern | 1,502 ms [1,408–1,570] | 1,389 ms [1,377–1,530] | 1,369 ms |
+| **TBT** | **89 ms** [0–644] | 683 ms [634–750] | 653 ms |
+| CLS | 0 in 3/5, 0.003 in 2 | 0 in 4/5, 0.001 in 1 | 0 and 0.003 |
+| LCP element | `img#poster` 5/5 | `img#poster` 5/5 | `img#poster` |
+
+**Stage 5 mobile**
+
+| | default (now 1200) | `?bootdelay=0` | before 4b (no floor existed) |
+|---|---|---|---|
+| **Performance** | **100** [79–100] | 79 [77–79] | 79 [78–81] |
+| LCP, Lantern | 1,114 ms [787–1,233] | 1,151 ms [1,061–1,311] | 1,821 ms |
+| **TBT** | **59 ms** [0–842] | 947 ms [884–1,040] | 895 ms |
+| CLS | **0 in 5/5** | 0 in 5/5 | 0 in 5/5 |
+| LCP element | `div.caption` 5/5 | `#film > .pin > .frame` 5/5 | `#film > .pin > .frame` |
+
+- **Stage 5's 947 → 59 ms is the whole point of the task.** Both configs run the same code; the only difference is where the floor sits. Without it every run is 884–1040 ms; with it the median is 59 and four of five runs are under 60.
+- One side effect worth stating: moving the caption to the top of the body (see below) made it the LCP element on stage 5 mobile, because it is a large block of text painted early. LCP got *better* (1,821 → 1,114 ms) and the caption is real content, so this is not a defect, but it is a different LCP element than the 4a table lists.
+- The stage-8 spread [0–644] and the stage-5 spread [0–842] are the tail analysed in section 11. The medians are unaffected by it; the max is not.
+
+**Desktop, both pages, 5 runs** (`measurements/production/lighthouse-desktop-4b`, `lighthouse-desktop-stage5-fix`)
+
+| | stage 8 | stage 5 |
+|---|---|---|
+| Performance | 98 [97–99] | **100** [97–100] |
+| LCP, Lantern | 467 ms [359–561] | 411 ms [397–489] |
+| **TBT** | 74 ms [50–104] | 0 ms [0–30] |
+| **CLS** | **0.000 in 5/5** | **0.000 in 5/5** |
+
+The raw CLS on those runs is `0.000146` in 3 of 5 stage-8 runs and `0.000146` in 5 of 5 stage-5 runs, i.e. displayed as 0.000 and under the 0.1 threshold by three orders of magnitude. The stage-5 figure before the caption-order fix was `0.028486` in 3 of 5 (section 10).
+
+The desktop path is untouched by the floor and the numbers are the same as 4a within noise.
+
+### 10. Stage 5 desktop CLS 0.028 on the deployed site, found and fixed (`d0597b2`)
+
+- First 4b desktop run: CLS **0.028 in 3 of 5**, and the `layout-shifts` audit named `div.beats`. Locally the same code gave 0.000 in 5/5 and Lighthouse against `127.0.0.1` gave 0.000 in 3/3, so this was a deployed-only defect.
+- A PerformanceObserver on the deployed page put numbers on it: on the first sample `div.beats` was at y **1058**, then at y **571**, and `--cap-h` was **empty** in the first sample and `281px` in the second. The variable is applied by the inline script, and that script was at the *bottom* of the body, after the film section. The browser had already laid the page out and painted, so the reserved height arrived one frame late and everything in the centred column jumped up by 281 px.
+- The fix moves the fixed `.caption` and its measuring script to the **top** of `<body>`. Position is `fixed`, so document order changes nothing about where it is drawn or about the tab order; the measurement now happens during parsing, before the first layout.
+- Re-measured on the deployed site after the fix: **0.000 in 5/5** desktop, and 0.00000 in 5/5 at 1350×940, 1440×900 and 390×844 in the page probe (`measurements/phase-4b/cls-local*.json`).
+- Note on the first attempt: I first blamed the new `#status` line in the note and gave it a fixed height. That was wrong — the CLS did not move, and the observer showed the beats shift was 281 px, exactly the caption. The status line still has a fixed box, because it is written after paint and must not grow the note, but that is not what caused this.
+
+### 11. The 660 ms tail: measured, reproduced, not a cold cache
+
+The question was whether the one 660 ms / 83 run in the 4a bootdelay batch was a cold CDN edge, a cold cache, or a real tail. Three measurements:
+
+| Setup | TBT per run | Reading |
+|---|---|---|
+| 3 runs, **fresh browser profile each**, no warm-up, `?bootdelay=1200` (`measurements/phase-4b/tail/cold-context-3-runs.json`) | 90 / 108 / 72 | does **not** reproduce cold |
+| 5 consecutive runs, **same profile**, no warm-up discard (`tail/bootdelay-1200-same-profile.json`) | **109 / 650 / 23 / 29 / 24** | reproduces, once, in a warm profile |
+| 5 consecutive runs, same profile, `?bootdelay=2500` (`tail/bootdelay-2500-same-profile.json`) | 132 / 55 / 41 / 22 / 25 | does not reproduce at 2500 |
+
+- So it is **not** a cold CDN edge and **not** a cold browser cache: the cold runs are the *clean* ones. It is a real tail, and it is positional rather than cold — it appeared as run 2 of a warm sequence, the same slot the 4a batch had it.
+- Mechanism, from `bootup-time` in the slow run: `stage-8/main.js` 1,179 ms of scripting and `stage-3/render.js` 357 ms land **inside** the TBT window; in the fast runs those same scripts total 60–100 ms of the window because the page is slower to reach them and the window closes first. TBT is measured to Time to Interactive, so a slow first paint moves the 3D compile out of the score; a fast one pulls it in. That is a property of the metric, not a regression.
+- `?bootdelay=2500` removed it in this sample (max 132 ms), which fits the same explanation: the compile lands after TTI either way. It is not adopted, because a 1.2 s default already buys the median and 2.5 s pushes the 3D start visibly later; the trade-off is yours.
+- Recorded as UNCERTAIN 17: reproduced 1 in 5, mechanism read from `bootup-time`, not traced event by event.
 
 ## Skills: what actually ran
 
@@ -857,12 +931,24 @@ so they are not mistaken for measured facts.
    not a black page, but it is not traced. Whether real Safari ever shows the black frame was not
    tested.
 14. **RESOLVED in 4a (`7b893d3`).** Desktop CLS 0.032 on stage 8 (3.8), in 3 of 5 runs. The cause was `shell.js` building the corner nav and prev/next after first paint, which grew `#controls`; neither listed candidate was the cause. Both navs are now static HTML. CLS is 0 in 5/5 desktop runs, and 0.000 in 5/5 on the deployed site (PRODUCTION 6). See "Phase 4a".
-15. **The repository root is published.** `[build] publish = "."` serves `FACTS.md`, `HANDOFF.md`,
-    `notes/`, `tools/*.py` and `measurements/` at 200 (PRODUCTION 3). No secrets are in them (checked
-    in `0625130`), and the measurements are part of the deliverable, so this is a recorded state, not
-    a defect. If the docs should be private, the fix is a redirect rule or moving the site into a
-    subdirectory; not done, because it would change every URL.
-16. **Stage 5 has no deferred boot and no `?bootdelay`.** Its mobile TBT on the deployed site is
-    895 ms, the worst figure in this document (`bootup-time`: `stage-5/main.js` 1,021 ms,
-    `scroll-film.js` 417 ms). Not fixed: it was not asked for, and stage 8 showed the cure is a code
-    change, not a config change.
+15. **The repository root is published — now on purpose.** `[build] publish = "."` serves
+    `FACTS.md`, `HANDOFF.md`, `notes/`, `tools/*.py` and `measurements/` at 200 (PRODUCTION 3). No
+    secrets are in them (checked in `0625130`). In 4b this stopped being an exposure to fix and became
+    a feature: the index footer links `/FACTS.md` as "lab notes: measurements, method, known
+    failures", with `/HANDOFF.md` next to it. Nothing was renamed or moved, so every URL that
+    already worked still works. The residual item is only that the narrowing options (redirect rule,
+    or a `site/` subdirectory) are documented and unexercised.
+16. **RESOLVED in 4b.** Stage 5 had no deferred boot and no `?bootdelay`; its deployed mobile TBT
+    was 895 ms, the worst figure in this document (`bootup-time`: `stage-5/main.js` 1,021 ms,
+    `scroll-film.js` 417 ms). Stage 5 now has `stage-5/boot.js`, the same entry pattern as stage 8:
+    the film preload and the WebGL scene both sit behind the 1200 ms floor. Deployed mobile median
+    TBT went **947 ms [884–1040] at `?bootdelay=0` → 59 ms [0–842] at the default**, performance
+    79 → 100 (PRODUCTION 9).
+17. **The 660 ms TBT tail is real and only partly explained.** At `?bootdelay=1200` a warm profile
+    produced 109 / **650** / 23 / 29 / 24 ms across five consecutive runs, so it is not a one-off,
+    and three runs with a fresh profile each (90 / 108 / 72) rule out a cold edge or a cold cache as
+    the cause. The mechanism is read from `bootup-time` — `stage-8/main.js` 1,179 ms plus
+    `stage-3/render.js` 357 ms falling inside the TBT window when first paint is fast enough to
+    reach them — and it is reproducible in direction, but it was not traced event by event in a
+    performance profile. `?bootdelay=2500` did not reproduce it in the same batch (132 / 55 / 41 /
+    22 / 25); that was not adopted. PRODUCTION 11.

@@ -8,31 +8,31 @@ A manual burr coffee grinder made only from procedural three.js geometry. There 
 
 ## Deployed URLs
 
-**Not deployed yet.** `<site>` below is a placeholder. Replace it with the Netlify site name once the deploy has run (commands at the end).
-
-The site must be served from the domain root, because every URL in the pages is root-absolute (`/vendor/…`, `/shared/…`, `/stage-8/main.js`).
+Live at **https://coffee-grinder-3d.netlify.app**, deployed from https://github.com/kamushken/coffee-grinder-3d on every push to `main`. The site must be served from the domain root, because every URL in the pages is root-absolute (`/vendor/…`, `/shared/…`, `/stage-8/main.js`).
 
 | Stage | URL | What it shows |
 |---|---|---|
-| index | `https://<site>.netlify.app/` | lab index: intro, a 9-card grid that is the nav, and the skills used with the pinned hash |
-| 0 | `https://<site>.netlify.app/stage-0/` | slop baseline: AmbientLight, default MeshStandardMaterial, straight-on, no shadows |
-| 1 | `https://<site>.netlify.app/stage-1/` | direction: palette and light temperature from `notes/direction.md` |
-| 2 | `https://<site>.netlify.app/stage-2/` | lighting: sky/sun presets with blending, fitted soft shadows, GTAO |
-| 3 | `https://<site>.netlify.app/stage-3/` | materials: per-family PBR rules, glass transmission, burr shader patch |
-| 4 | `https://<site>.netlify.app/stage-4/` | composition: rule of thirds, one camera flight, one profile sweep |
-| 5 | `https://<site>.netlify.app/stage-5/` | motion: scroll-scrubbed film cut from our own stage-8 recording (scroll-film runtime), then the live scene |
-| 6 | `https://<site>.netlify.app/stage-6/` | explainer: exploded view of the burr assembly, x-ray, labels, picking |
-| 7 | `https://<site>.netlify.app/stage-7/` | degradation: quality tiers, poster fallback, reduced motion, keyboard nav |
-| 8 | `https://<site>.netlify.app/stage-8/` | final: stage 3 light, stage 4 composition, stage 6 explainer and stage 7 degradation together |
+| index | https://coffee-grinder-3d.netlify.app/ | lab index: intro, a 9-card grid that is the nav, the skills used with the pinned hash, and a footer link to `/FACTS.md` as "lab notes" |
+| 0 | https://coffee-grinder-3d.netlify.app/stage-0/ | slop baseline: AmbientLight, default MeshStandardMaterial, straight-on, no shadows |
+| 1 | https://coffee-grinder-3d.netlify.app/stage-1/ | direction: palette and light temperature from `notes/direction.md` |
+| 2 | https://coffee-grinder-3d.netlify.app/stage-2/ | lighting: sky/sun presets with blending, fitted soft shadows, GTAO |
+| 3 | https://coffee-grinder-3d.netlify.app/stage-3/ | materials: per-family PBR rules, glass transmission, burr shader patch |
+| 4 | https://coffee-grinder-3d.netlify.app/stage-4/ | composition: rule of thirds, one camera flight, one profile sweep |
+| 5 | https://coffee-grinder-3d.netlify.app/stage-5/ | motion: scroll-scrubbed film cut from our own stage-8 recording (scroll-film runtime), then the live scene. Both sit behind the same 1200 ms deferred floor as stage 8 |
+| 6 | https://coffee-grinder-3d.netlify.app/stage-6/ | explainer: exploded view of the burr assembly, x-ray, labels, picking |
+| 7 | https://coffee-grinder-3d.netlify.app/stage-7/ | degradation: quality tiers, poster fallback, reduced motion, keyboard nav |
+| 8 | https://coffee-grinder-3d.netlify.app/stage-8/ | final: stage 3 light, stage 4 composition, stage 6 explainer and stage 7 degradation together |
 
-Stage 8 URL params:
+Stage 8 and stage 5 URL params (both read `bootdelay` in their own `boot.js`):
 - `?quality=poster|fast|balanced|high`
-- `?boot=now`
-- `?bootdelay=<ms>` (default 0; delays the deferred mobile import to at least `load + ms`)
+- `?boot=now` (skip the deferred boot and start immediately)
+- `?bootdelay=<ms>` — **default 1200** on the deferred path since 4b; `?bootdelay=0` restores the pre-4b behaviour exactly. A non-numeric value reads as 0. Desktop, reduced motion, `?record` and `?boot=now` never reach the floor, so the parameter has no effect on them.
 - `?motion=reduce`
 - `?ondemand=0`
 - `?record`
 - `?explode=`, `?xray=1`, `?light=`, `?view=`
+
+On the deferred path the intent listeners (pointerdown, scroll, wheel, touchmove, keydown) are registered before `requestIdleCallback` and the 2.5 s timeout, so a gesture wins over both. The floor still applies underneath: a gesture at 200 ms starts the work at load + 1200 ms, not at 200 ms. That is deliberate, so touching the page cannot pull the compile back into the measured window.
 
 ## Pinned versions
 
@@ -57,9 +57,9 @@ All stills are Chromium, WebP q82. Each still's capture JSON is `measurements/<n
 | `stage-3.webp` | 1440×900, 35,874 B | Stage 3: material families (brushed steel, walnut, glass hopper with transmission). |
 | `stage-3-burr-patch.webp` | 800×560, 10,912 B | Close-up of the one shader patch, the burr highlight (`tools/burr-closeup.html`). |
 | `stage-4.webp` | 1440×900, 36,294 B | Stage 4: rule-of-thirds composition on the walnut tray, hero view after the flight. |
-| `stage-5.webp` | 1440×900, 44,476 B | Stage 5 scroll film at the front hold: frame from our stage-8 recording, first caption, note above the film. |
+| `stage-5.webp` | 1440×900, 44,854 B | Stage 5 scroll film at the front hold: frame from our stage-8 recording, first caption and status line, note above the film. |
 | `stage-5-live.webp` | 1440×900, 44,216 B | Stage 5 after the film: the live three.js grinder below it. |
-| `stage-5-scroll.mp4` | 480×270, 20 s, 57,329 B | Stage 5 scrolled top to bottom: front → flight → hero → explode in the film, then the live scene. |
+| `stage-5-scroll.mp4` | 640×360, 20 s, 8 fps, 66,337 B | Stage 5 scrolled top to bottom: front → flight → hero → explode in the film, then the live scene (`record.py --scroll "0:0 18:100%"`, then ffmpeg to 640 px, crf 30). |
 | `stage-6.webp` | 1440×900, 50,246 B | Stage 6 fully exploded (`?explode=1`): burr assembly apart, body x-rayed, labels on. |
 | `stage-6-assembled.webp` | 1440×900, 52,638 B | Stage 6 assembled, explode at 0. |
 | `stage-6-explode.mp4` | 640×400, 7 s, 53,387 B | Stage 6 explode slider going from 0 to 1: crank, hopper, ring and burrs separating. |
@@ -93,20 +93,42 @@ Each figure is from 1 discarded warm-up + 5 runs; median [min–max]. The LCP el
 - Stage 0 mobile: 79. This is the baseline and was kept as it is on purpose.
 - **These are localhost numbers and they do not describe the deployed site.** Against `127.0.0.1`, mobile missed the targets: 62 / 6.31 s / 365 ms against ≥ 80 / ≤ 3.0 s / ≤ 300 ms. On the deployed site the same code scores **83 / 1.37 s / 653 ms**, and **99 / 1.37 s / 105 ms** with `?bootdelay=1200`, because three.js arrives compressed from the CDN. See "Deployed site" below.
 
-### Deployed site (`https://coffee-grinder-3d.netlify.app`, commit `aa836a6`)
+### Deployed site (`https://coffee-grinder-3d.netlify.app`, Phase 4b, deploy `d0597b2`)
 
-Lighthouse 12.8.2, 1 discarded warm-up + 5 runs per config, median [min–max]. Raw reports in `measurements/production/`.
+Lighthouse 12.8.2, 1 discarded warm-up + 5 runs per config, median [min–max]. Raw reports in `measurements/production/lighthouse-*-4b/` and `lighthouse-*-stage5-fix/`. The pre-4b deployed numbers are still in the same tree without the `-4b` suffix, so the two are comparable side by side.
 
-| | Mobile default | Mobile `?bootdelay=1200` | Desktop |
+**Stage 8 mobile**
+
+| | default (now 1200) | `?bootdelay=0` | 4a default (was 0) |
 |---|---|---|---|
-| Performance | **83** [80–85] | **99** [83–100] | **98** [96–99] |
-| LCP, Lantern | 1,369 ms [1,227–1,518] | 1,370 ms [1,257–1,480] | 479 ms [311–517] |
-| LCP, observed | 1,024 ms [794–1,239] | 1,084 ms [926–1,927] | 1,144 ms [919–2,079] |
-| TBT | **653 ms** [575–812] | **105 ms** [16–660] | 66 ms [36–85] |
-| CLS | 0 in 4/5, 0.003 in 1 | 0 in 4/5, 0.003 in 1 | **0.000 in 5/5** |
-| a11y / BP / SEO | 100 / 100 / 100 | 100 / 100 / 100 | 100 / 100 / 100 |
+| Performance | **100** [83–100] | 83 [81–83] | 83 [80–85] |
+| LCP, Lantern | 1,502 ms [1,408–1,570] | 1,389 ms [1,377–1,530] | 1,369 ms |
+| TBT | **89 ms** [0–644] | 683 ms [634–750] | 653 ms |
+| CLS | 0.000 (0.003 in 2 runs) | 0.000 | 0.000 / 0.003 |
+| LCP element | `img#poster` 5/5 | `img#poster` 5/5 | `img#poster` |
 
-Stage 5 mobile on the deployed site: performance **79** [78–81], LCP 1,821 ms, TBT **895 ms** [753–976], CLS **0 in 5/5**. It has no `?bootdelay`; that is UNCERTAIN 16.
+**Stage 5 mobile**
+
+| | default (now 1200) | `?bootdelay=0` | before 4b (no floor) |
+|---|---|---|---|
+| Performance | **100** [79–100] | 79 [77–79] | 79 [78–81] |
+| LCP, Lantern | 1,114 ms [787–1,233] | 1,151 ms [1,061–1,311] | 1,821 ms |
+| TBT | **59 ms** [0–842] | 947 ms [884–1,040] | 895 ms |
+| CLS | **0.000 in 5/5** | **0.000 in 5/5** | 0.000 in 5/5 |
+| LCP element | `div.caption` 5/5 | `#film > .pin > .frame` 5/5 | `#film > .pin > .frame` |
+
+**Desktop, both pages, 5 runs**
+
+| | stage 8 | stage 5 |
+|---|---|---|
+| Performance | 98 [97–99] | **100** [97–100] |
+| LCP, Lantern | 467 ms [359–561] | 411 ms [397–489] |
+| TBT | 74 ms [50–104] | 0 ms [0–30] |
+| CLS | **0.000 in 5/5** | **0.000 in 5/5** |
+
+- Stage 5's 947 → 59 ms is the whole of item 1b: the same code in both configs, the only difference being where the floor sits.
+- Both `[0–…]` spreads are the tail in UNCERTAIN 17, not the median.
+- Accessibility, best practices and SEO are **100 / 100 / 100** in every config on every page.
 
 Transferred bytes with compression on (Playwright, wire size):
 
@@ -137,11 +159,14 @@ CLS at phone widths on the deployed site, measured with a PerformanceObserver in
 
 ### Checks
 
-- Accessibility (Lighthouse): **100 on all 10 pages** (4a).
-- site-check: 0 problems on stage 8 (16 shots, 2 engines × 3 widths × 2 query sets + reduced motion), on stage 5 after the film rebuild (16 shots, `--scroll-steps 4`) and on stages 0, 2–4, 6, 7 and the index.
-- boot_test: 26/26 original cases + 2 import-failure cases pass, 0 page errors.
-  - `?bootdelay=0` matches 3.8 on every behavioural field.
-  - At `?bootdelay=1200`, every deferred import starts at ≥ load + 1200 ms.
+- Accessibility (Lighthouse): **100 on all 10 pages** (4a), and 100 in every 4b config on both pages.
+- site-check: 0 problems on stage 8 (16 shots, 2 engines × 3 widths × 2 query sets + reduced motion), on stage 5 after the film rebuild (16 shots, `--scroll-steps 4`; re-run in 4b: `measurements/phase-4b/site-check-stage-5.txt`, 16 shots, 0 problems, 0 errors) and on stages 0, 2–4, 6, 7 and the index.
+- boot_test, run twice in 4b (`measurements/phase-4b/`):
+  - with the new default: 28/28, every deferred case starting at load + 1200–1203 ms, 0 page errors;
+  - with `?bootdelay=0`: 28/28, and **0 behavioural differences** from the default run other than the timing field itself.
+- film_probe after the stage-5 refactor: 35/35 samples, frames 7 / 35 / 62 / 112 / 142 as specified, no beat-over-film and no beat-over-caption overlap.
+- CLS in the page at 1350×940, 1440×900 and 390×844: 0.00000 in 5/5 on both pages, 0 non-zero entries, 0 page errors.
+- Frame time and geometry unchanged by the refactor: 9.77 / 6.43 / 9.98 ms in Chromium and 16.67 ms in WebKit; 218 draw calls, 103,556 triangles.
 - First paint: every route is non-black within 1 s in both engines at both widths. The slowest is 477 ms.
 
 ### Skills: what ran
@@ -161,15 +186,14 @@ One skill bug was found and patched locally: site-check `--scroll-steps` raises 
 3. **Retina frame intervals are bimodal (~16 / ~20 ms) with vsync off.** I read this as GPU-bound; it could instead be the compositor cadence in headless mode. Not traced.
 4. **Retina frame time comes from headless runs.** A visible Safari or Chrome window on the same Mac may differ.
 5. **WebKit Tab order on stages 7/8**: Tab cycles only between the skip link and the canvas. I attribute this to Safari's default "Tab skips links". Real Safari with that preference changed was not tested.
-6. **Netlify transfer sizes, caching and compression**: not measured, because nothing is deployed yet. The cache headers are set in `netlify.toml`; compression is up to the platform. Run the checks below to close this item.
+6. **RESOLVED on the deployed site.** Brotli on every text type, `immutable` on `/vendor/*` and `/captures/*`, `public,max-age=0,must-revalidate` on HTML and unhashed JS, Range → 206 with `content-range: bytes 0-999/1095473`, 404 for `/.tools/env.sh`, `/.skills/…` and `/.tmp/`. Raw output in `measurements/production/handoff-checks.txt`.
 7. **The stage 5 video on real iOS Safari** (Range seeking, `playsinline`, GOP-4 scrubbing): only tested in Playwright WebKit on macOS.
 8. **Phone performance in general**: no real phone was used. "390@2" is a desktop GPU with a phone-sized viewport, and Lighthouse mobile is simulated throttling.
 9. **The Phase 3 Lighthouse outlier (58)** did not recur under the warm-up protocol. That fits a cold shader cache but does not prove it.
-10. **Why the simulated mobile LCP stays at 6.3 s.**
-    - Dynamic `import()` did not change it.
-    - Arming the import after load + 2 rAF gave 5.86 s.
-    - The poster-only floor is 1.35 s.
-    - Whether a longer delay reaches the floor is not tested. `?bootdelay=<ms>` (4a) makes this testable, but Lighthouse was not run with it.
+10. **Why the simulated mobile LCP sits where it does.**
+    - Locally it stayed at 6.31 s regardless of dynamic `import()` or load + 2 rAF.
+    - On the deployed site it is 1.37–1.50 s, and a longer delay does not move it: `?bootdelay=1200` gave 1,370 ms against 1,369 ms default in 4a. The delay moves blocking time, not the LCP. Compression on the CDN is what moved it.
+    - Still unexplained: why the same Lantern model gives 6.31 s local and 1.37 s deployed. The measurable input difference is 687 KB uncompressed vs 162 KB compressed; the two were not decomposed.
 11. **Deferred boot on real phones.** The trigger conditions were emulated. WebKit has no `navigator.connection` and no `requestIdleCallback`, so on iOS only the viewport rule applies, and boot happens on the 2.5 s timeout or the first touch.
 12. **Whether Retina ever reaches the fast tier without forcing.** On the M1 Pro, balanced settles at 8.7 ms. A slower GPU is needed to see the second drop happen on its own.
 13. **The WebKit index first shot.** At 1440 it is sometimes uniformly black at about 60 ms. I read this as a Playwright screenshot timing artefact; it is not traced.
@@ -177,6 +201,9 @@ One skill bug was found and patched locally: site-check `--scroll-steps` raises 
     - Cause: `shell.js` built the corner nav and prev/next after first paint, which grew `#controls`.
     - Fix: both are now static HTML.
     - Result: CLS 0 in 5/5 desktop runs.
+15. **The repository root is published, on purpose.** `publish = "."` serves `/FACTS.md`, `/HANDOFF.md`, `/notes/`, `/tools/*.py` and `/measurements/…` at 200. No secrets are in them. In 4b this became a feature rather than a leak: the index footer links `/FACTS.md` as the lab notes, and `/HANDOFF.md` next to it. Nothing was renamed or moved. The narrowing options (a redirect rule, or moving the site into a subdirectory) are documented and unexercised.
+16. **RESOLVED in 4b (`3de6e2d`).** Stage 5 had no deferred boot and no `?bootdelay`; its deployed mobile TBT was 895 ms. It now has `stage-5/boot.js` and the same 1200 ms floor, and the deployed mobile median TBT is 59 ms [0–842] against 947 ms [884–1,040] at `?bootdelay=0`.
+17. **The 660 ms TBT tail is real and only partly explained.** Five consecutive warm-profile runs at `?bootdelay=1200` gave 109 / **650** / 23 / 29 / 24 ms, so it repeats; three cold-profile runs gave 90 / 108 / 72, so it is not a cold edge or a cold cache. The mechanism is read from `bootup-time` (the stage-8 module compile falls inside the TBT window when first paint is fast) and is not traced event by event. `?bootdelay=2500` did not reproduce it and was not adopted.
 
 ## Deploy
 
@@ -190,13 +217,12 @@ npx --yes netlify-cli@latest deploy --dir . --message "phase 4a"       # draft U
 npx --yes netlify-cli@latest deploy --dir . --prod --message "phase 4a" # production
 ```
 
-The source is pushed to https://github.com/kamushken/coffee-grinder-3d. That is the simpler route: import that repository in the Netlify UI, set build command empty and publish directory `.`, and every push to `main` deploys.
+**This is the route in use.** The source is pushed to https://github.com/kamushken/coffee-grinder-3d, the repository is imported in the Netlify UI with build command empty and publish directory `.`, and every push to `main` deploys. The CLI commands above are the manual alternative and were not used for the live site.
 
 - `sites:create` creates `.netlify/state.json`, which is gitignored.
 - `--dir .` matches `publish = "."` in `netlify.toml`. There is no build command, so the CLI uploads the files as they are on disk.
-- `.skills/`, `.tools/` and `.tmp/` are also on disk. As far as I know the CLI skips dot-directories when it uploads; I have not run it, so check that `<site>.netlify.app/.tools/env.sh` returns 404 after the deploy (last curl below). On the deployed site it is 404, and so are `/.skills/...` and `/.tmp/`.
-- **The checkout root is public.** `publish = "."` serves everything tracked outside a dot-directory: `/FACTS.md`, `/HANDOFF.md`, `/README.md`, `/LICENSE`, `/notes/direction.md`, `/tools/lh.py` and `/measurements/...` all return 200. Directory listings (`/tools/`, `/measurements/`) return 404, and `netlify.toml` returns 404. No secrets are in the published files (checked in `0625130`). This is recorded, not fixed; see UNCERTAIN 15.
-- Alternative: push the repo to a Git host and import it in the Netlify UI with build command empty and publish directory `.`. Only committed files are deployed that way.
+- `.skills/`, `.tools/` and `.tmp/` are on disk too. The Git route uploads only committed files, and all three are gitignored, so they are not there. Verified on the live site: `/.tools/env.sh` and `/.skills/…` both return 404.
+- **The checkout root is public, deliberately.** `publish = "."` serves everything tracked outside a dot-directory: `/FACTS.md`, `/HANDOFF.md`, `/README.md`, `/LICENSE`, `/notes/direction.md`, `/tools/lh.py` and `/measurements/…` all return 200. Directory listings (`/tools/`, `/measurements/`) return 404, and `netlify.toml` returns 404. No secrets are in the published files (checked in `0625130`). Since 4b the index footer links `/FACTS.md` and `/HANDOFF.md` as the lab notes, so this is now an intended part of the site; see UNCERTAIN 15.
 
 ### Post-deploy checks (they close UNCERTAIN 6)
 

@@ -58,18 +58,20 @@ Homebrew is not present on this machine.
 | `/stage-2/` | lighting: sky/sun presets with blending, fitted soft shadows, GTAO | frozen `6097ddf`, DPR fix `c6e169e` · `captures/stage-2.webp` |
 | `/stage-3/` | materials: per-family PBR rules, glass transmission, burr shader patch | frozen `9e68e6d`, DPR fix `c6e169e` · `captures/stage-3*.webp` |
 | `/stage-4/` | composition: rule-of-thirds, one camera flight, one profile sweep | frozen `907e87e`, DPR fix `c6e169e` · `captures/stage-4.webp` |
-| `/stage-5/` | motion: scroll-scrubbed film cut from our own stage-8 recording (scroll-film runtime), cursor-rig / alpha-cutout DOCUMENTED-NOT-RUN | frozen `97fc3fd`, DPR fix `c6e169e`, caption `ffc900c`, film rebuilt from `captures/stage-8-60fps.mp4` `8f74572` · `captures/stage-5*.webp`, `stage-5-scroll.mp4` |
+| `/stage-5/` | motion: scroll-scrubbed film cut from our own stage-8 recording (scroll-film runtime), cursor-rig / alpha-cutout DOCUMENTED-NOT-RUN | frozen `97fc3fd`, DPR fix `c6e169e`, caption `ffc900c`, film rebuilt from `captures/stage-8-60fps.mp4` `8f74572`, boot entry `boot.js` in 4b `3de6e2d` · `captures/stage-5*.webp`, `stage-5-scroll.mp4` |
 | `/stage-6/` | explainer: exploded-view of the burr assembly, x-ray, labels, picking | frozen `fd6b800`, DPR fix `c6e169e` · `captures/stage-6*.webp`, `stage-6-explode.mp4` |
 | `/stage-7/` | degradation: quality tiers, poster fallback, reduced motion, keyboard nav | frozen `d8817ea`, LCP fix `c74bff1` · `captures/stage-7*.webp` |
 | `/stage-8/` | final: stage 3 light + stage 4 composition + stage 6 explainer + stage 7 degradation | frozen `cf86b51` (+ record fix `6cee84a`, LCP fix `c74bff1`, 3.7: tier ladder `a79406d`, mobile deferred boot `b7c5437`, mobile fast default `26f74c1`; 3.8: dynamic import entry `boot.js` `457e36c`; 4a: `?bootdelay=<ms>` `4fc0d72`) · `captures/stage-8*.webp` |
 
 Phase 3.6 (UX only, scenes untouched): every stage page has prev/next links with stage titles (`3877b2e`); stage 0 has a visible "Compare with stage 8" note (`ebb05ac`); stages 1–4 and 6 have a CSS sky-to-ground background, so the page is never black before the first WebGL frame (`3c20c6d`). Details are in `FACTS.md` under "Phase 3.6".
 
-Phase 4a (pre-deploy, scenes untouched): the corner nav and prev/next are static HTML in every stage page, and the stage 0-4 captions are `<div>`, which removes the desktop CLS 0.032 (`7b893d3`). Stage 8 takes `?bootdelay=<ms>` (default 0): on the deferred (mobile) path the 3D import waits until at least `load + ms` (`4fc0d72`). `netlify.toml` publishes the root with no build and long immutable caching for `/vendor/*` and `/captures/*` (`6e2e566`). Deploy notes are in `HANDOFF.md`.
+Phase 4a (pre-deploy, scenes untouched): the corner nav and prev/next are static HTML in every stage page, and the stage 0-4 captions are `<div>`, which removes the desktop CLS 0.032 (`7b893d3`). Stage 8 takes `?bootdelay=<ms>`: on the deferred (mobile) path the 3D import waits until at least `load + ms` (`4fc0d72`). `netlify.toml` publishes the root with no build and long immutable caching for `/vendor/*` and `/captures/*` (`6e2e566`). Deploy notes are in `HANDOFF.md`.
 
-Deployed at https://coffee-grinder-3d.netlify.app (commit `aa836a6`). The live numbers differ from the local ones and the difference is the CDN: mobile Lighthouse on the edge is **83 / LCP 1.37 s / TBT 653 ms**, and **99 / 1.37 s / 105 ms** with `?bootdelay=1200`, against 62 / 6.31 s / 365 ms localhost, because three.js is served at 162 KB brotli instead of 687 KB. Desktop CLS is 0 in 5/5, and 0.00000 in 15 phone runs at 390/360/414 px. See `FACTS.md` under "PRODUCTION". The repository root is published as-is (docs, tools, measurements); dot-directories are not.
+Phase 4b (scenes untouched): `?bootdelay` now defaults to **1200** on the deferred path, in stage 8 and in stage 5. `?bootdelay=0` restores the old behaviour exactly, and the immediate path (desktop, reduced motion, `?record`, `?boot=now`) never reaches the floor. Stage 5 got a `boot.js` entry like stage 8's, so its 1.07 MB film fetch and its WebGL build both sit behind the floor instead of inside the load task (`3de6e2d`). The index footer links `/FACTS.md` as the lab notes. A stage-5 desktop CLS of 0.028, visible only on the deployed site, was traced to the caption's `--cap-h` being measured after first layout, and fixed by moving the caption and its script to the top of `<body>` (`d0597b2`).
 
-Stage 8 URL params (read in `stage-8/boot.js` and `stage-8/main.js`): `quality` (`poster`, `fast`, `balanced`, `high`), `boot=now` (skip the deferred boot), `bootdelay=<ms>`, `motion=reduce`, `ondemand=0`, `record`, plus `explode`, `xray`, `light`, `view` for the scene state.
+Deployed at https://coffee-grinder-3d.netlify.app (Phase 4b, deploy `d0597b2`). The live numbers differ from the local ones and the difference is the CDN. After 4b, stage 8 mobile is **100 / LCP 1.50 s / TBT 89 ms** and stage 5 mobile is **100 / LCP 1.11 s / TBT 59 ms**, against **83 / 683 ms** and **79 / 947 ms** with `?bootdelay=0`, and 62 / 6.31 s / 365 ms on localhost, because three.js is served at 162 KB brotli instead of 687 KB. Desktop CLS is 0.000 in 5/5 on both pages, and 0.00000 in 15 phone runs at 390/360/414 px. Both `[0–…]` TBT spreads are a real tail, reproduced 1 in 5 and analysed in `FACTS.md` PRODUCTION 11. See `FACTS.md` under "PRODUCTION". The repository root is published as-is (docs, tools, measurements), deliberately, since the footer links to it; dot-directories are not.
+
+Stage 8 and stage 5 URL params (read in each page's `boot.js` and `main.js`): `quality` (`poster`, `fast`, `balanced`, `high`), `boot=now` (skip the deferred boot), `bootdelay=<ms>` (default **1200** on the deferred path; 0 restores pre-4b), `motion=reduce`, `ondemand=0`, `record`, plus `explode`, `xray`, `light`, `view` for the scene state.
 
 Each stage is frozen once its capture is committed. Phase 3.5 lifted the freeze for bugfixes only (no art changes); each fix is its own commit, listed in `FACTS.md`. Shared code in `shared/` is frozen at the
 point the first stage using it is captured; later stages fork rather than edit.
@@ -88,15 +90,18 @@ needs for seeking.
 Deployed measurements can be repeated against the live site with the same tools:
 
 ```bash
-python3 tools/lh.py perf   --pages stage-8 --forms mobile,desktop --runs 5 --base https://coffee-grinder-3d.netlify.app
-python3 tools/lh.py perf   --pages stage-8 --forms mobile --runs 5 --base https://coffee-grinder-3d.netlify.app \
-                           --query '?bootdelay=1200' --tag bootdelay1200
+# the default is the 1200 ms floor since 4b
+python3 tools/lh.py perf   --pages stage-8,stage-5 --forms mobile,desktop --runs 5 --base https://coffee-grinder-3d.netlify.app
+# the control: the pre-4b behaviour, no floor at all
+python3 tools/lh.py perf   --pages stage-8,stage-5 --forms mobile --runs 5 --base https://coffee-grinder-3d.netlify.app \
+                           --query '?bootdelay=0' --tag bootdelay0
 python3 tools/cls_probe.py --pages stage-8,stage-5 --runs 5 --sizes 390x844@2
 ```
 
 `--base` tells `lh.py` to run the same warm-up + 5 protocol against a deployed origin instead of
-`127.0.0.1`. `tools/cls_probe.py` reads `layout-shift` entries from the page itself, so it reports the
-observed CLS rather than Lantern's model.
+`127.0.0.1`; `--query` appends a string to every URL and `--tag` keeps the two batches apart in
+`summary.json`. `tools/cls_probe.py` reads `layout-shift` entries from the page itself, so it reports
+the observed CLS rather than Lantern's model.
 
 ## License
 
