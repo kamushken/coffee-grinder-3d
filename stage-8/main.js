@@ -5,7 +5,8 @@
 // Shadow: env.js frustum sizing is kept unchanged. The straight shadow edge right of the tray
 // (logged as a stage-4 "cut-off" defect) was measured in stage 8 to be the tray's own cast
 // shadow at 9° sun elevation, not frustum clipping (notes/direction.md, stage 8).
-// Not included: the stage-5 scroll film (its footage is an electric motor, not this grinder).
+// Not included: the stage-5 scroll film. It is an intro beat with its own scroll section, and
+// repeating it here would double the same camera move.
 // Phase 3.8: this module is no longer the page's entry script. stage-8/boot.js (no static
 // imports) decides poster / deferred / immediate boot, probes WebGL 2, then dynamic-imports this
 // file and calls start(). Everything below is loaded only when 3D will actually start.

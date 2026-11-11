@@ -35,11 +35,16 @@ const film = new ScrollFilm({
   onReady: () => { filmReady = true; document.body.classList.add('film-ready'); },
 });
 
-// The stage caption is fixed over the bottom of the page. Reserve its height inside the pinned
-// frame, so the film and the beat always sit above it whatever the caption's size is.
+// The stage caption is fixed over the bottom of the page on wide viewports. Reserve its height
+// inside the pinned frame, so the film and the beat sit above it. On narrow viewports the CSS puts
+// the caption in the flow instead (under the canvas), so nothing has to be reserved.
 const cap = document.querySelector('.caption');
-const setCapH = () => document.documentElement.style.setProperty('--cap-h', `${cap.offsetHeight}px`);
-new ResizeObserver(setCapH).observe(cap); setCapH();
+const setCapH = () => {
+  const inFlow = getComputedStyle(cap).position === 'static';
+  document.documentElement.style.setProperty('--cap-h', inFlow ? '0px' : `${cap.offsetHeight}px`);
+};
+new ResizeObserver(setCapH).observe(cap);
+addEventListener('resize', setCapH); setCapH();
 
 // --- live scene (stage 4, unchanged) ---------------------------------------------------------
 const canvas = document.getElementById('gl');
