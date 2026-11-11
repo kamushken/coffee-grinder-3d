@@ -61,6 +61,27 @@
   </style>
 </head>
 <body>
+  <!-- The fixed caption goes first in the document, so its height is measurable before anything is
+       laid out or painted. The pinned frame reserves that height with padding-bottom: var(--cap-h)
+       and the column is centred, so a value applied later moves the film and the beat: measured
+       DIV.beats 1058 -> 571 px, CLS 0.02775 on 1350. Position is fixed, so document order has no
+       effect on where it is drawn or on the tab order (the source order matches the reading order).
+       This classic script runs during parsing; main.js keeps a ResizeObserver for later changes. -->
+  <div class="caption"><b>Stage 5 — motion.</b> A scroll-scrubbed intro built with the scroll-film engine (<code>scroll-film.js</code>, video mode). Source: our own 60 fps recording of stage 8 (<code>captures/stage-8-60fps.mp4</code>, frame-capture <code>record.py</code>), cut to 0–10 s and run through <code>prep.py video</code> at 800 px, 15 fps, GOP 4, no B-frames. <span class="dnr">Generating footage (motion-assets / scroll-film keyframes and legs): DOCUMENTED-NOT-RUN, no paid API calls.</span> Below the film: the stage-4 scene, with a flight that starts when the scene scrolls into view.
+    <details><summary>Sub-sections not run</summary>
+      <span class="dnr">cursor-rig: DOCUMENTED-NOT-RUN.</span> It needs a painted character plus 2–8 image-to-video head-turn clips. There is no character in this brief, and the clips would be paid generation.<br>
+      <span class="dnr">alpha-cutout: DOCUMENTED-NOT-RUN.</span> It needs a clip generated on a chroma plate. The film is a render with an opaque sky and ground, so there is nothing to key.
+    </details>
+    <button data-light="morning">morning</button><button data-light="golden">golden</button><button data-light="night">night</button><nav class="prevnext" aria-label="Previous and next stage"><a href="/stage-4/" rel="prev" class="prev">← Stage 4 · composition</a><a href="/stage-6/" rel="next" class="next">Stage 6 · explainer →</a></nav></div>
+  <script>
+    (() => {
+      const c = document.querySelector('.caption');
+      if (!c) return;
+      if (getComputedStyle(c).position === 'static') return;   // narrow layout: nothing reserved
+      document.documentElement.style.setProperty('--cap-h', `${c.offsetHeight}px`);
+    })();
+  </script>
+
   <canvas id="gl" aria-label="The coffee grinder on a walnut tray at golden hour, revealed after the scroll film. Drag to orbit."></canvas>
   <nav class="stages" aria-label="Stages"><a href="/">home</a><a href="/stage-0/" aria-label="Stage 0">0</a><a href="/stage-1/" aria-label="Stage 1">1</a><a href="/stage-2/" aria-label="Stage 2">2</a><a href="/stage-3/" aria-label="Stage 3">3</a><a href="/stage-4/" aria-label="Stage 4">4</a><a href="/stage-5/" aria-label="Stage 5" aria-current="page">5</a><a href="/stage-6/" aria-label="Stage 6">6</a><a href="/stage-7/" aria-label="Stage 7">7</a><a href="/stage-8/" aria-label="Stage 8">8</a></nav>
 
@@ -77,27 +98,6 @@
     </div>
   </section>
   <section class="live" aria-label="Live three.js grinder"></section>
-
-  <div class="caption"><b>Stage 5 — motion.</b> A scroll-scrubbed intro built with the scroll-film engine (<code>scroll-film.js</code>, video mode). Source: our own 60 fps recording of stage 8 (<code>captures/stage-8-60fps.mp4</code>, frame-capture <code>record.py</code>), cut to 0–10 s and run through <code>prep.py video</code> at 800 px, 15 fps, GOP 4, no B-frames. <span class="dnr">Generating footage (motion-assets / scroll-film keyframes and legs): DOCUMENTED-NOT-RUN, no paid API calls.</span> Below the film: the stage-4 scene, with a flight that starts when the scene scrolls into view.
-    <details><summary>Sub-sections not run</summary>
-      <span class="dnr">cursor-rig: DOCUMENTED-NOT-RUN.</span> It needs a painted character plus 2–8 image-to-video head-turn clips. There is no character in this brief, and the clips would be paid generation.<br>
-      <span class="dnr">alpha-cutout: DOCUMENTED-NOT-RUN.</span> It needs a clip generated on a chroma plate. The film is a render with an opaque sky and ground, so there is nothing to key.
-    </details>
-    <button data-light="morning">morning</button><button data-light="golden">golden</button><button data-light="night">night</button><nav class="prevnext" aria-label="Previous and next stage"><a href="/stage-4/" rel="prev" class="prev">← Stage 4 · composition</a><a href="/stage-6/" rel="next" class="next">Stage 6 · explainer →</a></nav></div>
-
-  <!-- The height of the fixed caption has to be known BEFORE the first paint. The pinned frame
-       reserves it with padding-bottom: var(--cap-h), and the column is centred, so a value applied
-       after paint moves the film and the beats: DIV.beats jumped 812 -> 531 px, CLS 0.02775 on 1440.
-       This classic (non-deferred) script runs as soon as the caption exists, so the variable is set
-       during parsing. main.js keeps a ResizeObserver for later changes (fonts, rotation, resize). -->
-  <script>
-    (() => {
-      const c = document.querySelector('.caption');
-      if (!c) return;
-      if (getComputedStyle(c).position === 'static') return;   // narrow layout: nothing reserved
-      document.documentElement.style.setProperty('--cap-h', `${c.offsetHeight}px`);
-    })();
-  </script>
 
   <script type="module" src="/shared/shell.js"></script>
   <script type="module" src="/shared/goatcounter.js"></script>
