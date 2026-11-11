@@ -202,13 +202,65 @@ The dynamic import did what you asked: the entry script has no static imports, t
 | boot_test `?bootdelay=1200` | import ≥ load + 1200 in deferred paths, fallbacks intact | 0 early starts; all fallbacks pass; 0 errors | PASS |
 | Mobile targets (≥ 80, ≤ 3.0 s, ≤ 300 ms) | from 3.8 | not re-measured in 4a; 3.8 values stand: 62 / 6.31 s / 365 ms | **FAIL** (unchanged) |
 
+## Stage 5 rebuilt: the film is our own stage-8 recording (`8f74572`)
+
+**The change.**
+- Source: `captures/stage-8-60fps.mp4` (frame-capture `record.py`, `?record=1`, no UI chrome, 1920×1080, 60 fps, 12 s), trimmed to 0–10 s.
+- `prep.py video --width 800 --fps 15 --gop 4` → `stage-5/film/grinder.mp4`:
+  - **1,095,473 B** (target < 1.3 MB);
+  - 800×450, 150 frames, 10.0 s;
+  - no B-frames, an I-frame every 4 (checked with ffprobe).
+- Poster: frame 62, the hero vantage, 7,498 B.
+- The motor film (`motor.mp4`, 1,265,171 B) is removed.
+- Keys over 600vh: `[0,7] [0.08,7] [0.3,62] [0.42,62] [0.42,82] [0.72,142] [1,142]`. These give front hold / flight / hero hold / explode / final hold, at your progress ranges.
+  - The frame numbers come from measured frame-to-frame differences of the encoded film. Frames 0–7 and 62–82 are still: ≤ 0.82/255 against the first frame of each run.
+- Four captions, in your wording. The note above the film is your exact sentence.
+- `fit: contain`. Reduced motion is the engine's `"steps"`, unchanged.
+- In portrait the film is pinned to the top of the frame, with the caption under it. Centred, half of it sat under the fixed stage caption at 390 px.
+- The live scene below is unchanged.
+
+**Film probe** (`tools/film_probe.py` → `measurements/phase-5r/film-probe.json`)
+- Setup: Chromium + WebKit × 1440×900 / 768×1024 / 390×844@2, scrolled to the middle of each beat.
+- Frame shown: 7 / 34–35 / 62 / 112 / 142 in all six runs.
+- The right caption is on in every sample.
+- Reduced motion (Chromium 1440): 7 / 62 / 62 / 82 / 142, key frames only.
+- 0 page errors.
+
+**site-check stage 5** (`check.py`, 3.7-patched, `--browser both --widths 1440,768,390 --scroll-steps 4 --ready "window.__ready === true"`; `measurements/site-check/stage-5-report.json`)
+- 16 shots, **0 with problems**, 0 errors, 0 blank canvases, no overflow.
+- Ready in 0.35–0.74 s.
+- 0 calls while the film covers the scene; 218 calls at scroll 1.0 (the live scene).
+- Contact sheet viewed: the caption and the hold are correct at 0 / 0.33 / 0.67, and the live scene shows at 1.0.
+
+**Frame time, live part** (`tools/frametime.py --engines chromium-uncapped,webkit --stages 5 --warmup`; `measurements/phase-5r/frametime-stage-5.json`)
+
+| | 3.5 | now |
+|---|---|---|
+| Chromium uncapped 1440 / 768 / 390@2 | 8.44 / 5.17 / 7.99 ms | 8.75 / 5.54 / 8.59 ms |
+| WebKit (60 Hz cap) | 16.67 ×3 | 16.67 ×3 |
+| calls / triangles | 218 / 103,556 | 218 / 103,556 |
+
+The live scene is the same code. I read the 0.3–0.6 ms difference as run-to-run variation; I did not test it with repeated runs.
+
+**Page weight** (`tools/weigh.py`; `measurements/phase-5r/weight-{chromium,webkit}.json`; 1440×900, decoded bodies until ready + 2 s)
+
+| | 3.5 | now |
+|---|---|---|
+| Chromium | 32 req, 2,143,671 B (video 1,265,171) | 32 req, **1,972,842 B** (video 1,095,473, poster 7,498, three 807,195) |
+| WebKit | 100 req, 2,161,894 B | 106 req, 2,013,743 B. WebKit issues extra Range requests for the video |
+| console / blank canvases | 0 / 0 | 0 / 0 |
+
+**Captures updated:**
+- `captures/stage-5.webp` (48,356 B, the front hold with caption 1);
+- `captures/stage-5-scroll.mp4` (`record.py --fps 8 --seconds 20 --scroll "0:0 18:100%"`, "no page errors", 480 px, 82,050 B).
+
 ## Skills: what actually ran
 
 | Skill | Status | Evidence |
 |---|---|---|
 | threejs-scene | RAN (starter `env.js`, `kit.js` copied verbatim into `lib/open-3d-skills/`) | stages 2–8 |
 | exploded-view | RAN (`explode.js` verbatim) | stages 6, 8 |
-| scroll-film | runtime RAN (`scroll-film.js` verbatim, `prep.py video`); **generation DOCUMENTED-NOT-RUN** | stage 5 uses the repo's own example footage (an electric motor) |
+| scroll-film | runtime RAN on our own recording (`scroll-film.js` verbatim, `prep.py video` on `captures/stage-8-60fps.mp4`); **generation still DOCUMENTED-NOT-RUN** | stage 5, `stage-5/film/grinder.mp4`. Until `8f74572` it ran on the repo's example footage (an electric motor) |
 | site-check | RAN (`check.py`, unmodified until 3.7, then one local patch, see SKILL BUGS) | `measurements/site-check/` |
 | frame-capture | RAN (`record.py`, `compare.py`, `serve.py`, unmodified; `--crf 26` in 3.7) | `captures/*-60fps.mp4`, `captures/compare-0-vs-8.mp4` |
 | motion-assets | **DOCUMENTED-NOT-RUN** (paid generation API). A text-only plan for grinder footage is in `notes/direction.md` (stage 5) | — |
@@ -495,9 +547,9 @@ Lighting and material parameters are the values in code; full tables with reason
 - Frame (3.5): 8.12 / 5.38 / 8.00 ms (390@2 was 15.90). 218 calls, 103,556 tris. 854,321 B. 0 console, 0 blank.
 - FOV 38 (fitFov), hero dir (0.42, 0.17, 1) at 0.74 m, thirds via setViewOffset, flight 2.8 s. Tray: kit.js sweep 0.34 × 0.22 m.
 
-### Stage 5 — motion (`97fc3fd`, DPR fix `c6e169e`, caption `ffc900c`)
-- Frame (live part, 3.5): 8.44 / 5.17 / 7.99 ms. While the film is on screen GL is paused (0 calls). 2,143,671 B (video 1,265,171). 0 console, 0 blank.
-- **Footage: the only local image sequence in the skills repo is `examples/motor-take-apart.webp`, an electric motor. The scroll-film technique is object-agnostic; the object on screen is not the grinder.** 129 frames → `prep.py video`, 15 fps, GOP 4, 600vh. How grinder footage would be generated (asset list, one look, cost calibration) is written up in `notes/direction.md`, text only. Generation, cursor-rig and alpha-cutout: DOCUMENTED-NOT-RUN.
+### Stage 5 — motion (`97fc3fd`, DPR fix `c6e169e`, caption `ffc900c`, film rebuilt `8f74572`)
+- Frame (live part, rebuild): 8.75 / 5.54 / 8.59 ms (3.5: 8.44 / 5.17 / 7.99). While the film is on screen GL is paused (0 calls). 1,972,842 B (video 1,095,473). 0 console, 0 blank.
+- **Footage since `8f74572`: our own stage-8 recording**, 0–10 s, 800 px, 15 fps, GOP 4, 150 frames, 600vh. Before that it was the skills repo's `examples/motor-take-apart.webp` (an electric motor); see "Stage 5 rebuilt" above. Generation, cursor-rig and alpha-cutout: DOCUMENTED-NOT-RUN.
 
 ### Stage 6 — explainer (`fd6b800`, DPR fix `c6e169e`)
 - Frame (3.5): 9.40 / 5.97 / 8.93 ms (390@2 was 16.83). 218 calls assembled, 216 exploded. 870,632 B. 0 console, 0 blank.

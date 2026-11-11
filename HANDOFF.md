@@ -19,7 +19,7 @@ The site must be served from the domain root, because every URL in the pages is 
 | 2 | `https://<site>.netlify.app/stage-2/` | lighting: sky/sun presets with blending, fitted soft shadows, GTAO |
 | 3 | `https://<site>.netlify.app/stage-3/` | materials: per-family PBR rules, glass transmission, burr shader patch |
 | 4 | `https://<site>.netlify.app/stage-4/` | composition: rule of thirds, one camera flight, one profile sweep |
-| 5 | `https://<site>.netlify.app/stage-5/` | motion: scroll-scrubbed film (scroll-film runtime; the footage is the skills repo's electric motor, not the grinder) |
+| 5 | `https://<site>.netlify.app/stage-5/` | motion: scroll-scrubbed film cut from our own stage-8 recording (scroll-film runtime), then the live scene |
 | 6 | `https://<site>.netlify.app/stage-6/` | explainer: exploded view of the burr assembly, x-ray, labels, picking |
 | 7 | `https://<site>.netlify.app/stage-7/` | degradation: quality tiers, poster fallback, reduced motion, keyboard nav |
 | 8 | `https://<site>.netlify.app/stage-8/` | final: stage 3 light, stage 4 composition, stage 6 explainer and stage 7 degradation together |
@@ -56,9 +56,9 @@ All stills are Chromium, WebP q82. Each still's capture JSON is `measurements/<n
 | `stage-3.webp` | 1440×900, 35,874 B | Stage 3: material families (brushed steel, walnut, glass hopper with transmission). |
 | `stage-3-burr-patch.webp` | 800×560, 10,912 B | Close-up of the one shader patch, the burr highlight (`tools/burr-closeup.html`). |
 | `stage-4.webp` | 1440×900, 36,294 B | Stage 4: rule-of-thirds composition on the walnut tray, hero view after the flight. |
-| `stage-5.webp` | 1440×900, 51,758 B | Stage 5 scroll film on screen (an electric motor taking itself apart, from the skills repo; not the grinder). |
+| `stage-5.webp` | 1440×900, 48,356 B | Stage 5 scroll film at the front hold: frame from our stage-8 recording, first caption, note above the film. |
 | `stage-5-live.webp` | 1440×900, 44,216 B | Stage 5 after the film: the live three.js grinder below it. |
-| `stage-5-scroll.mp4` | 480×300, 20 s, 56,443 B | Stage 5 scrolled top to bottom: the film scrubbing, then the live scene. |
+| `stage-5-scroll.mp4` | 480×270, 20 s, 82,050 B | Stage 5 scrolled top to bottom: front → flight → hero → explode in the film, then the live scene. |
 | `stage-6.webp` | 1440×900, 50,246 B | Stage 6 fully exploded (`?explode=1`): burr assembly apart, body x-rayed, labels on. |
 | `stage-6-assembled.webp` | 1440×900, 52,638 B | Stage 6 assembled, explode at 0. |
 | `stage-6-explode.mp4` | 640×400, 7 s, 53,387 B | Stage 6 explode slider going from 0 to 1: crank, hopper, ring and burrs separating. |
@@ -72,7 +72,7 @@ All stills are Chromium, WebP q82. Each still's capture JSON is `measurements/<n
 
 Other shipped media that is not in `captures/`:
 - `stage-7/poster-wide.webp` (48,994 B) and `stage-7/poster-tall.webp` (49,312 B): the LCP poster for stages 7 and 8;
-- `stage-5/film/motor.mp4` (1,265,171 B) and `stage-5/film/poster.webp`: the scroll-film source.
+- `stage-5/film/grinder.mp4` (1,095,473 B) and `stage-5/film/poster.webp` (7,498 B): the scroll film, cut from `captures/stage-8-60fps.mp4`.
 
 ## Numbers (from `FACTS.md`)
 
@@ -97,7 +97,7 @@ Each figure is from 1 discarded warm-up + 5 runs; median [min–max]. The LCP el
 - Stage 8, Retina 1440@2, balanced tier pinned: **12.10 ms** [12.08–12.17]. Threshold ≤ 16.7 ms: PASS.
 - Stage 8 Retina, auto-tier steady state at 8 s: 8.71 ms. It settles on balanced.
 - Stage 8 Retina, high tier pinned: 38.72 ms. Informational only.
-- Stages 2–8, uncapped, at 1440@1 / 768@1 / 390@2: max **9.40 ms** (stage 6 at 1440).
+- Stages 2–8, uncapped, at 1440@1 / 768@1 / 390@2: max **9.40 ms** (stage 6 at 1440). Stage 5 live part after the film rebuild: 8.75 / 5.54 / 8.59 ms.
 - Draw calls max **218**, triangles **103,556**. At 390 (fast tier): 142 / 64,452.
 
 ### Weight
@@ -106,12 +106,13 @@ Each figure is from 1 discarded warm-up + 5 runs; median [min–max]. The LCP el
 |---|---|
 | Stage 8 page, measured in 3.5 | 928,418 B, of which three.js + addons are 807,195 |
 | Stage 7 page | 913,449 B |
+| Stage 5 page (film rebuild) | 1,972,842 B, of which the film is 1,095,473 |
 | Posters, wide / tall | 48,994 / 49,312 B |
 
 ### Checks
 
 - Accessibility (Lighthouse): **100 on all 10 pages** (4a).
-- site-check: 0 problems on stage 8 (16 shots, 2 engines × 3 widths × 2 query sets + reduced motion) and on stages 0, 2–7 and the index.
+- site-check: 0 problems on stage 8 (16 shots, 2 engines × 3 widths × 2 query sets + reduced motion), on stage 5 after the film rebuild (16 shots, `--scroll-steps 4`) and on stages 0, 2–4, 6, 7 and the index.
 - boot_test: 26/26 original cases + 2 import-failure cases pass, 0 page errors.
   - `?bootdelay=0` matches 3.8 on every behavioural field.
   - At `?bootdelay=1200`, every deferred import starts at ≥ load + 1200 ms.
@@ -122,7 +123,7 @@ Each figure is from 1 discarded warm-up + 5 runs; median [min–max]. The LCP el
 | Skill | Status |
 |---|---|
 | threejs-scene, exploded-view, site-check, frame-capture | RAN |
-| scroll-film | runtime RAN; footage generation DOCUMENTED-NOT-RUN |
+| scroll-film | runtime RAN on our own stage-8 recording; footage generation DOCUMENTED-NOT-RUN |
 | motion-assets, alpha-cutout, cursor-rig | DOCUMENTED-NOT-RUN (they need paid generation) |
 
 One skill bug was found and patched locally: site-check `--scroll-steps` raises ZeroDivisionError. The details are in `FACTS.md` under SKILL BUGS and in `measurements/phase-3.7/check-py.patch`.
@@ -182,7 +183,7 @@ curl -sI "$S/captures/stage-8.webp" | grep -i '^cache-control'
 # HTML must NOT be immutable (expect Netlify's default max-age=0, must-revalidate)
 curl -sI "$S/stage-8/" | grep -i '^cache-control'
 # the video needs Range for stage 5 seeking (expect HTTP 206)
-curl -s -o /dev/null -w '%{http_code}\n' -H 'Range: bytes=0-99' "$S/stage-5/film/motor.mp4"
+curl -s -o /dev/null -w '%{http_code}\n' -H 'Range: bytes=0-99' "$S/stage-5/film/grinder.mp4"
 # nothing private uploaded (expect 404)
 curl -s -o /dev/null -w '%{http_code}\n' "$S/.tools/env.sh"
 ```

@@ -58,7 +58,7 @@ Homebrew is not present on this machine.
 | `/stage-2/` | lighting: sky/sun presets with blending, fitted soft shadows, GTAO | frozen `6097ddf`, DPR fix `c6e169e` · `captures/stage-2.webp` |
 | `/stage-3/` | materials: per-family PBR rules, glass transmission, burr shader patch | frozen `9e68e6d`, DPR fix `c6e169e` · `captures/stage-3*.webp` |
 | `/stage-4/` | composition: rule-of-thirds, one camera flight, one profile sweep | frozen `907e87e`, DPR fix `c6e169e` · `captures/stage-4.webp` |
-| `/stage-5/` | motion: scroll-scrubbed intro (scroll-film), cursor-rig / alpha-cutout DOCUMENTED-NOT-RUN | frozen `97fc3fd`, DPR fix `c6e169e`, caption `ffc900c` · `captures/stage-5*.webp`, `stage-5-scroll.mp4` |
+| `/stage-5/` | motion: scroll-scrubbed film cut from our own stage-8 recording (scroll-film runtime), cursor-rig / alpha-cutout DOCUMENTED-NOT-RUN | frozen `97fc3fd`, DPR fix `c6e169e`, caption `ffc900c`, film rebuilt from `captures/stage-8-60fps.mp4` `8f74572` · `captures/stage-5*.webp`, `stage-5-scroll.mp4` |
 | `/stage-6/` | explainer: exploded-view of the burr assembly, x-ray, labels, picking | frozen `fd6b800`, DPR fix `c6e169e` · `captures/stage-6*.webp`, `stage-6-explode.mp4` |
 | `/stage-7/` | degradation: quality tiers, poster fallback, reduced motion, keyboard nav | frozen `d8817ea`, LCP fix `c74bff1` · `captures/stage-7*.webp` |
 | `/stage-8/` | final: stage 3 light + stage 4 composition + stage 6 explainer + stage 7 degradation | frozen `cf86b51` (+ record fix `6cee84a`, LCP fix `c74bff1`, 3.7: tier ladder `a79406d`, mobile deferred boot `b7c5437`, mobile fast default `26f74c1`; 3.8: dynamic import entry `boot.js` `457e36c`; 4a: `?bootdelay=<ms>` `4fc0d72`) · `captures/stage-8*.webp` |

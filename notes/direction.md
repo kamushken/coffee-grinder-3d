@@ -184,34 +184,57 @@ Measured (Chromium 1440x900, `measurements/stage-4-capture.json`): 8.39 ms/frame
 
 ## Stage 5 — motion (as built)
 
-Follows scroll-film SKILL.md "Build" steps 2–4, applied to existing footage. No legs were
+Follows scroll-film SKILL.md "Build" steps 2–4, applied to a clip we already had. No legs were
 generated.
+
+**Source, since the rebuild (`8f74572`): our own recording of stage 8.** The film is
+`captures/stage-8-60fps.mp4` (frame-capture `record.py`, `?record=1`, no UI chrome, 1920×1080,
+60 fps, 12 s), so the film shows this grinder, lit and composed as on stage 8.
+
+**Why the motor was dropped.** The first build used the skills repo's
+`examples/motor-take-apart.webp` (129 frames of an electric motor), because it was the only local
+image sequence and generation was out of scope. It proved the engine worked. But the page then
+showed a different object from every other stage, and the caption had to explain that. Our own
+stage-8 recording is the same kind of clip the engine is built for (a fixed camera path rendered
+in advance). It needs no paid generation, and it makes the film part of the lab's story: stage 0's
+frame → one camera move → the hero frame → the exploded view. The motor file
+(`stage-5/film/motor.mp4`, 1,265,171 B) is removed.
 
 | Item | Value |
 |---|---|
-| Source | `.skills/open-3d-skills/examples/motor-take-apart.webp`: 129 frames, 800×480, every alpha pixel 255. Pillow reports a 67 ms frame duration (some frames return None). It shows an electric motor, not the grinder. It is the only local sequence in the repo examples |
-| Extraction | Pillow → 129 PNGs, flattened on `#d9b48f` (no effect, since the alpha is opaque) → lossless x264 leg at 15 fps (`.tmp/s5/leg.mp4`, 129 frames, checked with ffprobe `nb_read_frames`) |
-| Shipped | `prep.py video .tmp/s5/leg.mp4 stage-5/film/motor.mp4 --width 800 --fps 15 --gop 4` → 1,265,171 B, 129 frames, 8.6 s. Poster: frame 0, `stage-5/film/poster.webp`, 12,894 B |
-| Rejected | `prep.py frames` at lg 800 px: 1.7 MB, 13 kB/frame. At sm 480 px: 0.7 MB. Video is smaller than lg. Frames would be more exact, but the 129-frame film is short enough that GOP-4 seeks land on the key frames in both engines (checked: `film.shown` = 0/40/72/128 at every hold, Chromium and WebKit) |
-| Section | 600vh (SKILL.md: "one viewport of scroll per second of film"; the film is 8.6 s, and holds take up the rest) |
-| Keys | `[0,0] [0.1,0] [0.3,40] [0.42,40] [0.55,72] [0.67,72] [0.9,128] [1,128]`: four holds, one caption per hold |
-| Fit | `contain` (the source has a baked title and labels at the edges; `cover` crops them on phones) |
-| Reduced motion | engine default `"steps"`: it jumps between key frames |
-| Live scene | the stage-4 scene below the film. GL renders only while `.live` intersects; the flight fires once, at 50 % visibility. Pointer events and orbit only when ≥ 90 % visible, so scrolling never gets captured by OrbitControls |
+| Source | `captures/stage-8-60fps.mp4`. The record choreography is a front still to 0.5 s, the front → hero flight from 0.5 to 4.1 s, a hero still to 5.5 s, the explode from 5.5 to 9.5 s, then a hold |
+| Trim | `ffmpeg -t 10` → near-lossless intermediate (`.tmp/s5/trim.mp4`, crf 10) |
+| Shipped | `prep.py video .tmp/s5/trim.mp4 stage-5/film/grinder.mp4 --width 800 --fps 15 --gop 4` → **1,095,473 B** (target < 1.3 MB), 800×450, 150 frames, 10.0 s, no B-frames, I-frame every 4 (ffprobe `pict_type`: `IPPPIPPP…`) |
+| Poster | frame 62 (the hero vantage, the first frame after the flight settles), `stage-5/film/poster.webp`, 800×450, q80, 7,498 B. It is the CSS background of the film frame, so the first paint is the film |
+| Frame map | mean absolute difference between neighbouring frames: frames 0–7 and 62–82 are still (≤ 0.82/255 against the first frame of the run, encoder noise), 7–62 is the flight, 82–142 the explode, 142–149 the end hold |
+| Section | 600vh |
+| Keys | `[0,7] [0.08,7] [0.3,62] [0.42,62] [0.42,82] [0.72,142] [1,142]`. 0–0.08 front hold · 0.08–0.30 flight · 0.30–0.42 hero hold · 0.42–0.72 explode · 0.72–1.00 final hold. Frames 62 and 82 show the same picture, so the step at 0.42 is invisible: it skips the recording's own 1.3 s hero still |
+| Captions | four, one per beat: front hold, flight, hero hold, then "The same scroll drives the exploded view." from 0.42 to the end (explode + final hold). They sit top-left on the film; in portrait they sit just below it |
+| Note above the film | the given sentence, in a dark strip at the top of the pinned frame |
+| Fit | `contain`. Landscape: centred. Portrait: `focus [0.5, 0]` pins the film to the top of the frame (in the middle, half of it sat under the fixed stage caption on a 390 px screen) |
+| Reduced motion | engine default `"steps"` (unchanged): it jumps to the nearest key frame (7, 62, 82, 142) |
+| Live scene | unchanged: the stage-4 scene below the film |
 
-**Phones (SKILL.md "Phones").** The 16:9 film is letterboxed (`contain`) on a 390 px portrait
-screen. The subject stays whole but small. A portrait leg set would need generation:
-DOCUMENTED-NOT-RUN.
+**Check (`tools/film_probe.py` → `measurements/phase-5r/film-probe.json`).**
+- Scrolled to the middle of each beat (0.04, 0.19, 0.36, 0.57, 0.86) in Chromium and WebKit at 1440×900, 768×1024 and 390×844@2.
+- The frame shown is 7 / 34–35 / 62 / 112 / 142 at every size in both engines.
+- The caption that is on matches the beat every time.
+- With reduced motion, Chromium 1440 shows only key frames: 7 / 62 / 62 / 82 / 142.
+- 0 page errors.
 
-**Pacing check.** `record.py ... --fps 8 --seconds 20 --scroll "0:0 18:100%"` → 160 frames,
-"no page errors". Re-encoded to `captures/stage-5-scroll.mp4` (480 px, 56,443 B).
+**Pacing check.** `record.py stage-5 --fps 8 --seconds 20 --scroll "0:0 18:100%"` → 160 frames,
+"no page errors". Re-encoded to `captures/stage-5-scroll.mp4` (480 px, crf 28, 82,050 B).
 
-**Grinder footage, if generated (text only, no API call; motion-assets SKILL.md "Before spending anything" / "One look" / "Generation order"):** asset list = 1 hero still of the stage-8 hero frame + 4 keyframe stills (assembled, crank off, hopper and ring off, burrs apart) + 3 start/end-anchored clips chained between them (each anchored on the extracted last frame of the previous one, one video model for the whole chain, "locked-off camera; the tray, background and lighting stay perfectly still"); one look = a style preamble built from this file's palette and golden-hour light, prepended byte-for-byte to every prompt, with the approved hero still as the style reference for the rest; cost = unknown until calibrated: one still and one short clip first, read the charge, estimate the rest from that (the skill says never to quote a price from memory), then get a yes before generating. Every prompt, job id and cost would go in `prompts/asset-prompts.md`.
+**Phones.** The 16:9 film is letterboxed. At 390 px it is 390×219 px at the top of the frame. A
+portrait version would need a second recording at a portrait size (`record.py --size 1080x1920`);
+not done.
+
+**Grinder footage, if generated (still text only; the film no longer needs it. No API call; motion-assets SKILL.md "Before spending anything" / "One look" / "Generation order"):** asset list = 1 hero still of the stage-8 hero frame + 4 keyframe stills (assembled, crank off, hopper and ring off, burrs apart) + 3 start/end-anchored clips chained between them (each anchored on the extracted last frame of the previous one, one video model for the whole chain, "locked-off camera; the tray, background and lighting stay perfectly still"); one look = a style preamble built from this file's palette and golden-hour light, prepended byte-for-byte to every prompt, with the approved hero still as the style reference for the rest; cost = unknown until calibrated: one still and one short clip first, read the charge, estimate the rest from that (the skill says never to quote a price from memory), then get a yes before generating. Every prompt, job id and cost would go in `prompts/asset-prompts.md`.
 
 **DOCUMENTED-NOT-RUN:** motion-assets (no paid generation), scroll-film generation (keyframes,
 legs, `prep.py seams`: there is only one leg, so seams has nothing to score), cursor-rig (no
-painted character, needs 2–8 paid image-to-video clips), alpha-cutout (the footage is opaque,
-there is no chroma plate).
+painted character, needs 2–8 paid image-to-video clips), alpha-cutout (the film is a render with
+an opaque sky and ground; there is no chroma plate).
 
 ## Stage 6 — explainer (as built)
 

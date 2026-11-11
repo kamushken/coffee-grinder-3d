@@ -1,0 +1,513 @@
+[
+ {
+  "engine": "chromium",
+  "size": "1440x900@1",
+  "reduced": false,
+  "rows": [
+   {
+    "progress": 0.04,
+    "shown": 7,
+    "frame": 7,
+    "count": 150,
+    "on": [
+     "Front, no composition. The same frame stage 0 gave you."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.04
+   },
+   {
+    "progress": 0.19,
+    "shown": 35,
+    "frame": 34.5,
+    "count": 150,
+    "on": [
+     "One camera move, three seconds. Nothing else changes."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.19
+   },
+   {
+    "progress": 0.36,
+    "shown": 62,
+    "frame": 62,
+    "count": 150,
+    "on": [
+     "The hero vantage. Now the frame is a decision, not a default."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.36
+   },
+   {
+    "progress": 0.57,
+    "shown": 112,
+    "frame": 112,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.57
+   },
+   {
+    "progress": 0.86,
+    "shown": 142,
+    "frame": 142,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.86
+   }
+  ],
+  "errors": []
+ },
+ {
+  "engine": "chromium",
+  "size": "768x1024@1",
+  "reduced": false,
+  "rows": [
+   {
+    "progress": 0.04,
+    "shown": 7,
+    "frame": 7,
+    "count": 150,
+    "on": [
+     "Front, no composition. The same frame stage 0 gave you."
+    ],
+    "noteBottom": 104,
+    "canvasTop": 104,
+    "canvasH": 920,
+    "sample": 0.04
+   },
+   {
+    "progress": 0.19,
+    "shown": 35,
+    "frame": 34.51,
+    "count": 150,
+    "on": [
+     "One camera move, three seconds. Nothing else changes."
+    ],
+    "noteBottom": 104,
+    "canvasTop": 104,
+    "canvasH": 920,
+    "sample": 0.19
+   },
+   {
+    "progress": 0.36,
+    "shown": 62,
+    "frame": 62,
+    "count": 150,
+    "on": [
+     "The hero vantage. Now the frame is a decision, not a default."
+    ],
+    "noteBottom": 104,
+    "canvasTop": 104,
+    "canvasH": 920,
+    "sample": 0.36
+   },
+   {
+    "progress": 0.57,
+    "shown": 112,
+    "frame": 111.98,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 104,
+    "canvasTop": 104,
+    "canvasH": 920,
+    "sample": 0.57
+   },
+   {
+    "progress": 0.86,
+    "shown": 142,
+    "frame": 142,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 104,
+    "canvasTop": 104,
+    "canvasH": 920,
+    "sample": 0.86
+   }
+  ],
+  "errors": []
+ },
+ {
+  "engine": "chromium",
+  "size": "390x844@2",
+  "reduced": false,
+  "rows": [
+   {
+    "progress": 0.04,
+    "shown": 7,
+    "frame": 7,
+    "count": 150,
+    "on": [
+     "Front, no composition. The same frame stage 0 gave you."
+    ],
+    "noteBottom": 160,
+    "canvasTop": 160,
+    "canvasH": 684,
+    "sample": 0.04
+   },
+   {
+    "progress": 0.19,
+    "shown": 35,
+    "frame": 34.51,
+    "count": 150,
+    "on": [
+     "One camera move, three seconds. Nothing else changes."
+    ],
+    "noteBottom": 160,
+    "canvasTop": 160,
+    "canvasH": 684,
+    "sample": 0.19
+   },
+   {
+    "progress": 0.36,
+    "shown": 62,
+    "frame": 62,
+    "count": 150,
+    "on": [
+     "The hero vantage. Now the frame is a decision, not a default."
+    ],
+    "noteBottom": 160,
+    "canvasTop": 160,
+    "canvasH": 684,
+    "sample": 0.36
+   },
+   {
+    "progress": 0.57,
+    "shown": 112,
+    "frame": 111.98,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 160,
+    "canvasTop": 160,
+    "canvasH": 684,
+    "sample": 0.57
+   },
+   {
+    "progress": 0.86,
+    "shown": 142,
+    "frame": 142,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 160,
+    "canvasTop": 160,
+    "canvasH": 684,
+    "sample": 0.86
+   }
+  ],
+  "errors": []
+ },
+ {
+  "engine": "chromium",
+  "size": "1440x900@1",
+  "reduced": true,
+  "rows": [
+   {
+    "progress": 0.04,
+    "shown": 7,
+    "frame": 7,
+    "count": 150,
+    "on": [
+     "Front, no composition. The same frame stage 0 gave you."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.04
+   },
+   {
+    "progress": 0.19,
+    "shown": 62,
+    "frame": 62,
+    "count": 150,
+    "on": [
+     "One camera move, three seconds. Nothing else changes."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.19
+   },
+   {
+    "progress": 0.36,
+    "shown": 62,
+    "frame": 62,
+    "count": 150,
+    "on": [
+     "The hero vantage. Now the frame is a decision, not a default."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.36
+   },
+   {
+    "progress": 0.57,
+    "shown": 82,
+    "frame": 82,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.57
+   },
+   {
+    "progress": 0.86,
+    "shown": 142,
+    "frame": 142,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.86
+   }
+  ],
+  "errors": []
+ },
+ {
+  "engine": "webkit",
+  "size": "1440x900@1",
+  "reduced": false,
+  "rows": [
+   {
+    "progress": 0.04,
+    "shown": 7,
+    "frame": 7,
+    "count": 150,
+    "on": [
+     "Front, no composition. The same frame stage 0 gave you."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.04
+   },
+   {
+    "progress": 0.19,
+    "shown": 35,
+    "frame": 34.5,
+    "count": 150,
+    "on": [
+     "One camera move, three seconds. Nothing else changes."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.19
+   },
+   {
+    "progress": 0.36,
+    "shown": 62,
+    "frame": 62,
+    "count": 150,
+    "on": [
+     "The hero vantage. Now the frame is a decision, not a default."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.36
+   },
+   {
+    "progress": 0.57,
+    "shown": 112,
+    "frame": 112,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.57
+   },
+   {
+    "progress": 0.86,
+    "shown": 142,
+    "frame": 142,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 60,
+    "canvasTop": 60,
+    "canvasH": 840,
+    "sample": 0.86
+   }
+  ],
+  "errors": []
+ },
+ {
+  "engine": "webkit",
+  "size": "768x1024@1",
+  "reduced": false,
+  "rows": [
+   {
+    "progress": 0.04,
+    "shown": 7,
+    "frame": 7,
+    "count": 150,
+    "on": [
+     "Front, no composition. The same frame stage 0 gave you."
+    ],
+    "noteBottom": 104,
+    "canvasTop": 104,
+    "canvasH": 920,
+    "sample": 0.04
+   },
+   {
+    "progress": 0.19,
+    "shown": 34,
+    "frame": 34.46,
+    "count": 150,
+    "on": [
+     "One camera move, three seconds. Nothing else changes."
+    ],
+    "noteBottom": 104,
+    "canvasTop": 104,
+    "canvasH": 920,
+    "sample": 0.19
+   },
+   {
+    "progress": 0.36,
+    "shown": 62,
+    "frame": 62,
+    "count": 150,
+    "on": [
+     "The hero vantage. Now the frame is a decision, not a default."
+    ],
+    "noteBottom": 104,
+    "canvasTop": 104,
+    "canvasH": 920,
+    "sample": 0.36
+   },
+   {
+    "progress": 0.57,
+    "shown": 112,
+    "frame": 111.98,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 104,
+    "canvasTop": 104,
+    "canvasH": 920,
+    "sample": 0.57
+   },
+   {
+    "progress": 0.86,
+    "shown": 142,
+    "frame": 142,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 104,
+    "canvasTop": 104,
+    "canvasH": 920,
+    "sample": 0.86
+   }
+  ],
+  "errors": []
+ },
+ {
+  "engine": "webkit",
+  "size": "390x844@2",
+  "reduced": false,
+  "rows": [
+   {
+    "progress": 0.04,
+    "shown": 7,
+    "frame": 7,
+    "count": 150,
+    "on": [
+     "Front, no composition. The same frame stage 0 gave you."
+    ],
+    "noteBottom": 160,
+    "canvasTop": 160,
+    "canvasH": 684,
+    "sample": 0.04
+   },
+   {
+    "progress": 0.19,
+    "shown": 34,
+    "frame": 34.45,
+    "count": 150,
+    "on": [
+     "One camera move, three seconds. Nothing else changes."
+    ],
+    "noteBottom": 160,
+    "canvasTop": 160,
+    "canvasH": 684,
+    "sample": 0.19
+   },
+   {
+    "progress": 0.36,
+    "shown": 62,
+    "frame": 62,
+    "count": 150,
+    "on": [
+     "The hero vantage. Now the frame is a decision, not a default."
+    ],
+    "noteBottom": 160,
+    "canvasTop": 160,
+    "canvasH": 684,
+    "sample": 0.36
+   },
+   {
+    "progress": 0.57,
+    "shown": 112,
+    "frame": 111.98,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 160,
+    "canvasTop": 160,
+    "canvasH": 684,
+    "sample": 0.57
+   },
+   {
+    "progress": 0.86,
+    "shown": 142,
+    "frame": 142,
+    "count": 150,
+    "on": [
+     "The same scroll drives the exploded view."
+    ],
+    "noteBottom": 160,
+    "canvasTop": 160,
+    "canvasH": 684,
+    "sample": 0.86
+   }
+  ],
+  "errors": []
+ }
+]
