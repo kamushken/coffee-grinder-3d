@@ -1,7 +1,9 @@
 // Stage 5 — motion. A scroll-scrubbed film intro (open-3d-skills scroll-film engine, video mode),
 // then the stage-4 live scene. The camera flight starts when the live section scrolls into view.
-// Generating the film, cursor-rig and alpha-cutout: DOCUMENTED-NOT-RUN (see the caption and FACTS.md).
-// FROZEN once captured.
+// The film is our own recording of stage 8 (captures/stage-8-60fps.mp4, frame-capture), cut to
+// 0–10 s, 800 px, 15 fps, GOP 4 by prep.py video. Generating footage (motion-assets), cursor-rig
+// and alpha-cutout: DOCUMENTED-NOT-RUN (see the caption and FACTS.md).
+// FROZEN once captured; the film was rebuilt from our own recording after Phase 4a.
 import * as THREE from 'three';
 import { ScrollFilm } from '/lib/open-3d-skills/scroll-film.js';
 import { createRig, wirePresetButtons, LIGHTING, U } from '/stage-3/render.js';
@@ -12,12 +14,16 @@ const RECORD = params.has('record');
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // --- film ------------------------------------------------------------------------------------
-// keys: [progress, frame]. Equal frames make a hold for each beat's caption (scroll-film SKILL.md).
-// The frame numbers come from a contact sheet of the 129 source frames: assembled 0–16,
-// fully apart ~40, housing x-rayed ~72, reassembled by 128.
+// keys: [progress, frame]. Equal frames make a hold (scroll-film SKILL.md). The 150 frames follow
+// the stage-8 record choreography at 15 fps: front still to 0.5 s (frame 7), front -> hero flight
+// 0.5–4.1 s (frames 7–62), hero still to 5.5 s (62–82), explode 5.5–9.5 s (82–142), held after.
+// Frames 0–7 and 62–82 are still: mean abs difference ≤ 0.82 / 255, encoder noise only. So the
+// hero hold shows 62 and the explode leg starts at 82; the two are the same picture.
+//   0.00–0.08 front, hold · 0.08–0.30 flight · 0.30–0.42 hero, hold · 0.42–0.72 explode ·
+//   0.72–1.00 final, hold
 export const FILM = {
-  src: '/stage-5/film/motor.mp4', fps: 15, frames: 129, sectionVh: 600,
-  keys: [[0, 0], [0.1, 0], [0.3, 40], [0.42, 40], [0.55, 72], [0.67, 72], [0.9, 128], [1, 128]],
+  src: '/stage-5/film/grinder.mp4', fps: 15, frames: 150, sectionVh: 600,
+  keys: [[0, 7], [0.08, 7], [0.3, 62], [0.42, 62], [0.42, 82], [0.72, 142], [1, 142]],
 };
 const section = document.getElementById('film');
 const beats = [...section.querySelectorAll('.beat')].map((el) => ({ el, at: el.dataset.at.split(',').map(Number) }));
@@ -28,6 +34,11 @@ const film = new ScrollFilm({
   onUpdate: ({ progress }) => { for (const b of beats) b.el.classList.toggle('on', progress >= b.at[0] && progress < b.at[1]); },
   onReady: () => { filmReady = true; document.body.classList.add('film-ready'); },
 });
+// Portrait: the 16:9 film is letterboxed (contain). Centred, its lower half sits under the fixed
+// stage caption, so in portrait it is pinned to the top of the frame and the beat goes below it.
+const portrait = matchMedia('(orientation: portrait)');
+const placeFilm = () => { film.focus = [0.5, portrait.matches ? 0 : 0.5]; film.shown = -1; };
+portrait.addEventListener('change', placeFilm); placeFilm();
 
 // --- live scene (stage 4, unchanged) ---------------------------------------------------------
 const canvas = document.getElementById('gl');
