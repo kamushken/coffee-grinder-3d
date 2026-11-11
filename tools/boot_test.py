@@ -21,17 +21,20 @@ STATE = """() => ({ deferred: !!window.__deferred, bootReason: window.__bootReas
   posterVisible: getComputedStyle(document.getElementById('poster')).visibility !== 'hidden' && !document.getElementById('poster').hidden,
   tier: window.__app ? window.__app.quality : null, dpr: window.__app ? window.__app.renderer.getPixelRatio() : null,
   fallback: window.__fallback || null, status: document.getElementById('status').textContent, t: Math.round(performance.now()),
-  firstFrameTier: window.__firstFrameTier || null })"""
+  firstFrameTier: window.__firstFrameTier || null, modulesAt: window.__modulesAt || null,
+  threeLoadedAt150: performance.getEntriesByType('resource').some(e => e.name.includes('three.module')) })"""
 # records the tier at the first renderer.render call, to prove fast is chosen before frame 1
 FIRST = """(() => { const iv = setInterval(() => { const a = window.__app; if (!a) return; clearInterval(iv);
   const r = a.renderer.render.bind(a.renderer); let done = false, before = a.rendered;
   a.renderer.render = (...x) => { if (!done) { done = true; window.__firstFrameTier = a.quality + '@' + a.renderer.getPixelRatio() + ' (frames before hook: ' + before + ')'; } return r(...x); }; }, 0); })();"""
 
 
-def case(b, name, w, h, dpr=2, q="", init=None, reduced=False, act=None, mobile=True):
+def case(b, name, w, h, dpr=2, q="", init=None, reduced=False, act=None, mobile=True, block=None):
     ctx = b.new_context(viewport={"width": w, "height": h}, device_scale_factor=dpr,
                         is_mobile=mobile and b.browser_type.name == "chromium", has_touch=mobile,
                         reduced_motion="reduce" if reduced else "no-preference")
+    if block:  # Phase 3.8: make the dynamic import fail at the network level
+        ctx.route(block, lambda route: route.abort())
     if init: ctx.add_init_script(init)
     ctx.add_init_script(FIRST)
     pg = ctx.new_page()
@@ -76,6 +79,8 @@ def main():
                 case(b, "1440 saveData", 1440, 900, init=SAVE_DATA, mobile=False),
                 case(b, "1440 3g", 1440, 900, init=THREE_G, mobile=False),
                 case(b, "1440 context lost (not deferred)", 1440, 900, act="lose", mobile=False),
+                # Phase 3.8 addition (not one of the 26): import('/stage-8/main.js') fails
+                case(b, "1440 module import fails (3.8)", 1440, 900, mobile=False, block="**/stage-8/main.js"),
             ]
             b.close()
     for r in out:

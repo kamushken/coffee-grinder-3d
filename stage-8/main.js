@@ -6,18 +6,13 @@
 // (logged as a stage-4 "cut-off" defect) was measured in stage 8 to be the tray's own cast
 // shadow at 9° sun elevation, not frustum clipping (notes/direction.md, stage 8).
 // Not included: the stage-5 scroll film (its footage is an electric motor, not this grinder).
+// Phase 3.8: this module is no longer the page's entry script. stage-8/boot.js (no static
+// imports) decides poster / deferred / immediate boot, probes WebGL 2, then dynamic-imports this
+// file and calls start(). Everything below is loaded only when 3D will actually start.
 import * as THREE from 'three';
 import { Exploder, Labels, Xray, Picker } from '/lib/open-3d-skills/explode.js';
 import { createRig, LIGHTING, U } from '/stage-3/render.js';
 import { buildStage4Content, createCameraRig, frame, VANTAGE, FRAMING, TARGET } from '/stage-4/scene.js';
-
-const params = new URLSearchParams(location.search);
-const RECORD = params.has('record');
-const REDUCED = params.get('motion') === 'reduce' || matchMedia('(prefers-reduced-motion: reduce)').matches;
-const ONDEMAND = params.get('ondemand') !== '0' && !RECORD;
-const poster = document.getElementById('poster');
-const status = document.getElementById('status');
-const say = (s) => { status.textContent = s; };
 
 export const TIERS = {
   high:     { maxDpr: 2,    gtao: true,  shadow: 4096 },
@@ -52,48 +47,9 @@ const EXPLAIN = { tgt: [TARGET[0], 0.22, TARGET[2]], dist: 1.0 };
 EXPLAIN.pos = heroDir.clone().normalize().multiplyScalar(EXPLAIN.dist).add(new THREE.Vector3(...EXPLAIN.tgt)).toArray();
 const ORDER = Object.keys(TIERS);
 
-function hasWebGL2() { try { return !!document.createElement('canvas').getContext('webgl2'); } catch { return false; } }
-function showPoster(reason) {
-  document.body.classList.add('poster-only'); poster.hidden = false;
-  say(`Static poster: ${reason}.`); window.__fallback = reason; window.__ready = true;
-}
-
-// Phase 3.7 mobile boot: on a narrow viewport or a constrained connection the poster is the page
-// until the browser is idle (2.5 s at the latest) or the visitor first touches, scrolls or types.
-const conn = navigator.connection || {};
-export const BOOT = {
-  narrow: innerWidth < 600,
-  constrained: !!conn.saveData || ['slow-2g', '2g', '3g'].includes(conn.effectiveType),
-  idleTimeout: 2500,
-};
-// reduced motion keeps its existing path (immediate boot, no flight); recording never defers
-BOOT.defer = (BOOT.narrow || BOOT.constrained) && !REDUCED && !RECORD && params.get('boot') !== 'now';
-// the stage-8 page does not scroll, so a scroll gesture never fires 'scroll': wheel and touchmove
-// stand in for it (measured: WebKit 390 wheel produced no 'scroll' event)
-const INTENT = ['pointerdown', 'scroll', 'wheel', 'touchmove', 'keydown'];
-function deferredStart() {
-  let done = false;
-  const go = (why) => {
-    if (done) return; done = true;
-    INTENT.forEach((e) => removeEventListener(e, onIntent, true));
-    window.__bootReason = why; boot();
-  };
-  const onIntent = (e) => go(e.type);
-  INTENT.forEach((e) => addEventListener(e, onIntent, { capture: true, passive: true }));
-  window.__deferred = true;
-  say('Poster first; 3D loads shortly.');
-  // Safari has no requestIdleCallback: plain timeout there
-  if (typeof window.requestIdleCallback === 'function') requestIdleCallback(() => go('idle'), { timeout: BOOT.idleTimeout });
-  else setTimeout(() => go('timeout'), BOOT.idleTimeout);
-}
-
-// the WebGL 2 probe creates a context, so a deferred boot defers the probe too
-function boot() { if (!hasWebGL2()) showPoster('this browser has no WebGL 2'); else start(); }
-if (params.get('quality') === 'poster') showPoster('requested with ?quality=poster');
-else if (BOOT.defer) deferredStart();
-else boot();
-
-function start() {
+// called by stage-8/boot.js once WebGL 2 is known to exist
+export function start({ params, RECORD, REDUCED, BOOT, showPoster, say }) {
+  const ONDEMAND = params.get('ondemand') !== '0' && !RECORD;
   const canvas = document.getElementById('gl');
   const camera = new THREE.PerspectiveCamera(FRAMING.fovBase, innerWidth / innerHeight, 0.01, 200);
   frame(camera);
@@ -233,7 +189,7 @@ function start() {
 
   applyExplode(t);
   let rendered = 0, last = performance.now() / 1000;
-  window.__app = { scene, camera, renderer, env, content, controls: cam.controls, ex, xray, labels, parts, TIERS, AUTO, EXPLODE, LABELS, EXPLAIN,
+  window.__app = { scene, camera, renderer, env, content, controls: cam.controls, ex, xray, labels, parts, TIERS, AUTO, EXPLODE, LABELS, EXPLAIN, BOOT,
     LIGHTING, U, VANTAGE, setQuality, wake, reduced: REDUCED, ondemand: ONDEMAND,
     get quality() { return quality; }, get rendered() { return rendered; },
     set: (v) => { target = t = v; slider.value = String(v); applyExplode(t); wake(); } };

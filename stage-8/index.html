@@ -77,6 +77,7 @@
   </noscript>
   <script type="module" src="/shared/shell.js"></script>
   <script type="module" src="/shared/goatcounter.js"></script>
-  <script type="module" src="./main.js"></script>
+  <!-- Phase 3.8: entry has no static imports; three + stage modules load via import() in boot.js -->
+  <script type="module" src="./boot.js"></script>
 </body>
 </html>
