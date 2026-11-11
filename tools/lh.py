@@ -19,8 +19,8 @@ BASE = "http://127.0.0.1:4321"
 METRICS = ["first-contentful-paint", "largest-contentful-paint", "total-blocking-time", "cumulative-layout-shift", "speed-index", "interactive"]
 
 
-def url_of(page):
-    return BASE + ("/" if page in ("/", "") else f"/{page}/")
+def url_of(page, base=BASE, query=""):
+    return base + ("/" if page in ("/", "") else f"/{page}/") + query
 
 
 def lh(url, out_json, form, profile, cats):
@@ -69,15 +69,16 @@ def perf(a):
     summary = {}
     for page in a.pages.split(","):
         for form in a.forms.split(","):
-            key = f"{page.strip('/') or 'index'}-{form}"
+            key = f"{page.strip('/') or 'index'}-{form}" + (f"-{a.tag}" if a.tag else "")
             prof = Path(".tmp/lh35") / key
             prof.mkdir(parents=True, exist_ok=True)
-            w = lh(url_of(page), str(prof / "warmup.json"), form, prof.resolve(), "performance,accessibility,best-practices,seo")
+            url = url_of(page, a.base, a.query)
+            w = lh(url, str(prof / "warmup.json"), form, prof.resolve(), "performance,accessibility,best-practices,seo")
             print(f"{key:20} warm-up (discarded) perf {round(w['categories']['performance']['score'] * 100)}", flush=True)
             runs = []
             for i in range(a.runs):
                 p = out / f"{key}-run{i + 1}.json"
-                rep = lh(url_of(page), str(p), form, prof.resolve(), "performance,accessibility,best-practices,seo")
+                rep = lh(url, str(p), form, prof.resolve(), "performance,accessibility,best-practices,seo")
                 r = {"scores": {c: round(v["score"] * 100) for c, v in rep["categories"].items()},
                      "metrics": {m: rep["audits"][m]["numericValue"] for m in METRICS},
                      "observed": observed(rep), "lcp_element": lcp_element(rep), "failing": failing(rep)}
@@ -95,6 +96,7 @@ def perf(a):
                 "median": {**{c: med([r["scores"][c] for r in runs]) for c in runs[0]["scores"]},
                            **{m: round(med([r["metrics"][m] for r in runs]), 3) for m in METRICS},
                            **{k: med([r["observed"][k] for r in runs]) for k in OBSERVED}},
+                       "url": url,
                 "spread": {**{c: [min(r["scores"][c] for r in runs), max(r["scores"][c] for r in runs)] for c in runs[0]["scores"]},
                            **{m: [round(min(r["metrics"][m] for r in runs), 3), round(max(r["metrics"][m] for r in runs), 3)] for m in METRICS},
                            **{k: [min(r["observed"][k] for r in runs), max(r["observed"][k] for r in runs)] for k in OBSERVED}},
@@ -132,6 +134,10 @@ def main():
     ap.add_argument("--forms", default="desktop,mobile")
     ap.add_argument("--runs", type=int, default=5)
     ap.add_argument("--out", default="measurements/lighthouse")
+    # Phase 4b: run the same protocol against the deployed site instead of 127.0.0.1.
+    ap.add_argument("--base", default=BASE)
+    ap.add_argument("--query", default="")
+    ap.add_argument("--tag", default="")
     a = ap.parse_args()
     (perf if a.mode == "perf" else a11y)(a)
 
