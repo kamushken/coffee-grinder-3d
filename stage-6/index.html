@@ -37,12 +37,12 @@
 <body>
   <canvas id="gl" aria-label="Exploded view of the coffee grinder's burr assembly on a walnut tray. Drag to orbit, hover or tap a part to name it."></canvas>
   <div class="labels" aria-hidden="true"></div>
-  <nav class="stages" aria-label="Stages"></nav>
+  <nav class="stages" aria-label="Stages"><a href="/">home</a><a href="/stage-0/" aria-label="Stage 0">0</a><a href="/stage-1/" aria-label="Stage 1">1</a><a href="/stage-2/" aria-label="Stage 2">2</a><a href="/stage-3/" aria-label="Stage 3">3</a><a href="/stage-4/" aria-label="Stage 4">4</a><a href="/stage-5/" aria-label="Stage 5">5</a><a href="/stage-6/" aria-label="Stage 6" aria-current="page">6</a><a href="/stage-7/" aria-label="Stage 7">7</a><a href="/stage-8/" aria-label="Stage 8">8</a></nav>
   <div class="caption"><b>Stage 6 — explainer.</b> <span class="long">An exploded view of the burr assembly, run on the exploded-view runtime (<code>explode.js</code>: Exploder, Labels, Xray, Picker). The crank lifts off the shaft hex, the hopper rises, the adjustment ring unscrews (lifts plus half a turn), and the burrs separate along the shaft. The body x-rays automatically as the burrs part. The part geometry is illustrative, not a specific product.</span><br>
     <label>explode <input id="explode" type="range" min="0" max="1" step="0.01" value="0" aria-label="Explode amount"></label>
     <button id="xray" aria-pressed="false">x-ray body</button>
     <span>part: <output id="part" aria-live="polite">—</output></span><br>
-    <button data-light="morning">morning</button><button data-light="golden">golden</button><button data-light="night">night</button></div>
+    <button data-light="morning">morning</button><button data-light="golden">golden</button><button data-light="night">night</button><nav class="prevnext" aria-label="Previous and next stage"><a href="/stage-5/" rel="prev" class="prev">← Stage 5 · motion</a><a href="/stage-7/" rel="next" class="next">Stage 7 · degradation →</a></nav></div>
   <script type="module" src="/shared/shell.js"></script>
   <script type="module" src="/shared/goatcounter.js"></script>
   <script type="module" src="./main.js"></script>

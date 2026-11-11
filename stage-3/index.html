@@ -23,9 +23,9 @@
 </head>
 <body>
   <canvas id="gl" aria-label="The coffee grinder with a clear glass hopper, brushed steel crank and burrs, matte green powder-coated body and walnut knob, on travertine under a low golden sun."></canvas>
-  <nav class="stages" aria-label="Stages"></nav>
-  <p class="caption"><b>Stage 3 — materials.</b> One rule per family (notes/direction.md): glass transmission 1 / IOR 1.5 / roughness 0.04; brushed steel metalness 0.9 / roughness 0.34 / anisotropy 0.6; powder coat roughness 0.62 / clearcoat 0.18; rubber roughness 0.88; walnut roughness 0.52 / clearcoat 0.35. One shader patch: machined-groove roughness and edge glint on the burrs. Lighting and camera unchanged.<br>
-    <button data-light="morning">morning</button><button data-light="golden">golden</button><button data-light="night">night</button></p>
+  <nav class="stages" aria-label="Stages"><a href="/">home</a><a href="/stage-0/" aria-label="Stage 0">0</a><a href="/stage-1/" aria-label="Stage 1">1</a><a href="/stage-2/" aria-label="Stage 2">2</a><a href="/stage-3/" aria-label="Stage 3" aria-current="page">3</a><a href="/stage-4/" aria-label="Stage 4">4</a><a href="/stage-5/" aria-label="Stage 5">5</a><a href="/stage-6/" aria-label="Stage 6">6</a><a href="/stage-7/" aria-label="Stage 7">7</a><a href="/stage-8/" aria-label="Stage 8">8</a></nav>
+  <div class="caption"><b>Stage 3 — materials.</b> One rule per family (notes/direction.md): glass transmission 1 / IOR 1.5 / roughness 0.04; brushed steel metalness 0.9 / roughness 0.34 / anisotropy 0.6; powder coat roughness 0.62 / clearcoat 0.18; rubber roughness 0.88; walnut roughness 0.52 / clearcoat 0.35. One shader patch: machined-groove roughness and edge glint on the burrs. Lighting and camera unchanged.<br>
+    <button data-light="morning">morning</button><button data-light="golden">golden</button><button data-light="night">night</button><nav class="prevnext" aria-label="Previous and next stage"><a href="/stage-2/" rel="prev" class="prev">← Stage 2 · lighting</a><a href="/stage-4/" rel="next" class="next">Stage 4 · composition →</a></nav></div>
   <script type="module" src="/shared/shell.js"></script>
   <script type="module" src="/shared/goatcounter.js"></script>
   <script type="module" src="./main.js"></script>

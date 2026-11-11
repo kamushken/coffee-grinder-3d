@@ -48,16 +48,15 @@
     } }
   </script>
   <canvas id="gl" tabindex="0" aria-label="Interactive 3D coffee grinder. With focus: arrow keys orbit, plus and minus zoom, 1 to 3 jump between views."></canvas>
-  <nav class="stages" aria-label="Stages"></nav>
+  <nav class="stages" aria-label="Stages"><a href="/">home</a><a href="/stage-0/" aria-label="Stage 0">0</a><a href="/stage-1/" aria-label="Stage 1">1</a><a href="/stage-2/" aria-label="Stage 2">2</a><a href="/stage-3/" aria-label="Stage 3">3</a><a href="/stage-4/" aria-label="Stage 4">4</a><a href="/stage-5/" aria-label="Stage 5">5</a><a href="/stage-6/" aria-label="Stage 6">6</a><a href="/stage-7/" aria-label="Stage 7" aria-current="page">7</a><a href="/stage-8/" aria-label="Stage 8">8</a></nav>
   <div class="caption" id="controls" tabindex="-1"><b>Stage 7 — degradation.</b> <span class="long">Three quality tiers (high: DPR ≤ 2, GTAO, 4096 shadows; balanced: DPR ≤ 1.5; fast: DPR 1, no GTAO, 2048 shadows). The tier drops automatically after 3 s of frames slower than 25 ms. A static poster shows first and stays if WebGL is missing or lost. Reduced motion means no flight, instant light changes and no damping. The scene renders only when something changes. Keyboard: Tab through every control, focus the canvas to orbit with the arrow keys and zoom with +/−.</span>
     <div class="row gl" role="group" aria-label="Quality"><span>quality</span><button data-quality="high">high</button><button data-quality="balanced">balanced</button><button data-quality="fast">fast</button></div>
     <div class="row gl" role="group" aria-label="View"><span>view</span><button data-view="front">1 front</button><button data-view="hero">2 hero</button><button data-view="low">3 low</button></div>
     <div class="row gl" role="group" aria-label="Light"><span>light</span><button data-light="morning">morning</button><button data-light="golden">golden</button><button data-light="night">night</button></div>
     <div id="status" role="status" aria-live="polite">Loading the 3D scene…</div>
-  </div>
+  <nav class="prevnext" aria-label="Previous and next stage"><a href="/stage-6/" rel="prev" class="prev">← Stage 6 · explainer</a><a href="/stage-8/" rel="next" class="next">Stage 8 · final →</a></nav></div>
   <noscript>
-    <style>#controls, nav.stages:empty { display: none; }</style>
-    <nav class="stages" aria-label="Stages"><a href="/">home</a><a href="/stage-0/">0</a><a href="/stage-1/">1</a><a href="/stage-2/">2</a><a href="/stage-3/">3</a><a href="/stage-4/">4</a><a href="/stage-5/">5</a><a href="/stage-6/">6</a><a href="/stage-7/" aria-current="page">7</a><a href="/stage-8/">8</a></nav>
+    <style>#controls { display: none; }</style>
     <p class="caption"><b>Stage 7 — degradation.</b> JavaScript is off, so this static poster is the whole page. The stage links above still work.</p>
   </noscript>
   <script type="module" src="/shared/shell.js"></script>

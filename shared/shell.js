@@ -1,4 +1,7 @@
 // Lab shell: stage nav + current-page marker (Phase 1), prev/next links (Phase 3.6).
+// Phase 4a: both are now static HTML in every stage page, so they are laid out in the first
+// paint. Building them here after first paint grew the caption by ~41 px and shifted it
+// (CLS 0.032 on stage 8 desktop). This script only fills them in if a page lacks the markup.
 const STAGES = [
   ['/', 'home'],
   ['/stage-0/', '0'], ['/stage-1/', '1'], ['/stage-2/', '2'], ['/stage-3/', '3'], ['/stage-4/', '4'],
@@ -7,7 +10,7 @@ const STAGES = [
 const TITLES = ['slop baseline', 'direction', 'lighting', 'materials', 'composition', 'motion', 'explainer', 'degradation', 'final'];
 const here = location.pathname.replace(/index\.html$/, '').replace(/([^/])$/, '$1/');
 const nav = document.querySelector('nav.stages');
-if (nav) {
+if (nav && !nav.children.length) {
   for (const [href, text] of STAGES) {
     const a = document.createElement('a');
     a.href = href; a.textContent = text;
@@ -19,10 +22,9 @@ if (nav) {
   }
 }
 
-// Phase 3.6: prev/next with stage titles, at the end of the stage caption (the bottom block)
 const m = here.match(/^\/stage-(\d)\/$/);
 const caption = document.querySelector('.caption');
-if (m && caption) {
+if (m && caption && !caption.querySelector('.prevnext')) {
   const n = +m[1];
   const link = (i, dir) => {
     const a = document.createElement('a');
