@@ -24,6 +24,11 @@
       justify-content: center; padding-bottom: calc(var(--cap-h, 0px) + 24px);
       background: linear-gradient(#bcc4c0, #8d7c69); }
     #film .note { flex: none; margin: 0; padding: 12px 360px 10px 16px; color: #e8e8e8; background: #111; }
+    /* boot.js writes the status line after first paint, and the note is the first child of a
+       centred column, so the line gets a fixed box: present and one line tall from the start,
+       empty or not. Nothing may grow there after paint. */
+    #film .note #status { display: block; height: 1.45em; line-height: 1.45em; overflow: hidden;
+      color: #b3ada4; font-size: 12px; }
     /* the frame takes whatever height is left and never grows past it, so the note, the film and
        the beat always fit between the top of the viewport and the reserved band for the caption */
     #film .frame { position: relative; flex: 1 1 auto; width: 100%; min-height: 0;
@@ -61,7 +66,7 @@
 
   <section id="film" aria-label="Scroll film: a recording of stage 8, from the front view to the hero view to the exploded burr assembly">
     <div class="pin">
-      <p class="note">The film is a recording of stage 8, made with frame-capture and scrubbed by scroll. The pipeline takes any clip — a render, a turntable, or generated footage via motion-assets.</p>
+      <p class="note">The film is a recording of stage 8, made with frame-capture and scrubbed by scroll. The pipeline takes any clip — a render, a turntable, or generated footage via motion-assets.<span id="status" role="status"></span></p>
       <div class="frame"><canvas aria-hidden="true"></canvas></div>
       <div class="beats">
         <p class="beat" data-at="0,0.08">Front, no composition. The same frame stage 0 gave you.</p>
@@ -80,8 +85,24 @@
     </details>
     <button data-light="morning">morning</button><button data-light="golden">golden</button><button data-light="night">night</button><nav class="prevnext" aria-label="Previous and next stage"><a href="/stage-4/" rel="prev" class="prev">← Stage 4 · composition</a><a href="/stage-6/" rel="next" class="next">Stage 6 · explainer →</a></nav></div>
 
+  <!-- The height of the fixed caption has to be known BEFORE the first paint. The pinned frame
+       reserves it with padding-bottom: var(--cap-h), and the column is centred, so a value applied
+       after paint moves the film and the beats: DIV.beats jumped 812 -> 531 px, CLS 0.02775 on 1440.
+       This classic (non-deferred) script runs as soon as the caption exists, so the variable is set
+       during parsing. main.js keeps a ResizeObserver for later changes (fonts, rotation, resize). -->
+  <script>
+    (() => {
+      const c = document.querySelector('.caption');
+      if (!c) return;
+      if (getComputedStyle(c).position === 'static') return;   // narrow layout: nothing reserved
+      document.documentElement.style.setProperty('--cap-h', `${c.offsetHeight}px`);
+    })();
+  </script>
+
   <script type="module" src="/shared/shell.js"></script>
   <script type="module" src="/shared/goatcounter.js"></script>
-  <script type="module" src="./main.js"></script>
+  <!-- Phase 4b: boot.js is the entry. It decides poster / deferred / immediate and only then
+       imports ./main.js, so the film fetch and the GL compile can start at load + 1200 ms. -->
+  <script type="module" src="./boot.js"></script>
 </body>
 </html>

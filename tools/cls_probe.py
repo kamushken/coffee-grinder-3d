@@ -12,7 +12,7 @@ import argparse, json, statistics
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
-BASE = "https://coffee-grinder-3d.netlify.app"
+BASE = "http://127.0.0.1:4321"
 
 # add_init_script runs this as a SCRIPT, not as a function, so it must not be wrapped
 # in an arrow: the observer has to be installed at the top level.

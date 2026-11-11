@@ -4,14 +4,14 @@
 // 0–10 s, 800 px, 15 fps, GOP 4 by prep.py video. Generating footage (motion-assets), cursor-rig
 // and alpha-cutout: DOCUMENTED-NOT-RUN (see the caption and FACTS.md).
 // FROZEN once captured; the film was rebuilt from our own recording after Phase 4a.
+//
+// Phase 4b: this file is no longer the entry. stage-5/boot.js decides when to import it and then
+// calls start(); nothing here runs at import time, so the deferred path can hold the whole thing
+// back — including the 1.07 MB film fetch and the three.js frame compile.
 import * as THREE from 'three';
 import { ScrollFilm } from '/lib/open-3d-skills/scroll-film.js';
 import { createRig, wirePresetButtons, LIGHTING, U } from '/stage-3/render.js';
 import { buildStage4Content, createCameraRig, frame, VANTAGE, FRAMING } from '/stage-4/scene.js';
-
-const params = new URLSearchParams(location.search);
-const RECORD = params.has('record');
-const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // --- film ------------------------------------------------------------------------------------
 // keys: [progress, frame]. Equal frames make a hold (scroll-film SKILL.md). The 150 frames follow
@@ -25,61 +25,65 @@ export const FILM = {
   src: '/stage-5/film/grinder.mp4', fps: 15, frames: 150, sectionVh: 600,
   keys: [[0, 7], [0.08, 7], [0.3, 62], [0.42, 62], [0.42, 82], [0.72, 142], [1, 142]],
 };
-const section = document.getElementById('film');
-const beats = [...section.querySelectorAll('.beat')].map((el) => ({ el, at: el.dataset.at.split(',').map(Number) }));
-let filmReady = false;
-const film = new ScrollFilm({
-  section, canvas: section.querySelector('canvas'),
-  video: { src: FILM.src, fps: FILM.fps }, keys: FILM.keys, fit: 'contain',
-  onUpdate: ({ progress }) => { for (const b of beats) b.el.classList.toggle('on', progress >= b.at[0] && progress < b.at[1]); },
-  onReady: () => { filmReady = true; document.body.classList.add('film-ready'); },
-});
 
-// The stage caption is fixed over the bottom of the page on wide viewports. Reserve its height
-// inside the pinned frame, so the film and the beat sit above it. On narrow viewports the CSS puts
-// the caption in the flow instead (under the canvas), so nothing has to be reserved.
-const cap = document.querySelector('.caption');
-const setCapH = () => {
-  const inFlow = getComputedStyle(cap).position === 'static';
-  document.documentElement.style.setProperty('--cap-h', inFlow ? '0px' : `${cap.offsetHeight}px`);
-};
-new ResizeObserver(setCapH).observe(cap);
-addEventListener('resize', setCapH); setCapH();
+export function start({ params, RECORD, REDUCED }) {
+  const section = document.getElementById('film');
+  const beats = [...section.querySelectorAll('.beat')].map((el) => ({ el, at: el.dataset.at.split(',').map(Number) }));
+  let filmReady = false;
 
-// --- live scene (stage 4, unchanged) ---------------------------------------------------------
-const canvas = document.getElementById('gl');
-const camera = new THREE.PerspectiveCamera(FRAMING.fovBase, innerWidth / innerHeight, 0.01, 200);
-frame(camera);
-const rig = createRig({ canvas, camera, record: RECORD, preset: params.get('light') || LIGHTING.preset });
-const { scene, renderer, env } = rig;
-const content = buildStage4Content(scene);
-rig.markNoAO();
-const cam = createCameraRig(camera, canvas, { reduced: REDUCED, record: RECORD });
-cam.jump('front');
-cam.controls.enabled = false;   // the page scrolls; orbit only once the live section is on screen
+  const film = new ScrollFilm({
+    section, canvas: section.querySelector('canvas'),
+    video: { src: FILM.src, fps: FILM.fps }, keys: FILM.keys, fit: 'contain',
+    onUpdate: ({ progress }) => { for (const b of beats) b.el.classList.toggle('on', progress >= b.at[0] && progress < b.at[1]); },
+    onReady: () => { filmReady = true; document.body.classList.add('film-ready'); },
+  });
 
-// Render the GL scene only while the live section shows (the opaque film covers it otherwise),
-// and fly once, the first time the live section is half on screen.
-let liveVisible = false, flown = false;
-new IntersectionObserver(([e]) => {
-  liveVisible = e.isIntersecting;
-  canvas.style.pointerEvents = e.intersectionRatio > 0.9 ? 'auto' : 'none';
-  if (e.intersectionRatio >= 0.5 && !flown) { flown = true; cam.flyTo('hero'); }
-  if (!cam.flying) cam.controls.enabled = e.intersectionRatio > 0.9;
-}, { threshold: [0, 0.5, 0.9, 1] }).observe(document.querySelector('.live'));
-canvas.style.pointerEvents = 'none';
+  // The stage caption is fixed over the bottom of the page on wide viewports. Reserve its height
+  // inside the pinned frame, so the film and the beat sit above it. On narrow viewports the CSS
+  // puts the caption in the flow instead (under the canvas), so nothing has to be reserved.
+  const cap = document.querySelector('.caption');
+  const setCapH = () => {
+    const inFlow = getComputedStyle(cap).position === 'static';
+    document.documentElement.style.setProperty('--cap-h', inFlow ? '0px' : `${cap.offsetHeight}px`);
+  };
+  new ResizeObserver(setCapH).observe(cap);
+  addEventListener('resize', setCapH); setCapH();
 
-addEventListener('resize', () => { rig.resize(); frame(camera); });
-wirePresetButtons(env);
+  // --- live scene (stage 4, unchanged) -------------------------------------------------------
+  const canvas = document.getElementById('gl');
+  const camera = new THREE.PerspectiveCamera(FRAMING.fovBase, innerWidth / innerHeight, 0.01, 200);
+  frame(camera);
+  const rig = createRig({ canvas, camera, record: RECORD, preset: params.get('light') || LIGHTING.preset });
+  const { scene, renderer, env } = rig;
+  const content = buildStage4Content(scene);
+  rig.markNoAO();
+  const cam = createCameraRig(camera, canvas, { reduced: REDUCED, record: RECORD });
+  cam.jump('front');
+  cam.controls.enabled = false;   // the page scrolls; orbit only once the live section is on screen
 
-if (RECORD) document.querySelectorAll('.caption, .stages').forEach((el) => { el.style.display = 'none'; });
+  // Render the GL scene only while the live section shows (the opaque film covers it otherwise),
+  // and fly once, the first time the live section is half on screen.
+  let liveVisible = false, flown = false;
+  new IntersectionObserver(([e]) => {
+    liveVisible = e.isIntersecting;
+    canvas.style.pointerEvents = e.intersectionRatio > 0.9 ? 'auto' : 'none';
+    if (e.intersectionRatio >= 0.5 && !flown) { flown = true; cam.flyTo('hero'); }
+    if (!cam.flying) cam.controls.enabled = e.intersectionRatio > 0.9;
+  }, { threshold: [0, 0.5, 0.9, 1] }).observe(document.querySelector('.live'));
+  canvas.style.pointerEvents = 'none';
 
-window.__app = { scene, camera, renderer, env, film, FILM, controls: cam.controls, VANTAGE, LIGHTING, U, content };
-let glFrames = 0;
-function loop() {
-  cam.step(performance.now() / 1000);
-  if (liveVisible || glFrames < 3) { rig.render(cam.controls.target); glFrames++; }
-  if (glFrames >= 3 && filmReady) window.__ready = true;
+  addEventListener('resize', () => { rig.resize(); frame(camera); });
+  wirePresetButtons(env);
+
+  if (RECORD) document.querySelectorAll('.caption, .stages').forEach((el) => { el.style.display = 'none'; });
+
+  window.__app = { scene, camera, renderer, env, film, FILM, controls: cam.controls, VANTAGE, LIGHTING, U, content };
+  let glFrames = 0;
+  function loop() {
+    cam.step(performance.now() / 1000);
+    if (liveVisible || glFrames < 3) { rig.render(cam.controls.target); glFrames++; }
+    if (glFrames >= 3 && filmReady) window.__ready = true;
+    requestAnimationFrame(loop);
+  }
   requestAnimationFrame(loop);
 }
-requestAnimationFrame(loop);

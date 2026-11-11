@@ -22,11 +22,18 @@ const BOOT = {
   narrow: innerWidth < 600,
   constrained: !!conn.saveData || ['slow-2g', '2g', '3g'].includes(conn.effectiveType),
   idleTimeout: 2500,
-  // Phase 4a: ?bootdelay=<ms> (default 0). A deferred start imports the 3D code no earlier than
-  // this many ms after the load event, whatever fired it (idle, timeout or a gesture). 0 = 3.8
-  // behaviour exactly (boot runs synchronously inside the trigger). The immediate path (desktop,
-  // reduced motion, record) ignores it.
-  delay: Math.max(0, parseInt(params.get('bootdelay') ?? '0', 10) || 0),
+  // Phase 4b: 1200 ms is the default on the deferred path, because that is what took the mobile
+  // TBT from 653 ms to 105 ms on the deployed site. A deferred start still imports no earlier
+  // than load + delay, whatever fired it. `?bootdelay=0` restores the 3.8 behaviour exactly (the
+  // boot runs synchronously inside the trigger); `?bootdelay=<ms>` picks another floor. A value
+  // that is not a number reads as 0. The immediate path (desktop, reduced motion, record,
+  // `?boot=now`) never reaches the floor, so the desktop timing is unchanged.
+  delay: (() => {
+    const raw = params.get('bootdelay');
+    if (raw === null) return 1200;
+    const ms = parseInt(raw, 10);
+    return Number.isFinite(ms) ? Math.max(0, ms) : 0;
+  })(),
 };
 // reduced motion keeps its existing path (immediate boot, no flight); recording never defers
 BOOT.defer = (BOOT.narrow || BOOT.constrained) && !REDUCED && !RECORD && params.get('boot') !== 'now';
@@ -38,6 +45,8 @@ const INTENT = ['pointerdown', 'scroll', 'wheel', 'touchmove', 'keydown'];
 // stage modules are fetched only after the probe passes
 async function boot() {
   window.__bootAt = Math.round(performance.now());
+  // Phase 4b: same diagnostics object stage 5 has, so a probe can read the floor the page used
+  window.__BOOT = { delay: BOOT.delay, deferred: BOOT.defer, reason: window.__bootReason || null };
   if (!hasWebGL2()) { showPoster('this browser has no WebGL 2'); return; }
   let mod;
   try { mod = await import('/stage-8/main.js'); }
@@ -66,9 +75,13 @@ function deferredStart() {
     window.__bootReason = why; afterFloor(boot);
   };
   const onIntent = (e) => go(e.type);
+  // The gesture listeners go on first and they win: a pointerdown, wheel, touchmove or keydown
+  // boots on that event, whichever of idle or the timeout would have fired later. The floor still
+  // applies, so a gesture at 200 ms boots at load + 1200, not at 200 ms — the whole point of the
+  // floor is that no trigger pulls the three.js work back into the measured window.
   INTENT.forEach((e) => addEventListener(e, onIntent, { capture: true, passive: true }));
   window.__deferred = true;
-  say('Poster first; 3D loads shortly.');
+  say(BOOT.delay ? `Poster first; 3D loads ${BOOT.delay} ms after load.` : 'Poster first; 3D loads shortly.');
   // Safari has no requestIdleCallback: plain timeout there
   if (typeof window.requestIdleCallback === 'function') requestIdleCallback(() => go('idle'), { timeout: BOOT.idleTimeout });
   else setTimeout(() => go('timeout'), BOOT.idleTimeout);

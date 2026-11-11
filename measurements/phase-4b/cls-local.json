@@ -1,0 +1,618 @@
+{
+ "stage-5-390x844@2": {
+  "runs": [
+   {
+    "run": 1,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "static",
+     "capTop": 5308,
+     "capH": 319,
+     "frameTop": 178,
+     "frameH": 603,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 2,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "static",
+     "capTop": 5308,
+     "capH": 319,
+     "frameTop": 178,
+     "frameH": 603,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 3,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "static",
+     "capTop": 5308,
+     "capH": 319,
+     "frameTop": 178,
+     "frameH": 603,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 4,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "static",
+     "capTop": 5308,
+     "capH": 319,
+     "frameTop": 178,
+     "frameH": 603,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 5,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "static",
+     "capTop": 5308,
+     "capH": 319,
+     "frameTop": 178,
+     "frameH": 603,
+     "overlap": 0
+    },
+    "errors": []
+   }
+  ],
+  "median": 0,
+  "max": 0,
+  "nonzero": 0
+ },
+ "stage-5-360x640@2": {
+  "runs": [
+   {
+    "run": 1,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "static",
+     "capTop": 3880,
+     "capH": 348,
+     "frameTop": 178,
+     "frameH": 399,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 2,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "static",
+     "capTop": 3880,
+     "capH": 348,
+     "frameTop": 178,
+     "frameH": 399,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 3,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "static",
+     "capTop": 3880,
+     "capH": 348,
+     "frameTop": 178,
+     "frameH": 399,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 4,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "static",
+     "capTop": 3880,
+     "capH": 348,
+     "frameTop": 178,
+     "frameH": 399,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 5,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "static",
+     "capTop": 3880,
+     "capH": 348,
+     "frameTop": 178,
+     "frameH": 399,
+     "overlap": 0
+    },
+    "errors": []
+   }
+  ],
+  "median": 0,
+  "max": 0,
+  "nonzero": 0
+ },
+ "stage-5-768x1024@1": {
+  "runs": [
+   {
+    "run": 1,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 731,
+     "capH": 281,
+     "frameTop": 121,
+     "frameH": 534,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 2,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 731,
+     "capH": 281,
+     "frameTop": 121,
+     "frameH": 534,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 3,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 731,
+     "capH": 281,
+     "frameTop": 121,
+     "frameH": 534,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 4,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 731,
+     "capH": 281,
+     "frameTop": 121,
+     "frameH": 534,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 5,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 731,
+     "capH": 281,
+     "frameTop": 121,
+     "frameH": 534,
+     "overlap": 0
+    },
+    "errors": []
+   }
+  ],
+  "median": 0,
+  "max": 0,
+  "nonzero": 0
+ },
+ "stage-5-1440x900@1": {
+  "runs": [
+   {
+    "run": 1,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 607,
+     "capH": 281,
+     "frameTop": 77,
+     "frameH": 454,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 2,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 607,
+     "capH": 281,
+     "frameTop": 77,
+     "frameH": 454,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 3,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 607,
+     "capH": 281,
+     "frameTop": 77,
+     "frameH": 454,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 4,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 607,
+     "capH": 281,
+     "frameTop": 77,
+     "frameH": 454,
+     "overlap": 0
+    },
+    "errors": []
+   },
+   {
+    "run": 5,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 607,
+     "capH": 281,
+     "frameTop": 77,
+     "frameH": 454,
+     "overlap": 0
+    },
+    "errors": []
+   }
+  ],
+  "median": 0,
+  "max": 0,
+  "nonzero": 0
+ },
+ "stage-8-390x844@2": {
+  "runs": [
+   {
+    "run": 1,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 589,
+     "capH": 243,
+     "frameTop": 0,
+     "frameH": 844,
+     "overlap": 242.625
+    },
+    "errors": []
+   },
+   {
+    "run": 2,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 589,
+     "capH": 243,
+     "frameTop": 0,
+     "frameH": 844,
+     "overlap": 242.625
+    },
+    "errors": []
+   },
+   {
+    "run": 3,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 589,
+     "capH": 243,
+     "frameTop": 0,
+     "frameH": 844,
+     "overlap": 242.625
+    },
+    "errors": []
+   },
+   {
+    "run": 4,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 589,
+     "capH": 243,
+     "frameTop": 0,
+     "frameH": 844,
+     "overlap": 242.625
+    },
+    "errors": []
+   },
+   {
+    "run": 5,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 589,
+     "capH": 243,
+     "frameTop": 0,
+     "frameH": 844,
+     "overlap": 242.625
+    },
+    "errors": []
+   }
+  ],
+  "median": 0,
+  "max": 0,
+  "nonzero": 0
+ },
+ "stage-8-360x640@2": {
+  "runs": [
+   {
+    "run": 1,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 380,
+     "capH": 248,
+     "frameTop": 0,
+     "frameH": 640,
+     "overlap": 247.625
+    },
+    "errors": []
+   },
+   {
+    "run": 2,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 380,
+     "capH": 248,
+     "frameTop": 0,
+     "frameH": 640,
+     "overlap": 247.625
+    },
+    "errors": []
+   },
+   {
+    "run": 3,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 380,
+     "capH": 248,
+     "frameTop": 0,
+     "frameH": 640,
+     "overlap": 247.625
+    },
+    "errors": []
+   },
+   {
+    "run": 4,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 380,
+     "capH": 248,
+     "frameTop": 0,
+     "frameH": 640,
+     "overlap": 247.625
+    },
+    "errors": []
+   },
+   {
+    "run": 5,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 380,
+     "capH": 248,
+     "frameTop": 0,
+     "frameH": 640,
+     "overlap": 247.625
+    },
+    "errors": []
+   }
+  ],
+  "median": 0,
+  "max": 0,
+  "nonzero": 0
+ },
+ "stage-8-768x1024@1": {
+  "runs": [
+   {
+    "run": 1,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 623,
+     "capH": 389,
+     "frameTop": 0,
+     "frameH": 1024,
+     "overlap": 389.375
+    },
+    "errors": []
+   },
+   {
+    "run": 2,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 623,
+     "capH": 389,
+     "frameTop": 0,
+     "frameH": 1024,
+     "overlap": 389.375
+    },
+    "errors": []
+   },
+   {
+    "run": 3,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 623,
+     "capH": 389,
+     "frameTop": 0,
+     "frameH": 1024,
+     "overlap": 389.375
+    },
+    "errors": []
+   },
+   {
+    "run": 4,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 623,
+     "capH": 389,
+     "frameTop": 0,
+     "frameH": 1024,
+     "overlap": 389.375
+    },
+    "errors": []
+   },
+   {
+    "run": 5,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 623,
+     "capH": 389,
+     "frameTop": 0,
+     "frameH": 1024,
+     "overlap": 389.375
+    },
+    "errors": []
+   }
+  ],
+  "median": 0,
+  "max": 0,
+  "nonzero": 0
+ },
+ "stage-8-1440x900@1": {
+  "runs": [
+   {
+    "run": 1,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 499,
+     "capH": 389,
+     "frameTop": 0,
+     "frameH": 900,
+     "overlap": 389.375
+    },
+    "errors": []
+   },
+   {
+    "run": 2,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 499,
+     "capH": 389,
+     "frameTop": 0,
+     "frameH": 900,
+     "overlap": 389.375
+    },
+    "errors": []
+   },
+   {
+    "run": 3,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 499,
+     "capH": 389,
+     "frameTop": 0,
+     "frameH": 900,
+     "overlap": 389.375
+    },
+    "errors": []
+   },
+   {
+    "run": 4,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 499,
+     "capH": 389,
+     "frameTop": 0,
+     "frameH": 900,
+     "overlap": 389.375
+    },
+    "errors": []
+   },
+   {
+    "run": 5,
+    "cls": 0,
+    "entries": [],
+    "layout": {
+     "capPosition": "fixed",
+     "capTop": 499,
+     "capH": 389,
+     "frameTop": 0,
+     "frameH": 900,
+     "overlap": 389.375
+    },
+    "errors": []
+   }
+  ],
+  "median": 0,
+  "max": 0,
+  "nonzero": 0
+ }
+}

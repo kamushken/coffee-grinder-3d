@@ -1,0 +1,11 @@
+default-chromium-1440                                           8.5 ms/frame  ready  0.5s
+default-chromium-768                                            8.3 ms/frame  ready  0.3s
+default-chromium-390                                            8.3 ms/frame  ready  1.6s
+default-chromium-1440-reduced                                reduced motion
+default-webkit-1440                                            16.5 ms/frame  ready  0.6s
+default-webkit-768                                             16.6 ms/frame  ready  0.4s
+default-webkit-390                                             16.5 ms/frame  ready  2.9s
+default-webkit-1440-reduced                                  reduced motion
+
+WebGL renderer: ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)
+8 shots, 0 with problems -> shots/sheet.jpg
