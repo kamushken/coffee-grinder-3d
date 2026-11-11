@@ -1,13 +1,24 @@
 # Static site, no framework, no build step. The repo root is the publish directory.
+# No `command` key on purpose: Netlify runs no build and serves the files as committed.
+# Every URL in the pages is root-absolute (/vendor/three/..., /shared/..., /stage-8/main.js),
+# so the site must be served from the domain root, not a sub-path.
 [build]
   publish = "."
 
+# three r169, vendored verbatim (vendor/three/VERSION.txt). The path carries no hash:
+# if the vendored version ever changes, rename the directory (e.g. /vendor/three-r170/)
+# instead of overwriting it, or returning visitors keep the old file for a year.
 [[headers]]
   for = "/vendor/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Recorded captures (webp, mp4). Same rule: a new capture gets a new file name.
 [[headers]]
   for = "/captures/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Text compression: Netlify's CDN negotiates brotli/gzip for text types (html, js, css, json,
+# svg) on its own; there is no setting for it here. It cannot be checked before deploy; the
+# curl checks are in HANDOFF.md.
